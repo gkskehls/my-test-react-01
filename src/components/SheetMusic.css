@@ -1,0 +1,70 @@
+.sheet-music-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.clef {
+    position: absolute;
+    font-size: 100px;
+    left: 10px;
+    top: 15px;
+    line-height: 1;
+    color: #333;
+    z-index: 1;
+}
+
+.staff {
+    position: absolute;
+    width: 100%;
+    top: 50px;
+}
+
+.staff-line {
+    width: 100%;
+    height: 2px;
+    background-color: #333;
+    /* 14px(간격) + 2px(선 두께) = 16px */
+    margin-bottom: 14px;
+}
+
+.notes-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.note {
+    position: absolute;
+}
+
+.note-head {
+    width: 22px;
+    height: 16px;
+    background-color: #333;
+    border-radius: 50%;
+    /* 실제 악보처럼 살짝 기울여줍니다 */
+    transform: rotate(-15deg);
+}
+
+.stem {
+    position: absolute;
+    width: 2px;
+    height: 50px;
+    background-color: #333;
+    /* 머리 오른쪽에 붙입니다 */
+    left: 20px;
+    bottom: 8px;
+}
+
+/* ▼▼▼ 이 부분을 파일 맨 아래에 추가해주세요 ▼▼▼ */
+.note.highlighted .note-head {
+    background-color: #61dafb; /* React 로고 색상으로 하이라이트 */
+}
+
+.note.highlighted .stem {
+    background-color: #61dafb;
+}

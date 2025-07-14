@@ -1,53 +1,49 @@
 // src/pages/PracticePage.tsx
 import React, { useState, useCallback } from 'react';
 import Piano from '../components/Piano';
-import { twinkleTwinkle, SongNote } from '../songs/twinkleTwinkle'; // 1. 노래 데이터 가져오기
-import './PracticePage.css'; // 2. 스타일을 위한 CSS 파일 가져오기
+import SheetMusic from '../components/SheetMusic'; // 1. SheetMusic 컴포넌트 import
+import { twinkleTwinkle, SongNote } from '../songs/twinkleTwinkle';
+import './PracticePage.css';
 
 const PracticePage: React.FC = () => {
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
-    const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+    // 피드백 상태는 이제 악보 하이라이트로 대체되므로 제거해도 됩니다.
+    // const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
     const targetNote: SongNote | undefined = twinkleTwinkle[currentNoteIndex];
     const isSongFinished = currentNoteIndex >= twinkleTwinkle.length;
 
-    // 피아노 건반이 눌렸을 때 호출될 함수
     const handleNotePlayed = useCallback((playedNote: string) => {
-        if (isSongFinished) return; // 노래가 끝났으면 아무것도 안 함
+        if (isSongFinished) return;
 
         if (playedNote === targetNote?.note) {
-            // 정답일 때
-            setFeedback('correct');
-            setTimeout(() => {
-                setCurrentNoteIndex(prev => prev + 1); // 다음 노트로 이동
-                setFeedback(null);
-            }, 300);
+            // 정답일 때, 간단히 다음 노트 인덱스로 업데이트
+            setCurrentNoteIndex(prev => prev + 1);
         } else {
-            // 오답일 때
-            setFeedback('wrong');
-            setTimeout(() => {
-                setFeedback(null);
-            }, 500);
+            // 오답일 때의 로직 (예: 잠시 건반을 붉게 표시)은 나중에 추가할 수 있습니다.
+            console.log("Wrong note!");
         }
     }, [currentNoteIndex, targetNote, isSongFinished]);
 
     return (
         <div className="practice-container">
             <h1>연습하기: 반짝반짝 작은 별</h1>
-            <div className="guide-box">
+
+            {/* 2. 기존 가이드 박스 대신 SheetMusic 컴포넌트를 사용합니다. */}
+            <div className="practice-sheet-wrapper">
                 {isSongFinished ? (
-                    <h2>🎉 참 잘했어요! 🎉</h2>
+                    <div className="congrats-message">
+                        <h2>🎉 참 잘했어요! 🎉</h2>
+                        <button onClick={() => setCurrentNoteIndex(0)}>다시하기</button>
+                    </div>
                 ) : (
-                    <>
-                        <p>다음에 누를 건반:</p>
-                        {/* 정답/오답에 따라 배경색이 바뀝니다 */}
-                        <div className={`target-note ${feedback ?? ''}`}>
-                            {targetNote?.displayName}
-                        </div>
-                    </>
+                    <SheetMusic
+                        song={twinkleTwinkle}
+                        currentNoteIndex={currentNoteIndex} // 3. 현재 인덱스를 전달!
+                    />
                 )}
             </div>
-            {/* Piano에 onNotePlayed 함수를 전달합니다 */}
+
             <Piano numOctaves={2} onNotePlayed={handleNotePlayed} />
         </div>
     );

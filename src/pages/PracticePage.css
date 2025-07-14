@@ -6,36 +6,36 @@
     padding: 20px;
 }
 
-.guide-box {
+/* 기존 guide-box 대신 새로운 wrapper 스타일 */
+.practice-sheet-wrapper {
+    width: 100%;
+    max-width: 800px;
     margin-bottom: 20px;
-    padding: 20px;
+    padding: 20px 0;
     border: 2px solid #eee;
     border-radius: 10px;
-    text-align: center;
-    width: 300px;
-    min-height: 120px;
     background-color: #f9f9f9;
+    min-height: 240px; /* 악보가 들어갈 최소 높이 확보 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.guide-box h2 {
+.congrats-message {
+    text-align: center;
+}
+
+.congrats-message h2 {
     color: #4CAF50;
+    margin-bottom: 20px;
 }
 
-.target-note {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #333;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.target-note.correct {
-    background-color: #4CAF50; /* Green */
+.congrats-message button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: #61dafb;
     color: white;
-}
-
-.target-note.wrong {
-    background-color: #f44336; /* Red */
-    color: white;
+    border-radius: 5px;
 }
