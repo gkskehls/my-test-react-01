@@ -45,3 +45,16 @@
     color: white;
     border-radius: 5px;
 }
+
+/* ▼▼▼ 반응형 디자인을 위한 미디어 쿼리 추가 ▼▼▼ */
+@media (max-width: 768px) {
+    .practice-sheet-wrapper {
+        min-height: 200px; /* 태블릿에서 높이 줄이기 */
+    }
+}
+
+@media (max-width: 480px) {
+    .practice-sheet-wrapper {
+        min-height: 150px; /* 태블릿에서 높이 줄이기 */
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'; // useMemo 추가
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import Piano from '../components/Piano';
 import SheetMusic from '../components/SheetMusic';
 import { Song } from '../songs';
@@ -10,40 +10,28 @@ interface PracticePageProps {
 
 const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    // scrollContainerRef는 이제 필요 없습니다.
 
-    // ▼▼▼ useMemo를 사용해 여러 줄의 악보(song.lines)를 하나의 배열로 합칩니다. ▼▼▼
     const flatNotes = useMemo(() => song.lines.flat(), [song]);
 
-    // 노래가 바뀌면 연습 진행도를 초기화
     useEffect(() => {
         setCurrentNoteIndex(0);
     }, [song]);
 
+    // 스크롤 로직을 훨씬 더 간단하고 안정적인 방식으로 개선합니다.
     useEffect(() => {
-        // ref가 가리키는 실제 div 요소가 있는지 확인
-        if (scrollContainerRef.current) {
-            // 악보의 음표 위치 계산에 사용된 값들 (SheetMusic.tsx와 동일)
-            const noteStartOffset = 60; // 시작 여백
-            const noteWidth = 45;       // 음표당 너비
+        // 현재 연주해야 할 음표의 DOM 요소를 ID로 직접 찾습니다.
+        const currentNoteElement = document.getElementById(`note-${currentNoteIndex}`);
 
-            // 현재 음표의 가로 위치 계산
-            const notePosition = noteStartOffset + (currentNoteIndex * noteWidth);
-
-            // 스크롤 컨테이너의 너비와 중앙 위치 계산
-            const containerWidth = scrollContainerRef.current.offsetWidth;
-            const containerCenter = containerWidth / 2;
-
-            // 음표가 컨테이너 중앙에 오도록 목표 스크롤 위치 계산
-            const targetScrollLeft = notePosition - containerCenter;
-
-            // 계산된 위치로 부드럽게 스크롤
-            scrollContainerRef.current.scrollTo({
-                left: targetScrollLeft,
+        if (currentNoteElement) {
+            // 해당 요소를 화면 중앙으로 부드럽게 스크롤합니다.
+            currentNoteElement.scrollIntoView({
                 behavior: 'smooth',
+                block: 'nearest', // 세로 스크롤은 최소화
+                inline: 'center', // 가로 스크롤 시 중앙에 위치
             });
         }
-    }, [currentNoteIndex]); // currentNoteIndex가 바뀔 때마다 이 효과를 실행
+    }, [currentNoteIndex]); // currentNoteIndex가 바뀔 때마다 실행
 
     const targetNote = flatNotes[currentNoteIndex];
     const isSongFinished = currentNoteIndex >= flatNotes.length;
@@ -62,8 +50,8 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
             <h1>연습하기: {song.title}</h1>
 
             <div
+                // ref는 더 이상 필요 없으므로 제거합니다.
                 className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''}`}
-                ref={scrollContainerRef}
             >
                 {isSongFinished ? (
                     <div className="congrats-message">
@@ -72,7 +60,6 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                     </div>
                 ) : (
                     <SheetMusic
-                        // ▼▼▼ song.notes 대신 flatNotes를 전달합니다.
                         notes={flatNotes}
                         currentNoteIndex={currentNoteIndex}
                     />

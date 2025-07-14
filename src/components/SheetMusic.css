@@ -1,16 +1,36 @@
 .sheet-music-wrapper {
+    /* --- 크기 결정 변수 --- */
+    /* 세로 */
+    --staff-top: 50px;
+    --line-height: 16px;
+    --step-height: 8px;
+    --base-note-top: 68px;
+    --wrapper-height: 200px;
+    /* 가로 (새로 추가) */
+    --note-spacing: 45px;
+    --staff-padding-left: 60px;
+    --staff-padding-right: 40px;
+    /* 음표 */
+    --clef-font-size: 100px;
+    --clef-top: 15px;
+    --note-head-width: 22px;
+    --note-head-height: 16px;
+    --stem-height: 50px;
+    --stem-left: 20px;
+    --stem-bottom: 8px;
+
     position: relative;
-    width: 100%;
-    height: 200px;
-    padding: 0 20px;
+    height: var(--wrapper-height);
     box-sizing: border-box;
+    /* JS에서 받은 --note-count 변수를 이용해 전체 너비를 동적으로 계산 */
+    width: calc(var(--staff-padding-left) + (var(--note-count, 0) * var(--note-spacing)) + var(--staff-padding-right));
 }
 
 .clef {
     position: absolute;
-    font-size: 100px;
+    font-size: var(--clef-font-size);
+    top: var(--clef-top);
     left: 10px;
-    top: 15px;
     line-height: 1;
     color: #333;
     z-index: 1;
@@ -18,17 +38,16 @@
 
 .staff {
     position: absolute;
+    top: var(--staff-top);
     left: 20px;
     right: 20px;
-    top: 50px;
 }
 
 .staff-line {
     width: 100%;
     height: 2px;
     background-color: #333;
-    /* 14px(간격) + 2px(선 두께) = 16px */
-    margin-bottom: 14px;
+    margin-bottom: calc(var(--line-height) - 2px);
 }
 
 .notes-container {
@@ -40,31 +59,53 @@
 
 .note {
     position: absolute;
+    /* JS에서 받은 변수들을 이용해 CSS가 직접 위치를 계산 */
+    top: calc(var(--base-note-top) + (var(--step-difference) * var(--step-height)));
+    left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing)));
 }
 
 .note-head {
-    width: 22px;
-    height: 16px;
+    width: var(--note-head-width);
+    height: var(--note-head-height);
     background-color: #333;
     border-radius: 50%;
-    /* 실제 악보처럼 살짝 기울여줍니다 */
     transform: rotate(-15deg);
 }
 
 .stem {
     position: absolute;
     width: 2px;
-    height: 50px;
+    height: var(--stem-height);
     background-color: #333;
-    /* 머리 오른쪽에 붙입니다 */
-    left: 20px;
-    bottom: 8px;
+    left: var(--stem-left);
+    bottom: var(--stem-bottom);
 }
 
-.note.highlighted .note-head {
-    background-color: #61dafb; /* React 로고 색상으로 하이라이트 */
-}
-
+.note.highlighted .note-head,
 .note.highlighted .stem {
     background-color: #61dafb;
+}
+
+/* ▼▼▼ 모바일 화면을 위한 미디어 쿼리 ▼▼▼ */
+@media (max-width: 480px) {
+    .sheet-music-wrapper {
+        /* 모바일에서는 변수 값만 바꿔주면 모든 크기가 알아서 조절됩니다. */
+        --staff-top: 40px;
+        --line-height: 12px;
+        --step-height: 6px;
+        --base-note-top: 52px;
+        --wrapper-height: 150px;
+        /* 가로 간격도 함께 줄여줍니다. */
+        --note-spacing: 38px;
+        --staff-padding-left: 20px;
+        --staff-padding-right: 20px;
+        /* 음표 크기 */
+        --clef-font-size: 75px;
+        --clef-top: 12px;
+        --note-head-width: 18px;
+        --note-head-height: 13px;
+        --stem-height: 40px;
+        --stem-left: 16px;
+        --stem-bottom: 6px;
+    }
 }

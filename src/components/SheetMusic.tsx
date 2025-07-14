@@ -2,27 +2,19 @@ import React from 'react';
 import { SongNote } from '../songs/twinkleTwinkle';
 import './SheetMusic.css';
 
-// 음표의 수직 위치를 계산하는 헬퍼 함수
-// (G4 음을 기준으로 각 음표가 얼마나 떨어져 있는지 계산합니다)
-const getNotePosition = (note: string): number => {
+// 음표가 기준음(G4)으로부터 몇 칸 떨어져 있는지 계산하는 함수
+const getNoteStepDifference = (note: string): number => {
     const noteSteps: { [key: string]: number } = {
         C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6,
     };
-    // 'C4'에서 'C'와 '4'를 분리합니다.
     const noteName = note.slice(0, 1);
     const octave = parseInt(note.slice(1, 2));
 
-    // 기준점: G4는 오선지의 두 번째 줄에 위치합니다. (top: 68px)
+    // 기준점: G4
     const baseNoteStep = noteSteps['G'] + 4 * 7;
-    const baseTopPosition = 68;
-
     const currentNoteStep = noteSteps[noteName] + octave * 7;
 
-    // 기준점과의 차이를 계산하여 최종 위치를 결정합니다.
-    const stepDifference = baseNoteStep - currentNoteStep;
-    const stepHeight = 8; // 한 칸(줄-칸 사이)의 높이
-
-    return baseTopPosition + stepDifference * stepHeight;
+    return baseNoteStep - currentNoteStep;
 };
 
 interface SheetMusicProps {
@@ -31,17 +23,15 @@ interface SheetMusicProps {
 }
 
 const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex }) => {
-    // 1. 악보 전체 너비를 노래 길이에 맞춰 동적으로 계산합니다.
-    // (시작 여백 + (음표 개수 * 음표 간격) + 끝 여백)
-    const totalWidth = 60 + (notes.length * 45) + 40;
+    // JS에서의 너비 계산 로직을 완전히 제거합니다.
 
     return (
-        // 2. 계산된 너비를 wrapper div에 style로 직접 적용합니다.
-        <div className="sheet-music-wrapper" style={{ width: `${totalWidth}px` }}>
-            {/* 높은음자리표 */}
+        <div
+            className="sheet-music-wrapper"
+            // CSS가 너비를 계산할 수 있도록 전체 음표 개수를 변수로 전달합니다.
+            style={{ '--note-count': notes.length } as React.CSSProperties}
+        >
             <div className="clef">𝄞</div>
-
-            {/* 오선지 */}
             <div className="staff">
                 <div className="staff-line" />
                 <div className="staff-line" />
@@ -49,22 +39,26 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex }) => {
                 <div className="staff-line" />
                 <div className="staff-line" />
             </div>
-
-            {/* 음표들 */}
             <div className="notes-container">
-                {notes.map((songNote, index) => (
-                    <div
-                        key={index}
-                        className={`note ${index === currentNoteIndex ? 'highlighted' : ''}`}
-                        style={{
-                            top: `${getNotePosition(songNote.note)}px`,
-                            left: `${60 + index * 45}px`,
-                        }}
-                    >
-                        <div className="note-head" />
-                        <div className="stem" />
-                    </div>
-                ))}
+                {notes.map((songNote, index) => {
+                    const stepDifference = getNoteStepDifference(songNote.note);
+                    return (
+                        <div
+                            // 스크롤 로직이 이 ID를 사용해 음표를 찾습니다.
+                            id={`note-${index}`}
+                            key={index}
+                            className={`note ${index === currentNoteIndex ? 'highlighted' : ''}`}
+                            style={{
+                                // CSS가 위치를 계산하는데 필요한 변수들만 전달합니다.
+                                '--step-difference': stepDifference,
+                                '--note-index': index,
+                            } as React.CSSProperties}
+                        >
+                            <div className="note-head" />
+                            <div className="stem" />
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

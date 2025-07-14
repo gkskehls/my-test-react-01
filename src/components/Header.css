@@ -25,3 +25,21 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
+
+/* ▼▼▼ 반응형 디자인을 위한 미디어 쿼리 추가 ▼▼▼ */
+@media (max-width: 600px) {
+    .app-header {
+        flex-direction: column; /* 아이템들을 세로로 쌓기 */
+        align-items: center;    /* 가운데 정렬 */
+        padding: 15px;
+    }
+
+    .logo {
+        margin-bottom: 10px; /* 로고와 메뉴 사이에 간격 주기 */
+    }
+
+    nav a {
+        margin: 0 8px; /* 메뉴 링크 사이 간격 조정 */
+        font-size: 0.9rem; /* 폰트 크기 살짝 줄이기 */
+    }
+}

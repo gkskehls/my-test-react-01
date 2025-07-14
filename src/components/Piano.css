@@ -40,3 +40,36 @@
     z-index: 2; /* 검은 건반이 위에 오도록 설정 */
     margin-left: -19px; /* 자신의 너비 절반만큼 왼쪽으로 이동하여 중앙 정렬 */
 }
+
+/* ▼▼▼ 반응형 디자인을 위한 미디어 쿼리 추가 ▼▼▼ */
+/* 화면 너비가 768px 이하일 때 (태블릿) */
+@media (max-width: 768px) {
+    .piano {
+        padding: 10px; /* 전체적인 패딩을 줄여 공간 확보 */
+    }
+
+    .white-key {
+        width: 40px;   /* 흰 건반 너비 줄이기 */
+        height: 180px; /* 흰 건반 높이 줄이기 */
+    }
+
+    .black-key {
+        width: 24px;   /* 검은 건반 너비 줄이기 */
+        height: 100px;  /* 검은 건반 높이 줄이기 */
+        margin-left: -12px; /* 너비에 맞춰 위치 조정 */
+    }
+}
+
+/* 화면 너비가 480px 이하일 때 (모바일) */
+@media (max-width: 480px) {
+    .white-key {
+        width: 30px;
+        height: 150px;
+    }
+
+    .black-key {
+        width: 18px;
+        height: 80px;
+        margin-left: -9px;
+    }
+}
