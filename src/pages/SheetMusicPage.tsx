@@ -10,7 +10,7 @@ interface SheetMusicPageProps {
 
 const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) => {
     return (
-        <div className="page-container">
+        <div>
             <h1>{song.title}</h1>
             <SongSelector selectedSongId={song.id} onSongChange={onSongChange} />
             <MultiLineSheetMusic song={song} />
