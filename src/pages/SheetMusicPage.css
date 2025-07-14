@@ -14,8 +14,10 @@
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 8px;
+    background-color: #f9f9f9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* 이미지가 둥근 모서리를 넘어가지 않도록 합니다. */
+    overflow-x: auto; /* 내용이 가로로 넘치면 스크롤바를 표시합니다. */
+    overflow-y: hidden; /* 세로 스크롤은 필요 없으므로 숨깁니다. */
 }
 
 .sheet-image-wrapper img {

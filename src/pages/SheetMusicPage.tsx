@@ -1,18 +1,27 @@
-// src/pages/SheetMusicPage.tsx
 import React from 'react';
-import SheetMusic from '../components/SheetMusic'; // 1. 새로 만든 SheetMusic 컴포넌트를 import
-import { twinkleTwinkle } from '../songs/twinkleTwinkle'; // 2. 노래 데이터를 import
+import SheetMusic from '../components/SheetMusic';
+import SongSelector from '../components/SongSelector'; // 1. SongSelector import
+import { Song } from '../songs'; // 2. Song 타입 import
 import './SheetMusicPage.css';
 
-const SheetMusicPage: React.FC = () => {
+// 3. 페이지가 받을 props 타입 정의
+interface SheetMusicPageProps {
+    song: Song;
+    onSongChange: (newSong: Song) => void;
+}
+
+const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) => {
     return (
         <div className="sheet-music-container">
-            <h1>반짝반짝 작은 별</h1>
-            <p>아래 악보를 보고 연습해보세요.</p>
+            {/* 4. 제목을 동적으로 표시 */}
+            <h1>{song.title}</h1>
 
-            {/* 3. 기존 img 태그 대신 SheetMusic 컴포넌트를 사용합니다. */}
+            {/* 5. 노래 선택 컴포넌트 추가 */}
+            <SongSelector selectedSongId={song.id} onSongChange={onSongChange} />
+
             <div className="sheet-image-wrapper">
-                <SheetMusic song={twinkleTwinkle} />
+                {/* 6. 선택된 노래의 악보 데이터를 전달 */}
+                <SheetMusic song={song.notes} />
             </div>
         </div>
     );

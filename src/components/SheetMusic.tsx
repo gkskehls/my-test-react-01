@@ -31,8 +31,13 @@ interface SheetMusicProps {
 }
 
 const SheetMusic: React.FC<SheetMusicProps> = ({ song, currentNoteIndex }) => {
+    // 1. 악보 전체 너비를 노래 길이에 맞춰 동적으로 계산합니다.
+    // (시작 여백 + (음표 개수 * 음표 간격) + 끝 여백)
+    const totalWidth = 60 + (song.length * 45) + 40;
+
     return (
-        <div className="sheet-music-wrapper">
+        // 2. 계산된 너비를 wrapper div에 style로 직접 적용합니다.
+        <div className="sheet-music-wrapper" style={{ width: `${totalWidth}px` }}>
             {/* 높은음자리표 */}
             <div className="clef">𝄞</div>
 
@@ -52,9 +57,7 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ song, currentNoteIndex }) => {
                         key={index}
                         className={`note ${index === currentNoteIndex ? 'highlighted' : ''}`}
                         style={{
-                            // getNotePosition 함수로 계산된 수직 위치
                             top: `${getNotePosition(songNote.note)}px`,
-                            // 음표들을 수평으로 나열
                             left: `${60 + index * 45}px`,
                         }}
                     >
