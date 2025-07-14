@@ -1,0 +1,41 @@
+/* src/pages/PracticePage.css */
+.practice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.guide-box {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    min-height: 120px;
+    background-color: #f9f9f9;
+}
+
+.guide-box h2 {
+    color: #4CAF50;
+}
+
+.target-note {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.target-note.correct {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.target-note.wrong {
+    background-color: #f44336; /* Red */
+    color: white;
+}

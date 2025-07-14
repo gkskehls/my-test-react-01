@@ -46,9 +46,10 @@ const KEY_MAP: { [key: string]: string } = {
 
 interface PianoProps {
     numOctaves?: number;
+    onNotePlayed?: (note: string) => void;
 }
 
-const Piano: React.FC<PianoProps> = ({ numOctaves = 2 }) => {
+const Piano: React.FC<PianoProps> = ({ numOctaves = 2, onNotePlayed }) => {
     const synth = useRef<Tone.Synth | null>(null);
     // 1. 오디오가 활성화(잠금 해제)되었는지 추적하기 위한 ref 추가
     const isAudioUnlocked = useRef(false);
@@ -83,7 +84,11 @@ const Piano: React.FC<PianoProps> = ({ numOctaves = 2 }) => {
         // 소리 재생과 시각 효과를 동시에 처리
         playNote(note);
         setActiveNotes(prev => [...prev, note]);
-    }, [activeNotes, playNote]); // activeNotes에 의존하여 항상 최신 상태를 참조
+        // 3. 건반을 누를 때마다 부모에게 알려주는 코드를 추가합니다.
+        if (onNotePlayed) {
+            onNotePlayed(note);
+        }
+    }, [activeNotes, playNote, onNotePlayed]); // activeNotes에 의존하여 항상 최신 상태를 참조
 
     const handleNoteUp = useCallback((note: string) => {
         setActiveNotes(prev => prev.filter(n => n !== note));
