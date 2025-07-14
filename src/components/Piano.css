@@ -1,0 +1,50 @@
+/* src/components/Piano.css */
+.piano {
+    display: flex;
+    position: relative; /* 검은 건반을 배치하기 위한 기준점 */
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    margin-top: 2rem;
+}
+
+.key {
+    cursor: pointer;
+    border: 1px solid #000;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 마우스로 클릭하거나 키보드로 눌렀을 때 동일한 스타일이 적용되도록 그룹화합니다. */
+.key:active,
+.key.active {
+    background-color: #61dafb; /* React 로고 색상으로 하이라이트 */
+    transform: translateY(2px);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.white-key {
+    width: 60px;
+    height: 240px;
+    background-color: white;
+    border-radius: 0 0 5px 5px;
+    z-index: 1; /* 흰 건반이 아래에 깔리도록 설정 */
+}
+
+.black-key {
+    width: 38px;
+    height: 140px;
+    background: linear-gradient(to bottom, #444, #222);
+    border-radius: 0 0 3px 3px;
+    position: absolute; /* 흰 건반 위에 띄우기 */
+    z-index: 2; /* 검은 건반이 위에 오도록 설정 */
+    margin-left: -19px; /* 자신의 너비 절반만큼 왼쪽으로 이동하여 중앙 정렬 */
+}
+
+/*
+  아래 부분은 이제 Piano.tsx에서 동적으로 처리하므로 삭제합니다.
+
+  .black-key[data-note="C#4"] { left: 60px; }
+  .black-key[data-note="D#4"] { left: 120px; }
+  ...
+*/
