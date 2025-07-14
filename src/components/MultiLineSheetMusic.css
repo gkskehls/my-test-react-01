@@ -1,0 +1,22 @@
+.multi-line-sheet-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.sheet-line-wrapper {
+    /* 각 악보 줄이 넘치면 스크롤되도록 설정 */
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: 10px; /* 각 줄 사이의 간격 */
+}
+
+/* 마지막 줄은 아래 간격을 없애 깔끔하게 보이도록 합니다. */
+.sheet-line-wrapper:last-child {
+    margin-bottom: 0;
+}

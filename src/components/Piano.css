@@ -40,11 +40,3 @@
     z-index: 2; /* 검은 건반이 위에 오도록 설정 */
     margin-left: -19px; /* 자신의 너비 절반만큼 왼쪽으로 이동하여 중앙 정렬 */
 }
-
-/*
-  아래 부분은 이제 Piano.tsx에서 동적으로 처리하므로 삭제합니다.
-
-  .black-key[data-note="C#4"] { left: 60px; }
-  .black-key[data-note="D#4"] { left: 120px; }
-  ...
-*/

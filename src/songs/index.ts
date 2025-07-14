@@ -5,7 +5,7 @@ import { threeBlindMice } from './threeBlindMice';
 export interface Song {
     id: string;       // 고유 ID
     title: string;    // 노래 제목
-    notes: SongNote[]; // 악보 데이터
+    lines: SongNote[][]; // 악보 데이터
 }
 
 // 전체 노래 목록
@@ -13,12 +13,12 @@ export const SONG_LIST: Song[] = [
     {
         id: 'twinkle-twinkle',
         title: '반짝반짝 작은 별',
-        notes: twinkleTwinkle,
+        lines: twinkleTwinkle,
     },
     {
         id: 'three-blind-mice',
         title: 'Three Blind Mice',
-        notes: threeBlindMice,
+        lines: threeBlindMice,
     },
     // 나중에 여기에 새로운 노래를 추가하기만 하면 됩니다.
 ];

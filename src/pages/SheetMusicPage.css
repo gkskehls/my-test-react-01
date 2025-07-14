@@ -1,26 +1,8 @@
 /* src/pages/SheetMusicPage.css */
-
-.sheet-music-container {
+.page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     text-align: center;
-}
-
-.sheet-image-wrapper {
-    margin-top: 20px;
-    max-width: 800px; /* 악보가 너무 커지지 않게 최대 너비를 지정합니다. */
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-x: auto; /* 내용이 가로로 넘치면 스크롤바를 표시합니다. */
-    overflow-y: hidden; /* 세로 스크롤은 필요 없으므로 숨깁니다. */
-}
-
-.sheet-image-wrapper img {
-    width: 100%; /* 이미지가 wrapper에 꽉 차도록 합니다. */
-    display: block; /* 이미지 아래의 불필요한 여백을 제거합니다. */
 }

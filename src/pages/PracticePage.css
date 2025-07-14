@@ -6,7 +6,6 @@
     padding: 20px;
 }
 
-/* 기존 guide-box 대신 새로운 wrapper 스타일 */
 .practice-sheet-wrapper {
     width: 100%;
     max-width: 800px;
@@ -16,11 +15,16 @@
     border-radius: 10px;
     background-color: #f9f9f9;
     min-height: 240px; /* 악보가 들어갈 최소 높이 확보 */
+    overflow-x: auto; /* 내용이 가로로 넘치면 스크롤바를 표시합니다. */
+    overflow-y: hidden; /* 세로 스크롤은 필요 없으므로 숨깁니다. */
+    /* Flexbox 관련 속성을 아래의 .is-finished로 옮겼습니다. */
+}
+
+/* 연습이 끝났을 때만 적용될 스타일 */
+.practice-sheet-wrapper.is-finished {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: auto; /* 내용이 가로로 넘치면 스크롤바를 표시합니다. */
-    overflow-y: hidden; /* 세로 스크롤은 필요 없으므로 숨깁니다. */
 }
 
 .congrats-message {

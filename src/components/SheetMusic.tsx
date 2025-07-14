@@ -26,14 +26,14 @@ const getNotePosition = (note: string): number => {
 };
 
 interface SheetMusicProps {
-    song: SongNote[];
+    notes: SongNote[];
     currentNoteIndex?: number;
 }
 
-const SheetMusic: React.FC<SheetMusicProps> = ({ song, currentNoteIndex }) => {
+const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex }) => {
     // 1. 악보 전체 너비를 노래 길이에 맞춰 동적으로 계산합니다.
     // (시작 여백 + (음표 개수 * 음표 간격) + 끝 여백)
-    const totalWidth = 60 + (song.length * 45) + 40;
+    const totalWidth = 60 + (notes.length * 45) + 40;
 
     return (
         // 2. 계산된 너비를 wrapper div에 style로 직접 적용합니다.
@@ -52,7 +52,7 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ song, currentNoteIndex }) => {
 
             {/* 음표들 */}
             <div className="notes-container">
-                {song.map((songNote, index) => (
+                {notes.map((songNote, index) => (
                     <div
                         key={index}
                         className={`note ${index === currentNoteIndex ? 'highlighted' : ''}`}
