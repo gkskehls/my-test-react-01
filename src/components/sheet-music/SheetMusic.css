@@ -70,6 +70,28 @@
     border-radius: 50%;
     transform: rotate(-15deg);
     transition: background-color 0.2s;
+    /* 텍스트를 중앙에 배치하기 위한 스타일 추가 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.note-syllable {
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    user-select: none;
+    pointer-events: none;
+    transform: rotate(15deg); /* 음표 머리가 기울어져 있으므로 텍스트는 바로 세웁니다. */
+}
+
+.note.highlighted .note-head {
+    background-color: #61dafb;
+}
+
+/* 하이라이트될 때 텍스트 색상을 바꿔 가독성을 높입니다. */
+.note.highlighted .note-syllable {
+    color: #333;
 }
 
 .stem {

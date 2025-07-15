@@ -19,6 +19,9 @@ const Key: React.FC<KeyProps> = ({ note, type, style, isActive, onNoteDown, onNo
         onNoteDown(note);
     };
 
+    // "C4"에서 "C" 또는 "C#" 처럼 옥타브를 제외한 음이름만 추출합니다.
+    const noteName = note.slice(0, -1);
+
     return (
         <div
             className={`key ${type}-key ${isActive ? 'active' : ''}`}
@@ -30,9 +33,12 @@ const Key: React.FC<KeyProps> = ({ note, type, style, isActive, onNoteDown, onNo
             onTouchEnd={() => onNoteUp(note)}
             style={style}
         >
+            {/* 건반에 음이름을 표시하는 span 태그 추가 */}
+            <span className="key-note-name">{noteName}</span>
         </div>
     );
 };
+
 
 
 const KEY_MAP: { [key: string]: string } = {

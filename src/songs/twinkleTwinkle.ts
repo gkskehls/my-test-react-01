@@ -1,53 +1,47 @@
-// src/songs/twinkleTwinkle.ts
 import { SongNote } from './types';
 
-// '반짝반짝 작은 별' 전체 멜로디
+// '반짝반짝 작은 별' 멜로디 (duration 수정)
 export const twinkleTwinkle: SongNote[][] = [
-    // 1소절: 반짝반짝 작은 별
+    // 1소절
     [
-        { note: 'C4', duration: '도' }, { note: 'C4', duration: '도' },
-        { note: 'G4', duration: '솔' }, { note: 'G4', duration: '솔' },
-        { note: 'A4', duration: '라' }, { note: 'A4', duration: '라' },
-        { note: 'G4', duration: '솔' },
+        { note: 'C4', duration: 'q' }, { note: 'C4', duration: 'q' },
+        { note: 'G4', duration: 'q' }, { note: 'G4', duration: 'q' },
+        { note: 'A4', duration: 'q' }, { note: 'A4', duration: 'q' },
+        { note: 'G4', duration: 'h' },
     ],
-
-    // 2소절: 아름답게 비치네
+    // 2소절
     [
-        { note: 'F4', duration: '파' }, { note: 'F4', duration: '파' },
-        { note: 'E4', duration: '미' }, { note: 'E4', duration: '미' },
-        { note: 'D4', duration: '레' }, { note: 'D4', duration: '레' },
-        { note: 'C4', duration: '도' },
+        { note: 'F4', duration: 'q' }, { note: 'F4', duration: 'q' },
+        { note: 'E4', duration: 'q' }, { note: 'E4', duration: 'q' },
+        { note: 'D4', duration: 'q' }, { note: 'D4', duration: 'q' },
+        { note: 'C4', duration: 'h' },
     ],
-
-    // 3소절: 동쪽 하늘에서도
+    // 3소절
     [
-        { note: 'G4', duration: '솔' }, { note: 'G4', duration: '솔' },
-        { note: 'F4', duration: '파' }, { note: 'F4', duration: '파' },
-        { note: 'E4', duration: '미' }, { note: 'E4', duration: '미' },
-        { note: 'D4', duration: '레' },
+        { note: 'G4', duration: 'q' }, { note: 'G4', duration: 'q' },
+        { note: 'F4', duration: 'q' }, { note: 'F4', duration: 'q' },
+        { note: 'E4', duration: 'q' }, { note: 'E4', duration: 'q' },
+        { note: 'D4', duration: 'h' },
     ],
-
-    // 4소절: 서쪽 하늘에서도
+    // 4소절
     [
-        { note: 'G4', duration: '솔' }, { note: 'G4', duration: '솔' },
-        { note: 'F4', duration: '파' }, { note: 'F4', duration: '파' },
-        { note: 'E4', duration: '미' }, { note: 'E4', duration: '미' },
-        { note: 'D4', duration: '레' },
+        { note: 'G4', duration: 'q' }, { note: 'G4', duration: 'q' },
+        { note: 'F4', duration: 'q' }, { note: 'F4', duration: 'q' },
+        { note: 'E4', duration: 'q' }, { note: 'E4', duration: 'q' },
+        { note: 'D4', duration: 'h' },
     ],
-
-    // 5소절: 반짝반짝 작은 별
+    // 5소절
     [
-        { note: 'C4', duration: '도' }, { note: 'C4', duration: '도' },
-        { note: 'G4', duration: '솔' }, { note: 'G4', duration: '솔' },
-        { note: 'A4', duration: '라' }, { note: 'A4', duration: '라' },
-        { note: 'G4', duration: '솔' },
+        { note: 'C4', duration: 'q' }, { note: 'C4', duration: 'q' },
+        { note: 'G4', duration: 'q' }, { note: 'G4', duration: 'q' },
+        { note: 'A4', duration: 'q' }, { note: 'A4', duration: 'q' },
+        { note: 'G4', duration: 'h' },
     ],
-
-    // 6소절: 아름답게 비치네
+    // 6소절
     [
-        { note: 'F4', duration: '파' }, { note: 'F4', duration: '파' },
-        { note: 'E4', duration: '미' }, { note: 'E4', duration: '미' },
-        { note: 'D4', duration: '레' }, { note: 'D4', duration: '레' },
-        { note: 'C4', duration: '도' },
+        { note: 'F4', duration: 'q' }, { note: 'F4', duration: 'q' },
+        { note: 'E4', duration: 'q' }, { note: 'E4', duration: 'q' },
+        { note: 'D4', duration: 'q' }, { note: 'D4', duration: 'q' },
+        { note: 'C4', duration: 'h' },
     ],
 ];
