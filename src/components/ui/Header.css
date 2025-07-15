@@ -15,10 +15,12 @@
     font-weight: bold;
     color: #333;
     text-decoration: none;
+    z-index: 1100; /* 모바일 메뉴가 열렸을 때 로고가 가려지지 않도록 */
 }
 
 .app-header nav {
     display: flex;
+    align-items: center; /* 수직 정렬을 위해 추가 */
     gap: 1.5rem;
 }
 
@@ -70,7 +72,7 @@
     height: 0;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-top: 5px solid #555; /* 화살표 모양 */
+    border-top: 5px solid #555;
 }
 
 .language-dropdown {
@@ -98,4 +100,96 @@
 
 .language-dropdown li:hover {
     background-color: #f5f5f5;
+}
+
+
+/* --- 햄버거 버튼과 모바일 메뉴 스타일 (추가된 부분) --- */
+
+.mobile-menu-toggle {
+    display: none; /* 데스크톱에서는 숨김 */
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1100; /* nav 메뉴보다 위에 위치하도록 */
+    padding: 10px;
+}
+
+.hamburger-icon {
+    width: 24px;
+    height: 18px;
+    position: relative;
+    transform: rotate(0deg);
+    transition: .5s ease-in-out;
+}
+
+.hamburger-icon span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #333;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+}
+
+/* 햄버거 아이콘 줄 위치 */
+.hamburger-icon span:nth-child(1) { top: 0px; }
+.hamburger-icon span:nth-child(2) { top: 7px; }
+.hamburger-icon span:nth-child(3) { top: 14px; }
+
+/* 열렸을 때 X 모양으로 변경 */
+.hamburger-icon.open span:nth-child(1) {
+    top: 7px;
+    transform: rotate(135deg);
+}
+.hamburger-icon.open span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+}
+.hamburger-icon.open span:nth-child(3) {
+    top: 7px;
+    transform: rotate(-135deg);
+}
+
+/* --- 모바일 화면 대응 (태블릿, 스마트폰) --- */
+@media (max-width: 768px) {
+    .app-header nav {
+        /* 메뉴 기본 상태 (숨겨진 상태) */
+        position: fixed;
+        top: 0;
+        right: -100%; /* 화면 오른쪽 바깥에 위치 */
+        width: 70%;
+        max-width: 280px;
+        height: 100vh;
+        background-color: #ffffff;
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+
+        /* 메뉴 아이템들을 세로로 정렬 */
+        flex-direction: column;
+        justify-content: center;
+        gap: 2rem;
+        padding: 60px 20px;
+        transition: right 0.35s ease-in-out;
+    }
+
+    .app-header nav.open {
+        right: 0; /* 'open' 클래스가 추가되면 오른쪽으로 슬라이드 인 */
+    }
+
+    .app-header nav a {
+        font-size: 1.2rem; /* 모바일에서 가독성 좋게 글자 크기 키우기 */
+        padding-bottom: 0;
+        border-bottom: none; /* 모바일에서는 밑줄 제거 */
+    }
+
+    .app-header nav a.active {
+        border-bottom: none; /* 모바일에서는 밑줄 제거 */
+    }
+
+    .mobile-menu-toggle {
+        display: block; /* 모바일에서는 햄버거 버튼 보이기 */
+    }
 }
