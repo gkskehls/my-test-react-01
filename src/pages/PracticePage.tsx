@@ -1,6 +1,7 @@
+// src/pages/PracticePage.tsx
 import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next'; // 1. useTranslation 훅 import
 import Piano from '../components/piano/Piano';
-// === 수정: MultiLineSheetMusic 대신 다시 SheetMusic을 사용합니다. ===
 import SheetMusic from '../components/sheet-music/SheetMusic';
 import { Song } from '../songs';
 import './PracticePage.css';
@@ -10,23 +11,18 @@ interface PracticePageProps {
 }
 
 const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
+    const { t } = useTranslation(); // 2. 훅 사용
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
 
-    // 전체 음표를 한 줄로 합친 배열은 그대로 사용합니다.
     const flatNotes = useMemo(() => song.lines.flat(), [song]);
 
-    // === 삭제: 여러 줄 계산 로직이 더 이상 필요 없으므로 삭제합니다. ===
-
-    // 곡이 바뀌면 상태 초기화
     useEffect(() => {
         setCurrentNoteIndex(0);
         setIsShaking(false);
     }, [song]);
 
-    // === 수정: 스크롤 로직을 단일 라인에 맞게 되돌립니다. ===
     useEffect(() => {
-        // 이제 음표 ID는 'note-인덱스' 형태입니다.
         const currentNoteElement = document.getElementById(`note-${currentNoteIndex}`);
         if (currentNoteElement) {
             currentNoteElement.scrollIntoView({
@@ -51,19 +47,19 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                 setIsShaking(false);
             }, 500);
         }
-    }, [targetNote, isSongFinished, isShaking]); // currentNoteIndex는 targetNote에 이미 의존하므로 제거 가능
+    }, [targetNote, isSongFinished, isShaking]);
 
     return (
         <div className="practice-container">
-            <h1>연습하기: {song.title}</h1>
+            {/* 3. 하드코딩된 텍스트를 t 함수로 교체 */}
+            <h1>{t('practicePageTitle', { title: song.title })}</h1>
             <div className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
                     <div className="congrats-message">
-                        <h2>🎉 참 잘했어요! 🎉</h2>
-                        <button onClick={() => setCurrentNoteIndex(0)}>다시하기</button>
+                        <h2>🎉 {t('congratsMessage')} 🎉</h2>
+                        <button onClick={() => setCurrentNoteIndex(0)}>{t('retryButton')}</button>
                     </div>
                 ) : (
-                    // === 수정: SheetMusic 컴포넌트를 직접 사용합니다. ===
                     <SheetMusic
                         notes={flatNotes}
                         currentNoteIndex={currentNoteIndex}

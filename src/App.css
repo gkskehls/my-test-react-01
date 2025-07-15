@@ -1,5 +1,15 @@
+/* src/App.css */
 .app-content {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.page-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px); /* 헤더 높이를 제외한 전체 높이 */
+  font-size: 1.2rem;
+  color: #888;
 }

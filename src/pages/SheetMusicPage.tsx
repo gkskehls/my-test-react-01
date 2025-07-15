@@ -1,7 +1,9 @@
+// src/pages/SheetMusicPage.tsx
 import React from 'react';
-import MultiLineSheetMusic from '../components/sheet-music/MultiLineSheetMusic';
+import { useTranslation } from 'react-i18next';
+import SheetMusic from '../components/sheet-music/SheetMusic';
 import SongSelector from '../components/ui/SongSelector';
-import { Song } from '../songs';
+import { Song, SONG_LIST } from '../songs';
 import './SheetMusicPage.css';
 
 interface SheetMusicPageProps {
@@ -10,11 +12,18 @@ interface SheetMusicPageProps {
 }
 
 const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) => {
+    const { t } = useTranslation();
+
     return (
         <div className="sheet-music-page-container">
-            <h1>악보 보기</h1>
-            <SongSelector selectedSongId={song.id} onSongChange={onSongChange} />
-            <MultiLineSheetMusic song={song} />
+            <h2>{t('sheetMusicTitle')}</h2>
+            <SongSelector
+                songs={SONG_LIST}
+                currentSongId={song.id}
+                onSongChange={onSongChange}
+                label={t('sheetMusic.selectSong')}
+            />
+            <SheetMusic notes={song.lines.flat()} />
         </div>
     );
 };
