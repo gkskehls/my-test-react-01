@@ -1,5 +1,22 @@
+/* src/pages/SheetMusicPage.css */
 .sheet-music-page-container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem; /* 전체적인 컴포넌트 간 간격 */
+}
+
+/* 여러 줄의 악보를 감싸는 래퍼 스타일 */
+.sheet-music-lines-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* 각 오선지(악보 줄) 사이의 간격 */
+    overflow-x: auto; /* 혹시 모를 긴 줄에 대비해 가로 스크롤 허용 */
+    padding: 1px;
+}
+
+/* 화면이 넓은 데스크톱에서는 악보를 보기 좋게 중앙 정렬합니다. */
+@media (min-width: 900px) {
+    .sheet-music-lines-wrapper {
+        align-items: center;
+    }
 }

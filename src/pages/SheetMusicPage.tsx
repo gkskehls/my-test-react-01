@@ -23,7 +23,18 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) =
                 onSongChange={onSongChange}
                 label={t('sheetMusic.selectSong')}
             />
-            <SheetMusic notes={song.lines.flat()} />
+            {/* ▼▼▼ 이 부분이 수정되었습니다 ▼▼▼ */}
+            <div className="sheet-music-lines-wrapper">
+                {/* song.lines 배열을 순회하며 각 줄마다 별도의 SheetMusic 컴포넌트를 렌더링합니다. */}
+                {song.lines.map((line, index) => (
+                    <SheetMusic
+                        key={`line-${index}`}
+                        notes={line}
+                        // 각 컴포넌트 내부의 노트 ID가 중복되지 않도록 고유한 접두사를 전달합니다.
+                        idPrefix={`line-${index}`}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
