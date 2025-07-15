@@ -166,12 +166,10 @@
         height: 100vh;
         background-color: #ffffff;
         box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
-
-        /* 메뉴 아이템들을 세로로 정렬 */
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start; /* 중앙 정렬 대신 상단에 정렬 */
         gap: 2rem;
-        padding: 60px 20px;
+        padding: 100px 20px; /* 헤더 영역을 피하도록 상단 여백을 충분히 줍니다. */
         transition: right 0.35s ease-in-out;
     }
 
