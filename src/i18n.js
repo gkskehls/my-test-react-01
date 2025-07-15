@@ -58,7 +58,7 @@ const resources = {
             // ▼▼▼ SheetMusicPage & ProfilePage 키 추가 ▼▼▼
             "sheetMusic.selectSong": "곡을 선택하세요",
             "profile.title": "내 정보",
-            "profile.inPreparation": "준비 중인 페이지입니다.",
+            "profile.inPreparation": "준비 중인 페이지입니다. 잠시만 기다려주세요.",
             // ▼▼▼ 문서 타이틀 키 추가 ▼▼▼
             "documentTitle": "피아노 연습"
         }
