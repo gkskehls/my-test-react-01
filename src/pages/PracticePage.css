@@ -44,3 +44,24 @@
 .congrats-message button:hover {
     background-color: #40a9ff;
 }
+
+/* 화면을 좌우로 흔드는 애니메이션 정의 */
+@keyframes shake {
+    10%, 90% {
+        transform: translateX(-1px);
+    }
+    20%, 80% {
+        transform: translateX(2px);
+    }
+    30%, 50%, 70% {
+        transform: translateX(-4px);
+    }
+    40%, 60% {
+        transform: translateX(4px);
+    }
+}
+
+/* shake 클래스가 적용되면 애니메이션을 실행합니다. */
+.practice-sheet-wrapper.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}

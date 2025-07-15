@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import Piano from '../components/piano/Piano'; // 경로 수정
-import SheetMusic from '../components/sheet-music/SheetMusic'; // 경로 수정
-import { Song } from '../songs'; // 경로 수정
+import { useState, useCallback, useEffect, useMemo } from 'react'; // React import는 그대로 둡니다.
+import Piano from '../components/piano/Piano';
+import SheetMusic from '../components/sheet-music/SheetMusic';
+import { Song } from '../songs';
 import './PracticePage.css';
 
 interface PracticePageProps {
@@ -10,14 +10,16 @@ interface PracticePageProps {
 
 const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
+    const [isShaking, setIsShaking] = useState(false); // 흔들림 효과를 위한 상태 추가
     const flatNotes = useMemo(() => song.lines.flat(), [song]);
 
-    // 곡이 바뀌면 처음부터 다시 시작
+    // 곡이 바뀌면 상태 초기화
     useEffect(() => {
         setCurrentNoteIndex(0);
+        setIsShaking(false);
     }, [song]);
 
-    // 현재 연주해야 할 음표로 스크롤
+    // ... (스크롤 useEffect는 변경 없음) ...
     useEffect(() => {
         const currentNoteElement = document.getElementById(`note-${currentNoteIndex}`);
         if (currentNoteElement) {
@@ -33,19 +35,26 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     const isSongFinished = currentNoteIndex >= flatNotes.length;
 
     const handleNotePlayed = useCallback((playedNote: string) => {
-        if (isSongFinished) return;
+        // 이미 흔들리는 중이거나 곡이 끝났으면 입력을 무시
+        if (isShaking || isSongFinished) return;
+
         if (playedNote === targetNote?.note) {
             setCurrentNoteIndex(prev => prev + 1);
         } else {
-            console.log("틀렸습니다! 다시 시도하세요.");
-            // 여기에 틀렸을 때의 시각적 피드백(예: 화면 흔들기)을 추가할 수 있습니다.
+            // 틀렸을 때: 흔들림 상태를 true로 변경
+            setIsShaking(true);
+            // 0.5초(애니메이션 길이) 후에 상태를 다시 false로 되돌려 다음에도 애니메이션이 동작하게 함
+            setTimeout(() => {
+                setIsShaking(false);
+            }, 500);
         }
-    }, [currentNoteIndex, targetNote, isSongFinished]);
+    }, [currentNoteIndex, targetNote, isSongFinished, isShaking]);
 
     return (
         <div className="practice-container">
             <h1>연습하기: {song.title}</h1>
-            <div className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''}`}>
+            {/* isShaking 상태에 따라 'shake' 클래스를 동적으로 추가 */}
+            <div className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
                     <div className="congrats-message">
                         <h2>🎉 참 잘했어요! 🎉</h2>

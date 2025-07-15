@@ -76,24 +76,6 @@
     align-items: center;
 }
 
-.note-syllable {
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    user-select: none;
-    pointer-events: none;
-    transform: rotate(15deg); /* 음표 머리가 기울어져 있으므로 텍스트는 바로 세웁니다. */
-}
-
-.note.highlighted .note-head {
-    background-color: #61dafb;
-}
-
-/* 하이라이트될 때 텍스트 색상을 바꿔 가독성을 높입니다. */
-.note.highlighted .note-syllable {
-    color: #333;
-}
-
 .stem {
     position: absolute;
     width: 2px;
@@ -104,15 +86,35 @@
     transition: background-color 0.2s;
 }
 
+.note-syllable {
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    user-select: none;
+    pointer-events: none;
+    transform: rotate(15deg); /* 음표 머리가 기울어져 있으므로 텍스트는 바로 세웁니다. */
+}
+
+
+/* --- Highlight Styles (정리된 부분) --- */
+
+/* highlighted 클래스가 적용된 음표의 크기를 키웁니다. */
+.note.highlighted {
+    transform: scale(1.1);
+}
+
+/* highlighted 클래스가 적용되면 음표 머리와 기둥의 색을 변경합니다. */
 .note.highlighted .note-head,
 .note.highlighted .stem {
     background-color: #61dafb; /* 하이라이트 색상 */
 }
 
-.note.highlighted {
-    transform: scale(1.1);
+/* 하이라이트될 때 텍스트 색상을 바꿔 가독성을 높입니다. */
+.note.highlighted .note-syllable {
+    color: #333;
 }
 
+/* --- Media Query --- */
 @media (max-width: 480px) {
     .sheet-music-wrapper {
         --staff-top: 40px;
