@@ -2,6 +2,7 @@
 .sheet-music-page-container {
     display: flex;
     flex-direction: column;
+    align-items: center; /* [수정] 페이지의 모든 컨텐츠를 중앙 정렬합니다. */
     gap: 1.5rem; /* 전체적인 컴포넌트 간 간격 */
 }
 
@@ -9,14 +10,18 @@
 .sheet-music-lines-wrapper {
     display: flex;
     flex-direction: column;
+    align-items: center; /* [수정] 미디어 쿼리 밖으로 이동하여 항상 악보 줄들을 중앙 정렬합니다. */
     gap: 1rem; /* 각 오선지(악보 줄) 사이의 간격 */
     overflow-x: auto; /* 혹시 모를 긴 줄에 대비해 가로 스크롤 허용 */
     padding: 1px;
+    width: 100%; /* 부모의 정렬 컨텍스트를 따르도록 너비를 100%로 설정합니다. */
 }
 
-/* 화면이 넓은 데스크톱에서는 악보를 보기 좋게 중앙 정렬합니다. */
+/*
+  [삭제] 이제 항상 중앙 정렬되므로 이 미디어 쿼리는 더 이상 필요 없습니다.
 @media (min-width: 900px) {
     .sheet-music-lines-wrapper {
         align-items: center;
     }
 }
+*/
