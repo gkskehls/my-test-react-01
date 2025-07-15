@@ -7,7 +7,7 @@
 
 .practice-sheet-wrapper {
     width: 100%;
-    max-width: 90vw;
+    max-width: 860px;
     overflow-x: auto;
     padding: 20px 0;
     background-color: #fff;
@@ -67,8 +67,9 @@
 }
 
 .piano-wrapper {
+    display: flex;
+    justify-content: center;
     width: 100%;
-    max-width: 95vw; /* 화면 양쪽에 약간의 여백을 줍니다. */
-    overflow-x: auto; /* 내용물이 넘칠 때 가로 스크롤바를 표시합니다. */
-    -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤을 지원합니다. */
+    margin-top: auto; /* 추가: 피아노를 하단에 붙이도록 도와줍니다. */
+    padding: 20px 0; /* 추가: 상하 여백 */
 }

@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'; // React import는 그대로 둡니다.
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import Piano from '../components/piano/Piano';
-import SheetMusic from '../components/sheet-music/SheetMusic';
+// SheetMusic 대신 MultiLineSheetMusic을 사용합니다.
+import MultiLineSheetMusic from '../components/sheet-music/MultiLineSheetMusic';
 import { Song } from '../songs';
 import './PracticePage.css';
 
@@ -10,8 +11,27 @@ interface PracticePageProps {
 
 const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
-    const [isShaking, setIsShaking] = useState(false); // 흔들림 효과를 위한 상태 추가
+    const [isShaking, setIsShaking] = useState(false);
+
+    // 전체 음표를 한 줄로 합친 배열은 그대로 유지합니다. (진행도 계산에 편리)
     const flatNotes = useMemo(() => song.lines.flat(), [song]);
+
+    // === 추가: 현재 음표가 몇 번째 줄, 몇 번째 음표인지 계산 ===
+    const { currentLineIndex, noteIndexInLine } = useMemo(() => {
+        let noteCounter = 0;
+        for (let lineIndex = 0; lineIndex < song.lines.length; lineIndex++) {
+            const line = song.lines[lineIndex];
+            if (currentNoteIndex < noteCounter + line.length) {
+                return {
+                    currentLineIndex: lineIndex,
+                    noteIndexInLine: currentNoteIndex - noteCounter,
+                };
+            }
+            noteCounter += line.length;
+        }
+        // 곡이 끝났거나 범위를 벗어난 경우
+        return { currentLineIndex: -1, noteIndexInLine: -1 };
+    }, [currentNoteIndex, song.lines]);
 
     // 곡이 바뀌면 상태 초기화
     useEffect(() => {
@@ -19,9 +39,9 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
         setIsShaking(false);
     }, [song]);
 
-    // ... (스크롤 useEffect는 변경 없음) ...
+    // 스크롤 로직은 그대로 유지합니다.
     useEffect(() => {
-        const currentNoteElement = document.getElementById(`note-${currentNoteIndex}`);
+        const currentNoteElement = document.getElementById(`note-${currentLineIndex}-${noteIndexInLine}`);
         if (currentNoteElement) {
             currentNoteElement.scrollIntoView({
                 behavior: 'smooth',
@@ -29,21 +49,18 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                 inline: 'center',
             });
         }
-    }, [currentNoteIndex]);
+    }, [currentLineIndex, noteIndexInLine]);
 
     const targetNote = flatNotes[currentNoteIndex];
     const isSongFinished = currentNoteIndex >= flatNotes.length;
 
     const handleNotePlayed = useCallback((playedNote: string) => {
-        // 이미 흔들리는 중이거나 곡이 끝났으면 입력을 무시
         if (isShaking || isSongFinished) return;
 
         if (playedNote === targetNote?.note) {
             setCurrentNoteIndex(prev => prev + 1);
         } else {
-            // 틀렸을 때: 흔들림 상태를 true로 변경
             setIsShaking(true);
-            // 0.5초(애니메이션 길이) 후에 상태를 다시 false로 되돌려 다음에도 애니메이션이 동작하게 함
             setTimeout(() => {
                 setIsShaking(false);
             }, 500);
@@ -60,9 +77,11 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                         <button onClick={() => setCurrentNoteIndex(0)}>다시하기</button>
                     </div>
                 ) : (
-                    <SheetMusic
-                        notes={flatNotes}
-                        currentNoteIndex={currentNoteIndex}
+                    // === 수정: SheetMusic 대신 MultiLineSheetMusic을 렌더링 ===
+                    <MultiLineSheetMusic
+                        song={song}
+                        currentLineIndex={currentLineIndex}
+                        noteIndexInLine={noteIndexInLine}
                     />
                 )}
             </div>

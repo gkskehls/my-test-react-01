@@ -15,13 +15,11 @@
     --stem-height: 50px;
     --stem-left: 20px;
     --stem-bottom: 8px;
-
+    --lyric-top: 150px;
     position: relative;
     height: var(--wrapper-height);
     box-sizing: border-box;
-    /* 악보의 전체 너비를 음표 개수에 따라 동적으로 계산합니다. */
     width: calc(var(--staff-padding-left) + (var(--note-count, 0) * var(--note-spacing)) + var(--staff-padding-right));
-    min-width: 100%;
 }
 
 .clef {
@@ -127,5 +125,23 @@
         --staff-padding-right: 20px;
         --clef-font-size: 75px;
         --clef-top: 12px;
+        /* 작은 화면에서 가사 위치 조정 */
+        --lyric-top: 120px;
     }
+}
+
+/* === 수정된 가사 스타일 === */
+.lyric {
+    position: absolute;
+    /* 1. 변수를 사용해 오선지 아래 고정된 높이에 위치시킵니다. */
+    top: var(--lyric-top);
+    /* 2. 음표와 동일한 로직으로 수평 위치를 계산합니다. */
+    left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing)));
+    /* 3. 계산된 위치를 기준으로 텍스트를 중앙 정렬합니다. */
+    transform: translateX(-50%);
+
+    font-size: 16px;
+    color: #333;
+    white-space: nowrap;
+    font-weight: 500;
 }

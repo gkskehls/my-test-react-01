@@ -1,15 +1,16 @@
 import React from 'react';
-import { SongNote } from '../../songs'; // 경로 수정
-import { getNoteStepDifference } from '../../lib/musicUtils'; // 경로 수정
+import { SongNote } from '../../songs';
+import { getNoteStepDifference } from '../../lib/musicUtils';
 import Note from './Note';
 import './SheetMusic.css';
 
 interface SheetMusicProps {
     notes: SongNote[];
     currentNoteIndex?: number;
+    idPrefix?: string; // === 추가: ID 접두사를 받기 위한 prop ===
 }
 
-const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex }) => {
+const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPrefix = '0' }) => {
     return (
         <div
             className="sheet-music-wrapper"
@@ -24,15 +25,29 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex }) => {
                 <div className="staff-line" />
             </div>
             <div className="notes-container">
+                {/* 1. 음표만 먼저 렌더링합니다. */}
                 {notes.map((songNote, index) => (
                     <Note
-                        key={index}
-                        id={`note-${index}`}
+                        // === 수정: key와 id를 prefix와 조합하여 고유하게 만듭니다. ===
+                        key={`${idPrefix}-note-${index}`}
+                        id={`${idPrefix}-${index}`}
                         noteIndex={index}
                         stepDifference={getNoteStepDifference(songNote.note)}
                         isHighlighted={index === currentNoteIndex}
-                        pitch={songNote.note} // Note 컴포넌트에 pitch 값 전달
+                        pitch={songNote.note}
                     />
+                ))}
+                {/* 2. 가사만 따로 모아서 렌더링합니다. */}
+                {notes.map((songNote, index) => (
+                    songNote.lyric && (
+                        <span
+                            key={`lyric-${idPrefix}-${index}`}
+                            className="lyric"
+                            style={{ '--note-index': index } as React.CSSProperties}
+                        >
+                            {songNote.lyric}
+                        </span>
+                    )
                 ))}
             </div>
         </div>
