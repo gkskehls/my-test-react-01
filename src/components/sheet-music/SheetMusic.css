@@ -6,7 +6,7 @@
     --base-note-top: 68px; /* 기준음(G4)의 상단 위치 */
     --wrapper-height: 200px;
     --note-spacing: 45px; /* 음표 간 가로 간격 */
-    --staff-padding-left: 60px;
+    --staff-padding-left: 80px;
     --staff-padding-right: 40px;
     --clef-font-size: 100px;
     --clef-top: 15px;
@@ -121,7 +121,7 @@
         --base-note-top: 52px;
         --wrapper-height: 150px;
         --note-spacing: 38px;
-        --staff-padding-left: 20px;
+        --staff-padding-left: 50px;
         --staff-padding-right: 20px;
         --clef-font-size: 75px;
         --clef-top: 12px;
