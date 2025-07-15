@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import Piano from '../components/piano/Piano';
-// SheetMusic 대신 MultiLineSheetMusic을 사용합니다.
-import MultiLineSheetMusic from '../components/sheet-music/MultiLineSheetMusic';
+// === 수정: MultiLineSheetMusic 대신 다시 SheetMusic을 사용합니다. ===
+import SheetMusic from '../components/sheet-music/SheetMusic';
 import { Song } from '../songs';
 import './PracticePage.css';
 
@@ -13,25 +13,10 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
 
-    // 전체 음표를 한 줄로 합친 배열은 그대로 유지합니다. (진행도 계산에 편리)
+    // 전체 음표를 한 줄로 합친 배열은 그대로 사용합니다.
     const flatNotes = useMemo(() => song.lines.flat(), [song]);
 
-    // === 추가: 현재 음표가 몇 번째 줄, 몇 번째 음표인지 계산 ===
-    const { currentLineIndex, noteIndexInLine } = useMemo(() => {
-        let noteCounter = 0;
-        for (let lineIndex = 0; lineIndex < song.lines.length; lineIndex++) {
-            const line = song.lines[lineIndex];
-            if (currentNoteIndex < noteCounter + line.length) {
-                return {
-                    currentLineIndex: lineIndex,
-                    noteIndexInLine: currentNoteIndex - noteCounter,
-                };
-            }
-            noteCounter += line.length;
-        }
-        // 곡이 끝났거나 범위를 벗어난 경우
-        return { currentLineIndex: -1, noteIndexInLine: -1 };
-    }, [currentNoteIndex, song.lines]);
+    // === 삭제: 여러 줄 계산 로직이 더 이상 필요 없으므로 삭제합니다. ===
 
     // 곡이 바뀌면 상태 초기화
     useEffect(() => {
@@ -39,9 +24,10 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
         setIsShaking(false);
     }, [song]);
 
-    // 스크롤 로직은 그대로 유지합니다.
+    // === 수정: 스크롤 로직을 단일 라인에 맞게 되돌립니다. ===
     useEffect(() => {
-        const currentNoteElement = document.getElementById(`note-${currentLineIndex}-${noteIndexInLine}`);
+        // 이제 음표 ID는 'note-인덱스' 형태입니다.
+        const currentNoteElement = document.getElementById(`note-${currentNoteIndex}`);
         if (currentNoteElement) {
             currentNoteElement.scrollIntoView({
                 behavior: 'smooth',
@@ -49,7 +35,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                 inline: 'center',
             });
         }
-    }, [currentLineIndex, noteIndexInLine]);
+    }, [currentNoteIndex]);
 
     const targetNote = flatNotes[currentNoteIndex];
     const isSongFinished = currentNoteIndex >= flatNotes.length;
@@ -65,7 +51,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                 setIsShaking(false);
             }, 500);
         }
-    }, [currentNoteIndex, targetNote, isSongFinished, isShaking]);
+    }, [targetNote, isSongFinished, isShaking]); // currentNoteIndex는 targetNote에 이미 의존하므로 제거 가능
 
     return (
         <div className="practice-container">
@@ -77,11 +63,10 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                         <button onClick={() => setCurrentNoteIndex(0)}>다시하기</button>
                     </div>
                 ) : (
-                    // === 수정: SheetMusic 대신 MultiLineSheetMusic을 렌더링 ===
-                    <MultiLineSheetMusic
-                        song={song}
-                        currentLineIndex={currentLineIndex}
-                        noteIndexInLine={noteIndexInLine}
+                    // === 수정: SheetMusic 컴포넌트를 직접 사용합니다. ===
+                    <SheetMusic
+                        notes={flatNotes}
+                        currentNoteIndex={currentNoteIndex}
                     />
                 )}
             </div>

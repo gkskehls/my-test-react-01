@@ -7,10 +7,10 @@ import './SheetMusic.css';
 interface SheetMusicProps {
     notes: SongNote[];
     currentNoteIndex?: number;
-    idPrefix?: string; // === 추가: ID 접두사를 받기 위한 prop ===
+    idPrefix?: string;
 }
 
-const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPrefix = '0' }) => {
+const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPrefix }) => {
     return (
         <div
             className="sheet-music-wrapper"
@@ -25,30 +25,41 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPref
                 <div className="staff-line" />
             </div>
             <div className="notes-container">
-                {/* 1. 음표만 먼저 렌더링합니다. */}
-                {notes.map((songNote, index) => (
-                    <Note
-                        // === 수정: key와 id를 prefix와 조합하여 고유하게 만듭니다. ===
-                        key={`${idPrefix}-note-${index}`}
-                        id={`${idPrefix}-${index}`}
-                        noteIndex={index}
-                        stepDifference={getNoteStepDifference(songNote.note)}
-                        isHighlighted={index === currentNoteIndex}
-                        pitch={songNote.note}
-                    />
-                ))}
-                {/* 2. 가사만 따로 모아서 렌더링합니다. */}
-                {notes.map((songNote, index) => (
-                    songNote.lyric && (
-                        <span
-                            key={`lyric-${idPrefix}-${index}`}
-                            className="lyric"
-                            style={{ '--note-index': index } as React.CSSProperties}
-                        >
-                            {songNote.lyric}
-                        </span>
-                    )
-                ))}
+                {/* 1. 음표 렌더링 */}
+                {notes.map((songNote, index) => {
+                    // === 수정: idPrefix 유무에 따라 ID와 key를 유연하게 생성합니다. ===
+                    const noteId = idPrefix ? `${idPrefix}-${index}` : `${index}`;
+                    const key = `note-${noteId}`;
+
+                    return (
+                        <Note
+                            key={key}
+                            id={noteId}
+                            noteIndex={index}
+                            stepDifference={getNoteStepDifference(songNote.note)}
+                            isHighlighted={index === currentNoteIndex}
+                            pitch={songNote.note}
+                        />
+                    );
+                })}
+                {/* 2. 가사 렌더링 */}
+                {notes.map((songNote, index) => {
+                    // === 수정: key를 고유하게 만듭니다. ===
+                    const lyricId = idPrefix ? `${idPrefix}-${index}` : `${index}`;
+                    const key = `lyric-${lyricId}`;
+
+                    return (
+                        songNote.lyric && (
+                            <span
+                                key={key}
+                                className="lyric"
+                                style={{ '--note-index': index } as React.CSSProperties}
+                            >
+                                {songNote.lyric}
+                            </span>
+                        )
+                    );
+                })}
             </div>
         </div>
     );
