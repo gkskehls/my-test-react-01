@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import * as Tone from 'tone';
 import './Piano.css';
 
+// Key 컴포넌트는 변경 없습니다.
 interface KeyProps {
     note: string;
     type: 'white' | 'black';
@@ -11,20 +12,16 @@ interface KeyProps {
     onNoteUp: (note: string) => void;
 }
 
-// Key 컴포넌트를 포인터 이벤트로 수정합니다.
 const Key: React.FC<KeyProps> = ({ note, type, style, isActive, onNoteDown, onNoteUp }) => {
     const noteName = note.slice(0, -1);
 
     const handlePointerDown = (e: React.PointerEvent) => {
-        // 브라우저의 기본 동작(스크롤 등)을 막습니다.
         e.preventDefault();
-        // 포인터를 캡처하여 해당 건반이 모든 후속 이벤트를 받도록 합니다.
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
         onNoteDown(note);
     };
 
     const handlePointerUpOrLeave = (e: React.PointerEvent) => {
-        // 캡처된 포인터가 있는 경우에만 해제합니다.
         if ((e.target as HTMLElement).hasPointerCapture(e.pointerId)) {
             (e.target as HTMLElement).releasePointerCapture(e.pointerId);
         }
@@ -35,7 +32,6 @@ const Key: React.FC<KeyProps> = ({ note, type, style, isActive, onNoteDown, onNo
         <div
             className={`key ${type}-key ${isActive ? 'active' : ''}`}
             data-note={note}
-            // 기존의 onMouseDown, onTouchStart 등을 onPointer* 이벤트로 교체합니다.
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUpOrLeave}
             onPointerLeave={handlePointerUpOrLeave}
@@ -57,7 +53,9 @@ interface PianoProps {
     onNotePlayed?: (note: string) => void;
 }
 
+// === ⭐️ 근본적으로 수정된 Piano 컴포넌트 ⭐️ ===
 const Piano: React.FC<PianoProps> = ({ numOctaves = 2, onNotePlayed }) => {
+    // ... (다른 state와 hook들은 변경 없음) ...
     const synth = useRef<Tone.Synth | null>(null);
     const isAudioUnlocked = useRef(false);
     const [activeNotes, setActiveNotes] = useState<string[]>([]);
@@ -110,38 +108,46 @@ const Piano: React.FC<PianoProps> = ({ numOctaves = 2, onNotePlayed }) => {
         };
     }, [handleNoteDown, handleNoteUp]);
 
-    const pianoKeys = useMemo(() => {
-        const keys: { note: string; type: 'white' | 'black'; style?: React.CSSProperties }[] = [];
-        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const pianoKeyGroups = useMemo(() => {
+        const groups: { whiteKey: string; blackKey: string | null }[] = [];
+        const whiteNoteNames = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         const startOctave = 4;
-        let whiteKeyIndex = 0;
+
         for (let octave = startOctave; octave < startOctave + numOctaves; octave++) {
-            for (const noteName of noteNames) {
-                const note = `${noteName}${octave}`;
-                const isBlackKey = noteName.includes('#');
-                const keyInfo: { note: string; type: 'white' | 'black'; style?: React.CSSProperties } = {
-                    note,
-                    type: isBlackKey ? 'black' : 'white',
-                };
-                if (isBlackKey) {
-                    const leftPosition = whiteKeyIndex * 60 - 19; // 위치 조정
-                    keyInfo.style = { left: `${leftPosition}px` };
-                } else {
-                    whiteKeyIndex++;
+            for (const noteName of whiteNoteNames) {
+                const whiteKey = `${noteName}${octave}`;
+                let blackKey = null;
+                // E와 B 다음에는 검은 건반이 없습니다.
+                if (noteName !== 'E' && noteName !== 'B') {
+                    blackKey = `${noteName}#${octave}`;
                 }
-                keys.push(keyInfo);
+                groups.push({ whiteKey, blackKey });
             }
         }
-        return keys;
+        return groups;
     }, [numOctaves]);
 
     return (
         <div className="piano">
-            {pianoKeys.filter(key => key.type === 'white').map(keyProps => (
-                <Key {...keyProps} key={keyProps.note} isActive={activeNotes.includes(keyProps.note)} onNoteDown={handleNoteDown} onNoteUp={handleNoteUp} />
-            ))}
-            {pianoKeys.filter(key => key.type === 'black').map(keyProps => (
-                <Key {...keyProps} key={keyProps.note} isActive={activeNotes.includes(keyProps.note)} onNoteDown={handleNoteDown} onNoteUp={handleNoteUp} />
+            {pianoKeyGroups.map(({ whiteKey, blackKey }) => (
+                <div key={whiteKey} className="key-container">
+                    <Key
+                        note={whiteKey}
+                        type="white"
+                        isActive={activeNotes.includes(whiteKey)}
+                        onNoteDown={handleNoteDown}
+                        onNoteUp={handleNoteUp}
+                    />
+                    {blackKey && (
+                        <Key
+                            note={blackKey}
+                            type="black"
+                            isActive={activeNotes.includes(blackKey)}
+                            onNoteDown={handleNoteDown}
+                            onNoteUp={handleNoteUp}
+                        />
+                    )}
+                </div>
             ))}
         </div>
     );
