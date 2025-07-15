@@ -1,5 +1,3 @@
-// 코드는 이전과 동일하며, 경로 이동만 반영됩니다.
-// (이전 답변의 Piano.tsx 코드와 동일)
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as Tone from 'tone';
 import './Piano.css';
@@ -13,33 +11,40 @@ interface KeyProps {
     onNoteUp: (note: string) => void;
 }
 
+// Key 컴포넌트를 포인터 이벤트로 수정합니다.
 const Key: React.FC<KeyProps> = ({ note, type, style, isActive, onNoteDown, onNoteUp }) => {
-    const handleTouchStart = (e: React.TouchEvent) => {
+    const noteName = note.slice(0, -1);
+
+    const handlePointerDown = (e: React.PointerEvent) => {
+        // 브라우저의 기본 동작(스크롤 등)을 막습니다.
         e.preventDefault();
+        // 포인터를 캡처하여 해당 건반이 모든 후속 이벤트를 받도록 합니다.
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
         onNoteDown(note);
     };
 
-    // "C4"에서 "C" 또는 "C#" 처럼 옥타브를 제외한 음이름만 추출합니다.
-    const noteName = note.slice(0, -1);
+    const handlePointerUpOrLeave = (e: React.PointerEvent) => {
+        // 캡처된 포인터가 있는 경우에만 해제합니다.
+        if ((e.target as HTMLElement).hasPointerCapture(e.pointerId)) {
+            (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+        }
+        onNoteUp(note);
+    };
 
     return (
         <div
             className={`key ${type}-key ${isActive ? 'active' : ''}`}
             data-note={note}
-            onMouseDown={() => onNoteDown(note)}
-            onMouseUp={() => onNoteUp(note)}
-            onMouseLeave={() => onNoteUp(note)}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={() => onNoteUp(note)}
+            // 기존의 onMouseDown, onTouchStart 등을 onPointer* 이벤트로 교체합니다.
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUpOrLeave}
+            onPointerLeave={handlePointerUpOrLeave}
             style={style}
         >
-            {/* 건반에 음이름을 표시하는 span 태그 추가 */}
             <span className="key-note-name">{noteName}</span>
         </div>
     );
 };
-
-
 
 const KEY_MAP: { [key: string]: string } = {
     'a': 'C4', 'w': 'C#4', 's': 'D4', 'e': 'D#4', 'd': 'E4',

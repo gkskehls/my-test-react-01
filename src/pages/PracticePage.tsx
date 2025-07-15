@@ -53,7 +53,6 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     return (
         <div className="practice-container">
             <h1>연습하기: {song.title}</h1>
-            {/* isShaking 상태에 따라 'shake' 클래스를 동적으로 추가 */}
             <div className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
                     <div className="congrats-message">
@@ -67,7 +66,9 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
                     />
                 )}
             </div>
-            <Piano numOctaves={2} onNotePlayed={handleNotePlayed} />
+            <div className="piano-wrapper">
+                <Piano numOctaves={2} onNotePlayed={handleNotePlayed} />
+            </div>
         </div>
     );
 };

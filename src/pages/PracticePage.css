@@ -65,3 +65,10 @@
 .practice-sheet-wrapper.shake {
     animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
+
+.piano-wrapper {
+    width: 100%;
+    max-width: 95vw; /* 화면 양쪽에 약간의 여백을 줍니다. */
+    overflow-x: auto; /* 내용물이 넘칠 때 가로 스크롤바를 표시합니다. */
+    -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤을 지원합니다. */
+}
