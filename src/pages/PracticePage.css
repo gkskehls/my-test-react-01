@@ -1,60 +1,49 @@
-/* src/pages/PracticePage.css */
 .practice-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    gap: 1.5rem;
 }
 
 .practice-sheet-wrapper {
     width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
+    max-width: 90vw;
+    overflow-x: auto;
     padding: 20px 0;
-    border: 2px solid #eee;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    min-height: 240px; /* 악보가 들어갈 최소 높이 확보 */
-    overflow-x: auto; /* 내용이 가로로 넘치면 스크롤바를 표시합니다. */
-    overflow-y: hidden; /* 세로 스크롤은 필요 없으므로 숨깁니다. */
-    /* Flexbox 관련 속성을 아래의 .is-finished로 옮겼습니다. */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    min-height: 240px; /* 최소 높이 지정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* 연습이 끝났을 때만 적용될 스타일 */
 .practice-sheet-wrapper.is-finished {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #e6f7ff;
 }
 
 .congrats-message {
     text-align: center;
+    color: #096dd9;
 }
 
 .congrats-message h2 {
-    color: #4CAF50;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .congrats-message button {
     padding: 10px 20px;
     font-size: 1rem;
-    cursor: pointer;
     border: none;
-    background-color: #61dafb;
+    background-color: #1890ff;
     color: white;
     border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-/* ▼▼▼ 반응형 디자인을 위한 미디어 쿼리 추가 ▼▼▼ */
-@media (max-width: 768px) {
-    .practice-sheet-wrapper {
-        min-height: 200px; /* 태블릿에서 높이 줄이기 */
-    }
-}
-
-@media (max-width: 480px) {
-    .practice-sheet-wrapper {
-        min-height: 150px; /* 태블릿에서 높이 줄이기 */
-    }
+.congrats-message button:hover {
+    background-color: #40a9ff;
 }

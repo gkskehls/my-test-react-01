@@ -1,12 +1,6 @@
-import { twinkleTwinkle, SongNote } from './twinkleTwinkle';
+import { twinkleTwinkle } from './twinkleTwinkle';
 import { threeBlindMice } from './threeBlindMice';
-
-// 개별 노래의 전체 정보를 담을 타입
-export interface Song {
-    id: string;       // 고유 ID
-    title: string;    // 노래 제목
-    lines: SongNote[][]; // 악보 데이터
-}
+import type { Song } from './types';
 
 // 전체 노래 목록
 export const SONG_LIST: Song[] = [
@@ -20,5 +14,7 @@ export const SONG_LIST: Song[] = [
         title: 'Three Blind Mice',
         lines: threeBlindMice,
     },
-    // 나중에 여기에 새로운 노래를 추가하기만 하면 됩니다.
 ];
+
+// 다른 파일에서 타입을 쉽게 가져올 수 있도록 다시 export 합니다.
+export * from './types';

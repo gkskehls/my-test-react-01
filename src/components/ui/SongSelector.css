@@ -1,0 +1,20 @@
+.song-selector-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.song-selector-container label {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.song-selector-container select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+}

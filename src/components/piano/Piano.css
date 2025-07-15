@@ -1,4 +1,5 @@
-/* src/components/Piano.css */
+/* 코드는 이전과 동일하며, 경로 이동만 반영됩니다. */
+/* (이전 답변의 Piano.css 코드와 동일) */
 .piano {
     display: flex;
     position: relative; /* 검은 건반을 배치하기 위한 기준점 */
@@ -7,6 +8,7 @@
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     margin-top: 2rem;
+    justify-content: center;
 }
 
 .key {
@@ -15,7 +17,6 @@
     box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* 마우스로 클릭하거나 키보드로 눌렀을 때 동일한 스타일이 적용되도록 그룹화합니다. */
 .key:active,
 .key.active {
     background-color: #61dafb; /* React 로고 색상으로 하이라이트 */
@@ -28,7 +29,7 @@
     height: 240px;
     background-color: white;
     border-radius: 0 0 5px 5px;
-    z-index: 1; /* 흰 건반이 아래에 깔리도록 설정 */
+    z-index: 1;
 }
 
 .black-key {
@@ -36,40 +37,31 @@
     height: 140px;
     background: linear-gradient(to bottom, #444, #222);
     border-radius: 0 0 3px 3px;
-    position: absolute; /* 흰 건반 위에 띄우기 */
-    z-index: 2; /* 검은 건반이 위에 오도록 설정 */
-    margin-left: -19px; /* 자신의 너비 절반만큼 왼쪽으로 이동하여 중앙 정렬 */
+    position: absolute;
+    z-index: 2;
 }
 
-/* ▼▼▼ 반응형 디자인을 위한 미디어 쿼리 추가 ▼▼▼ */
-/* 화면 너비가 768px 이하일 때 (태블릿) */
 @media (max-width: 768px) {
     .piano {
-        padding: 10px; /* 전체적인 패딩을 줄여 공간 확보 */
+        padding: 10px;
     }
-
     .white-key {
-        width: 40px;   /* 흰 건반 너비 줄이기 */
-        height: 180px; /* 흰 건반 높이 줄이기 */
+        width: 40px;
+        height: 180px;
     }
-
     .black-key {
-        width: 24px;   /* 검은 건반 너비 줄이기 */
-        height: 100px;  /* 검은 건반 높이 줄이기 */
-        margin-left: -12px; /* 너비에 맞춰 위치 조정 */
+        width: 24px;
+        height: 100px;
     }
 }
 
-/* 화면 너비가 480px 이하일 때 (모바일) */
 @media (max-width: 480px) {
     .white-key {
         width: 30px;
         height: 150px;
     }
-
     .black-key {
         width: 18px;
         height: 80px;
-        margin-left: -9px;
     }
 }

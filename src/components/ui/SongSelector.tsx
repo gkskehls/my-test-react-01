@@ -1,5 +1,5 @@
 import React from 'react';
-import { Song, SONG_LIST } from '../songs';
+import { Song, SONG_LIST } from '../../songs'; // 경로 수정
 import './SongSelector.css';
 
 interface SongSelectorProps {

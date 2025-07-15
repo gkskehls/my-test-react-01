@@ -1,16 +1,13 @@
 .sheet-music-wrapper {
-    /* --- 크기 결정 변수 --- */
-    /* 세로 */
+    /* CSS 변수를 사용해 악보의 각종 수치를 관리합니다. */
     --staff-top: 50px;
     --line-height: 16px;
-    --step-height: 8px;
-    --base-note-top: 68px;
+    --step-height: 8px; /* 음표 한 칸의 높이 */
+    --base-note-top: 68px; /* 기준음(G4)의 상단 위치 */
     --wrapper-height: 200px;
-    /* 가로 (새로 추가) */
-    --note-spacing: 45px;
+    --note-spacing: 45px; /* 음표 간 가로 간격 */
     --staff-padding-left: 60px;
     --staff-padding-right: 40px;
-    /* 음표 */
     --clef-font-size: 100px;
     --clef-top: 15px;
     --note-head-width: 22px;
@@ -22,8 +19,9 @@
     position: relative;
     height: var(--wrapper-height);
     box-sizing: border-box;
-    /* JS에서 받은 --note-count 변수를 이용해 전체 너비를 동적으로 계산 */
+    /* 악보의 전체 너비를 음표 개수에 따라 동적으로 계산합니다. */
     width: calc(var(--staff-padding-left) + (var(--note-count, 0) * var(--note-spacing)) + var(--staff-padding-right));
+    min-width: 100%;
 }
 
 .clef {
@@ -59,9 +57,10 @@
 
 .note {
     position: absolute;
-    /* JS에서 받은 변수들을 이용해 CSS가 직접 위치를 계산 */
+    /* CSS 변수를 사용해 음표의 위치를 동적으로 계산합니다. */
     top: calc(var(--base-note-top) + (var(--step-difference) * var(--step-height)));
     left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing)));
+    transition: transform 0.1s ease-in-out;
 }
 
 .note-head {
@@ -70,6 +69,7 @@
     background-color: #333;
     border-radius: 50%;
     transform: rotate(-15deg);
+    transition: background-color 0.2s;
 }
 
 .stem {
@@ -79,33 +79,29 @@
     background-color: #333;
     left: var(--stem-left);
     bottom: var(--stem-bottom);
+    transition: background-color 0.2s;
 }
 
 .note.highlighted .note-head,
 .note.highlighted .stem {
-    background-color: #61dafb;
+    background-color: #61dafb; /* 하이라이트 색상 */
 }
 
-/* ▼▼▼ 모바일 화면을 위한 미디어 쿼리 ▼▼▼ */
+.note.highlighted {
+    transform: scale(1.1);
+}
+
 @media (max-width: 480px) {
     .sheet-music-wrapper {
-        /* 모바일에서는 변수 값만 바꿔주면 모든 크기가 알아서 조절됩니다. */
         --staff-top: 40px;
         --line-height: 12px;
         --step-height: 6px;
         --base-note-top: 52px;
         --wrapper-height: 150px;
-        /* 가로 간격도 함께 줄여줍니다. */
         --note-spacing: 38px;
         --staff-padding-left: 20px;
         --staff-padding-right: 20px;
-        /* 음표 크기 */
         --clef-font-size: 75px;
         --clef-top: 12px;
-        --note-head-width: 18px;
-        --note-head-height: 13px;
-        --stem-height: 40px;
-        --stem-left: 16px;
-        --stem-bottom: 6px;
     }
 }

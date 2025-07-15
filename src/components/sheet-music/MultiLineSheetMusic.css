@@ -1,0 +1,15 @@
+.multi-line-sheet-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 악보 줄 사이의 간격 */
+    width: 100%;
+    overflow-x: auto; /* 가로 스크롤이 필요할 경우 */
+    padding-bottom: 10px;
+}
+
+.sheet-line-wrapper {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    padding: 10px 0;
+}
