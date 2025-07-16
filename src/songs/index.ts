@@ -6,12 +6,12 @@ import type { Song } from './types';
 export const SONG_LIST: Song[] = [
     {
         id: 'twinkle-twinkle',
-        title: '반짝반짝 작은 별',
+        titleKey: 'songs.twinkle-twinkle', // title을 titleKey로 변경
         lines: twinkleTwinkle,
     },
     {
         id: 'three-blind-mice',
-        title: 'Three Blind Mice',
+        titleKey: 'songs.three-blind-mice', // title을 titleKey로 변경
         lines: threeBlindMice,
     },
 ];

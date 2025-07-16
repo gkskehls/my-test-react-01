@@ -52,7 +52,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ song }) => {
     return (
         <div className="practice-container">
             {/* 3. 하드코딩된 텍스트를 t 함수로 교체 */}
-            <h1>{t('practicePageTitle', { title: song.title })}</h1>
+            <h1>{t('practicePageTitle', { title: t(song.titleKey) })}</h1>
             <div className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
                     <div className="congrats-message">

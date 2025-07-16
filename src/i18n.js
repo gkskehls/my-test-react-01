@@ -22,6 +22,12 @@ const resources = {
             "congratsMessage": "Well Done!",
             "retryButton": "Retry",
 
+            // 곡 제목
+            "songs": {
+                "twinkle-twinkle": "Twinkle, Twinkle, Little Star",
+                "three-blind-mice": "Three Blind Mice"
+            },
+
             // 악보 및 프로필 페이지
             "sheetMusic.selectSong": "Select a Song",
             "profile.title": "My Profile",
@@ -84,6 +90,12 @@ const resources = {
             "practicePageTitle": "연습하기: {{title}}",
             "congratsMessage": "참 잘했어요!",
             "retryButton": "다시하기",
+
+            // 곡 제목
+            "songs": {
+                "twinkle-twinkle": "반짝반짝 작은 별",
+                "three-blind-mice": "눈 먼 생쥐 세 마리"
+            },
 
             // 악보 및 프로필 페이지
             "sheetMusic.selectSong": "곡을 선택하세요",

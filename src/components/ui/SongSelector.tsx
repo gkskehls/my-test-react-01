@@ -1,5 +1,6 @@
 // src/components/ui/SongSelector.tsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Song } from '../../songs'; // Song 타입만 import 합니다.
 // import './SongSelector.css'; // CSS 파일이 있다면 그대로 둡니다.
 
@@ -17,6 +18,8 @@ const SongSelector: React.FC<SongSelectorProps> = ({
                                                        onSongChange,
                                                        label,
                                                    }) => {
+    const { t } = useTranslation();
+
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newSongId = event.target.value;
         // 2. 내부 SONG_LIST 대신 props로 받은 songs 배열을 사용합니다.
@@ -34,7 +37,7 @@ const SongSelector: React.FC<SongSelectorProps> = ({
                 {/* 4. 내부 SONG_LIST 대신 props로 받은 songs 배열로 목록을 만듭니다. */}
                 {songs.map(song => (
                     <option key={song.id} value={song.id}>
-                        {song.title}
+                        {t(song.titleKey)}
                     </option>
                 ))}
             </select>

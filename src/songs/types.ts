@@ -8,6 +8,6 @@ export interface SongNote {
 
 export interface Song {
     id: string;
-    title: string;
+    titleKey: string; // 번역 키를 사용하도록 title을 titleKey로 변경
     lines: SongNote[][];
 }
