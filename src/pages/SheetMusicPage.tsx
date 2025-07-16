@@ -7,7 +7,7 @@ import { Song, SongNote } from '../songs'; // SONG_LIST는 이제 모달 내부�
 import './SheetMusicPage.css';
 
 // --- 추가된 부분: 계산을 위한 상수 정의 ---
-// 각 음표 길이에 따른 너비 값을 정의합니다. (SheetMusic.css와 동기화)
+// 참고: 이 상수들은 ./SheetMusicPage.css 안의 CSS 변수들과 동기화되어야 합니다.
 const DURATION_WIDTHS: { [key: string]: number } = {
     'q': 45, // 4분음표
     'h': 60, // 2분음표
@@ -54,21 +54,22 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ songs, song, onSongChan
         const newGroupedLines: SongNote[][] = [];
         let currentLineNotes: SongNote[] = [];
         let currentLineWidth = 0;
-
+ 
         song.lines.forEach((bar, index) => {
             const barWidth = barWidths[index];
-
-            if (currentLineNotes.length > 0 && currentLineWidth + MIN_BAR_SPACING + barWidth > containerWidth) {
-                // 현재 라인에 더 이상 마디가 들어갈 수 없으면 라인을 확정합니다.
+            // 현재 라인에 첫 번째 마디가 아닐 경우에만 간격을 추가합니다.
+            const spacing = currentLineNotes.length > 0 ? MIN_BAR_SPACING : 0;
+ 
+            if (currentLineNotes.length > 0 && currentLineWidth + spacing + barWidth > containerWidth) {
+                // 현재 라인이 가득 찼으면, 이 라인을 확정합니다.
                 newGroupedLines.push(currentLineNotes);
-                // 새 라인을 시작합니다.
+                // 새 라인을 현재 마디로 시작합니다.
                 currentLineNotes = bar;
                 currentLineWidth = barWidth;
             } else {
-                // 현재 라인에 마디를 추가합니다.
+                // 현재 라인에 마디와 너비를 추가합니다.
                 currentLineNotes = [...currentLineNotes, ...bar];
-                // 너비를 업데이트 (첫 마디가 아닐 경우에만 간격 추가)
-                currentLineWidth += (currentLineNotes.length > bar.length ? MIN_BAR_SPACING : 0) + barWidth;
+                currentLineWidth += spacing + barWidth;
             }
         });
 
