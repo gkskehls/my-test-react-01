@@ -58,7 +58,7 @@ const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ songs, onClose, onS
                 <div className="modal-header">
                     <h2 id="modal-title">{t('sheetMusic.selectSong')}</h2>
                     {/* aria-label도 번역 키를 사용하면 더 좋습니다. */}
-                    <button className="modal-close-button" onClick={onClose} aria-label={t('common.close', 'Close')}>
+                    <button className="modal-close-button" onClick={onClose} aria-label={t('common.close')}>
                         &times;
                     </button>
                 </div>

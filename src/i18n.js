@@ -13,6 +13,8 @@ const resources = {
             "nav.sheetMusic": "Sheet Music",
             "nav.profile": "Profile",
             "home.title": "My Piano App",
+            "nav.openMenu": "Open navigation menu", // 접근성을 위한 메뉴 열기 레이블
+            "nav.closeMenu": "Close navigation menu", // 접근성을 위한 메뉴 닫기 레이블
             "home.welcome": "Welcome to the Piano Practice Project!",
             "home.description": "Use the top menu to navigate to the desired function.",
             "home.startPractice": "Start Practicing",
@@ -64,14 +66,17 @@ const resources = {
                 }
             },
 
-            // 레거시 또는 미분류 키 (정리 필요)
-            "appTitle": "Pitch Perfect",
-            "practiceMode": "Practice Mode",
-            "sheetMusicTitle": "Sheet Music",
-            "changeLanguageToKo": "한국어로 변경",
-            "changeLanguageToEn": "Switch to English",
-            "lyricPlaceholder": "Lyric",
-            "documentTitle": "Piano Practice"
+            // 앱 전반에서 사용되는 공통 UI 텍스트
+            "common": {
+                "close": "Close",
+                "loading": "Loading...",
+                "noSongsAvailable": "No songs available to play."
+            },
+
+            // 브라우저 탭 제목 등 메타 정보
+            "meta": {
+                "documentTitle": "My Piano"
+            }
         }
     },
     // 한국어 리소스
@@ -81,6 +86,8 @@ const resources = {
             "nav.practice": "연습하기",
             "nav.sheetMusic": "악보 보기",
             "nav.profile": "내 정보",
+            "nav.openMenu": "네비게이션 메뉴 열기",
+            "nav.closeMenu": "네비게이션 메뉴 닫기",
             "home.title": "My Piano 앱",
             "home.welcome": "피아노 연습 프로젝트에 오신 것을 환영합니다!",
             "home.description": "상단 메뉴를 통해 원하는 기능으로 이동하세요.",
@@ -133,14 +140,16 @@ const resources = {
                 }
             },
 
-            // 레거시 또는 미분류 키 (정리 필요)
-            "appTitle": "음정 연습",
-            "practiceMode": "연습 모드",
-            "sheetMusicTitle": "악보 보기",
-            "changeLanguageToKo": "한국어로 변경",
-            "changeLanguageToEn": "Switch to English",
-            "lyricPlaceholder": "가사",
-            "documentTitle": "피아노 연습"
+            // 앱 전반에서 사용되는 공통 UI 텍스트
+            "common": {
+                "close": "닫기",
+                "loading": "로딩 중...",
+                "noSongsAvailable": "연주할 수 있는 곡이 없습니다."
+            },
+            // 브라우저 탭 제목 등 메타 정보
+            "meta": {
+                "documentTitle": "My Piano"
+            }
         }
     }
 };

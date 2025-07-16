@@ -71,7 +71,7 @@ const Header: React.FC = () => {
                 onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="main-nav"
-                aria-label={t(isMobileMenuOpen ? 'nav.closeMenu' : 'nav.openMenu', 'Toggle navigation')}
+                aria-label={t(isMobileMenuOpen ? 'nav.closeMenu' : 'nav.openMenu')}
             >
                 <div className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}>
                     <span></span>
