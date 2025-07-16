@@ -76,17 +76,33 @@
 
 /* --- 음표 길이별 스타일 --- */
 
-/* 2분음표(half note) 머리는 비워줍니다. */
-.note.duration-h .note-head {
+/* 2분음표(half note)와 온음표(whole note) 머리는 비워줍니다. */
+.note.duration-h .note-head,
+.note.duration-w .note-head {
     background-color: white;
     border: 2px solid #333;
     /* 테두리 두께만큼 너비/높이를 조정하여 크기를 유지합니다. */
     box-sizing: border-box;
 }
 
-/* 2분음표의 계이름은 검은색으로 표시하여 가독성을 확보합니다. */
-.note.duration-h .note-syllable {
+/* 2분음표와 온음표의 계이름은 검은색으로 표시하여 가독성을 확보합니다. */
+.note.duration-h .note-syllable,
+.note.duration-w .note-syllable {
     color: #333;
+}
+
+.flag {
+    position: absolute;
+    width: 2px;
+    height: 25px; /* 깃발의 꼬리 길이 */
+    background-color: #333;
+    /* 기둥의 아래쪽에 위치시킵니다. */
+    left: var(--stem-left);
+    bottom: var(--stem-bottom);
+    /* 깃발 모양을 만들기 위해 기울이고 이동시킵니다. */
+    transform-origin: top left;
+    transform: skewX(30deg) translateX(1px);
+    transition: background-color 0.2s;
 }
 
 .stem {
@@ -118,7 +134,8 @@
 
 /* highlighted 클래스가 적용되면 음표 머리와 기둥의 색을 변경합니다. */
 .note.highlighted .note-head,
-.note.highlighted .stem {
+.note.highlighted .stem,
+.note.highlighted .flag {
     background-color: #61dafb; /* 하이라이트 색상 */
 }
 

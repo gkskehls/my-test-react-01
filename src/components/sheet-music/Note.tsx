@@ -2,6 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './SheetMusic.css';
+import type { NoteDuration } from '../../songs/types';
 
 interface NoteProps {
     id: string;
@@ -9,7 +10,7 @@ interface NoteProps {
     stepDifference: number;
     isHighlighted: boolean;
     pitch: string;
-    duration: 'q' | 'h'; // 4분음표(quarter), 2분음표(half) 등
+    duration: NoteDuration; // 8분음표, 4분음표, 2분음표, 온음표 등
 }
 
 // React.FC 대신, props를 직접 타이핑하는 현대적인 함수 컴포넌트 선언 방식을 사용합니다.
@@ -48,7 +49,10 @@ const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch, duration }:
             <div className="note-head">
                 {displayName && <span className="note-syllable">{displayName}</span>}
             </div>
-            <div className="stem"></div>
+            {/* 온음표('w')는 기둥(stem)이 없으므로 렌더링하지 않습니다. */}
+            {duration !== 'w' && <div className="stem"></div>}
+            {/* 8분음표('8')는 깃발(flag)을 가집니다. */}
+            {duration === '8' && <div className="flag"></div>}
         </div>
     );
 };
