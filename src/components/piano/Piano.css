@@ -45,6 +45,8 @@
     font-weight: bold;
     pointer-events: none;
     user-select: none;
+    /* 계이름이 길어질 경우 줄바꿈되는 것을 방지합니다. */
+    white-space: nowrap;
 }
 
 .white-key .key-note-name {
@@ -54,6 +56,12 @@
 .black-key .key-note-name {
     color: #ccc;
     font-size: 12px;
+}
+
+/* 한국어 계이름('도#')은 영어('C#')보다 폭이 넓으므로,
+ * 한국어일 때 검은 건반의 글씨 크기를 약간 줄여 자연스럽게 보이도록 합니다. */
+:root[lang="ko"] .black-key .key-note-name {
+    font-size: 11px;
 }
 
 .key:active,

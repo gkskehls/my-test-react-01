@@ -10,6 +10,11 @@ const Header: React.FC = () => {
     // 1. 모바일 메뉴의 열림/닫힘 상태를 관리할 state 추가
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+    // 언어가 변경될 때마다 HTML 문서의 lang 속성을 업데이트합니다.
+    useEffect(() => {
+        document.documentElement.lang = i18n.language;
+    }, [i18n.language]);
+
     const changeLanguage = (lng: 'ko' | 'en') => {
         i18n.changeLanguage(lng);
         setLangDropdownOpen(false);
