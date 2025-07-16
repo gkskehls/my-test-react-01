@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import SongSelector from '../components/ui/SongSelector';
+import SongTabs from '../components/ui/SongTabs'; // SongSelector 대신 SongTabs를 가져옵니다.
 import { Song, SONG_LIST, SongNote } from '../songs';
 import './SheetMusicPage.css';
 
@@ -101,11 +101,11 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) =
     return (
         <div className="sheet-music-page-container">
             <h2>{t('sheetMusicTitle')}</h2>
-            <SongSelector
+            {/* SongSelector를 SongTabs로 교체합니다. label prop은 더 이상 필요 없습니다. */}
+            <SongTabs
                 songs={SONG_LIST}
                 currentSongId={song.id}
                 onSongChange={onSongChange}
-                label={t('sheetMusic.selectSong')}
             />
             {/* ref를 연결하여 너비를 측정합니다. */}
             <div className="sheet-music-lines-wrapper" ref={wrapperRef}>
