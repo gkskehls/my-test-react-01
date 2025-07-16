@@ -1,0 +1,40 @@
+.song-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    width: 150px; /* 고정 너비 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.song-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #61dafb;
+}
+
+.song-card-artwork {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 정사각형 비율 */
+    background-color: #f0f4f8;
+    border-radius: 8px;
+    font-size: 3rem;
+    color: #a0aec0;
+}
+
+.song-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.2;
+}

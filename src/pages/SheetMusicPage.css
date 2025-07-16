@@ -1,22 +1,54 @@
 /* src/pages/SheetMusicPage.css */
 .sheet-music-page-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 페이지 상단 헤더 영역 (버튼을 담는 컨테이너) */
+.sheet-music-header {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* 곡 선택 버튼 스타일 (기존 library-open-button에서 변경) */
+.song-selector-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem; /* 텍스트와 아이콘 사이 간격 */
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid #d1d5db; /* 더 부드러운 테두리 */
+    border-radius: 8px;
+    background-color: #ffffff; /* 배경을 흰색으로 변경 */
+    color: #1f2937; /* 텍스트 색상을 어둡게 */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.song-selector-button:hover {
+    border-color: #61dafb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.dropdown-icon {
+    font-size: 0.7em;
+    color: #6b7280;
 }
 
 .sheet-music-lines-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
     width: 100%;
-    align-items: center;
-    padding: 0 2rem; /* 좌우 여백은 유지 */
-    box-sizing: border-box;
+    margin-bottom: 2rem;
 }
 
+/* 각 악보 줄을 감싸는 div (반응형 레이아웃에 사용) */
 .sheet-music-row {
+    margin-bottom: 2rem;
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: center; /* 악보를 가운데 정렬합니다. */
 }

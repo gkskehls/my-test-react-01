@@ -1,9 +1,9 @@
 // src/pages/SheetMusicPage.tsx
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'; // `SongTabs`가 제거되었으므로 관련 import는 필요 없습니다.
 import { useTranslation } from 'react-i18next';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import SongTabs from '../components/ui/SongTabs'; // SongSelector 대신 SongTabs를 가져옵니다.
-import { Song, SONG_LIST, SongNote } from '../songs';
+import SongLibraryModal from '../components/library/SongLibraryModal'; // 새로 만든 모달 컴포넌트를 가져옵니다.
+import { Song, SongNote } from '../songs'; // SONG_LIST는 이제 모달 내부에서 사용됩니다.
 import './SheetMusicPage.css';
 
 // --- 추가된 부분: 계산을 위한 상수 정의 ---
@@ -30,6 +30,7 @@ interface SheetMusicPageProps {
 const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) => {
     const { t } = useTranslation();
     const [groupedLines, setGroupedLines] = useState<SongNote[][]>([]);
+    const [isLibraryOpen, setIsLibraryOpen] = useState(false); // 모달의 표시 여부를 관리하는 상태
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     // useMemo를 사용해 각 마디의 너비를 미리 계산해 둡니다. (성능 최적화)
@@ -100,13 +101,13 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) =
 
     return (
         <div className="sheet-music-page-container">
-            <h2>{t('sheetMusicTitle')}</h2>
-            {/* SongSelector를 SongTabs로 교체합니다. label prop은 더 이상 필요 없습니다. */}
-            <SongTabs
-                songs={SONG_LIST}
-                currentSongId={song.id}
-                onSongChange={onSongChange}
-            />
+            <div className="sheet-music-header">
+                {/* 버튼 클래스명을 더 명확하게 바꾸고, 현재 곡 제목과 아이콘을 표시합니다. */}
+                <button className="song-selector-button" onClick={() => setIsLibraryOpen(true)}>
+                    <span>{t(song.titleKey)}</span>
+                    <span className="dropdown-icon">▼</span>
+                </button>
+            </div>
             {/* ref를 연결하여 너비를 측정합니다. */}
             <div className="sheet-music-lines-wrapper" ref={wrapperRef}>
                 {groupedLines.map((line, index) => (
@@ -119,6 +120,13 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) =
                     </div>
                 ))}
             </div>
+
+            {isLibraryOpen && (
+                <SongLibraryModal
+                    onClose={() => setIsLibraryOpen(false)}
+                    onSongSelect={onSongChange}
+                />
+            )}
         </div>
     );
 };
