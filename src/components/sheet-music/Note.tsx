@@ -12,7 +12,7 @@ interface NoteProps {
 
 // React.FC 대신, props를 직접 타이핑하는 현대적인 함수 컴포넌트 선언 방식을 사용합니다.
 const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch }: NoteProps) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     // CSS 변수를 사용하여 음표의 동적 위치를 지정합니다.
     // --note-index: 음표의 가로 위치 (순서)
@@ -34,9 +34,9 @@ const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch }: NoteProps
     const noteName = pitch.replace(/\d/g, ''); // 'C#4' -> 'C#'
     const translationKey = `notes.${noteName.replace('#', 'sharp')}`;
 
-    // 기존처럼 한국어일 때만 계이름을 표시하도록 합니다.
-    // 영어일 때도 표시하고 싶다면 이 조건문을 제거하면 됩니다.
-    const displayName = i18n.language === 'ko' ? t(translationKey, noteName) : null;
+    // 언어 설정에 관계없이 항상 번역된 음이름을 가져옵니다.
+    // (영어: C, D, E... / 한국어: 도, 레, 미...)
+    const displayName = t(translationKey, noteName);
 
     return (
         <div id={`note-${id}`} className={noteClasses} style={noteStyle}>
