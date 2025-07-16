@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as Tone from 'tone';
+import { useTranslation } from 'react-i18next';
 import './Piano.css';
 
 // Key 컴포넌트는 변경 없습니다.
@@ -14,7 +15,12 @@ interface KeyProps {
 
 // 컴포넌트 선언 방식을 최신 스타일로 변경하고 이벤트 핸들러 타입을 명확히 합니다.
 const Key = ({ note, type, style, isActive, onNoteDown, onNoteUp }: KeyProps) => {
-    const noteName = note.slice(0, -1);
+    const { t } = useTranslation();
+
+    // 'C#4' -> 'C#', 'C4' -> 'C' 와 같이 옥타브를 제거하여 순수 음이름을 추출합니다.
+    const noteName = note.replace(/\d/g, '');
+    // i18next 키 형식에 맞게 '#'을 'sharp'로 변경합니다. (예: 'notes.Csharp')
+    const translationKey = `notes.${noteName.replace('#', 'sharp')}`;
 
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -36,7 +42,8 @@ const Key = ({ note, type, style, isActive, onNoteDown, onNoteUp }: KeyProps) =>
             onPointerLeave={handlePointerUpOrLeave}
             style={style}
         >
-            <span className="key-note-name">{noteName}</span>
+            {/* 번역된 음이름을 표시합니다. 번역 키가 없으면 noteName을 그대로 보여줍니다. */}
+            <span className="key-note-name">{t(translationKey, noteName)}</span>
         </div>
     );
 };
