@@ -61,9 +61,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ song, onSongChange }) => {
 
     return (
         <div className="practice-container">
-            <h1>{t('practicePageTitle', { title: t(song.titleKey) })}</h1>
-
-            {/* '악보 보기' 페이지와 동일한 곡 선택 UI를 추가합니다. */}
+            {/* 페이지 제목을 제거하고, 곡 선택 버튼을 유일한 컨트롤로 사용합니다. */}
             <div className="practice-header">
                 <button className="song-selector-button" onClick={() => setIsLibraryOpen(true)}>
                     <span>{t(song.titleKey)}</span>
