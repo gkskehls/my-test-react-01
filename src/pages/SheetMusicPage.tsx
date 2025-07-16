@@ -23,11 +23,12 @@ const MIN_BAR_SPACING = 20; // 마디와 마디 사이의 최소 간격
 // --- 여기까지 ---
 
 interface SheetMusicPageProps {
+    songs: Song[];
     song: Song;
     onSongChange: (newSong: Song) => void;
 }
 
-const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) => {
+const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
     const [groupedLines, setGroupedLines] = useState<SongNote[][]>([]);
     const [isLibraryOpen, setIsLibraryOpen] = useState(false); // 모달의 표시 여부를 관리하는 상태
@@ -123,6 +124,7 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ song, onSongChange }) =
 
             {isLibraryOpen && (
                 <SongLibraryModal
+                    songs={songs}
                     onClose={() => setIsLibraryOpen(false)}
                     onSongSelect={onSongChange}
                 />

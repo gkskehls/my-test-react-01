@@ -1,16 +1,17 @@
 // src/components/library/SongLibraryModal.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Song, SONG_LIST } from '../../songs';
+import { Song } from '../../songs'; // 정적 SONG_LIST import를 제거합니다.
 import SongCard from './SongCard';
 import './SongLibraryModal.css';
 
 interface SongLibraryModalProps {
+    songs: Song[]; // 부모로부터 동적 곡 목록을 받도록 prop을 추가합니다.
     onClose: () => void;
     onSongSelect: (song: Song) => void;
 }
 
-const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ onClose, onSongSelect }) => {
+const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ songs, onClose, onSongSelect }) => {
     const { t } = useTranslation();
 
     const handleSongCardClick = (song: Song) => {
@@ -29,7 +30,7 @@ const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ onClose, onSongSele
                 </div>
                 <div className="modal-body">
                     <div className="song-grid">
-                        {SONG_LIST.map(song => (
+                        {songs.map(song => ( // 정적 SONG_LIST 대신 props로 받은 songs를 사용합니다.
                             <SongCard
                                 key={song.id}
                                 song={song}

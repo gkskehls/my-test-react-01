@@ -9,11 +9,12 @@ import './PracticePage.css';
 
 // 1. App.tsx로부터 song과 onSongChange를 props로 받도록 인터페이스를 정의합니다.
 interface PracticePageProps {
+    songs: Song[];
     song: Song;
     onSongChange: (newSong: Song) => void;
 }
 
-const PracticePage: React.FC<PracticePageProps> = ({ song, onSongChange }) => {
+const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
     // 2. song 상태는 이제 props로 받으므로, 모달 표시 여부만 내부 상태로 관리합니다.
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
@@ -88,6 +89,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ song, onSongChange }) => {
             {/* 라이브러리 모달 렌더링 로직 추가 */}
             {isLibraryOpen && (
                 <SongLibraryModal
+                    songs={songs} // 전체 곡 목록을 모달에 전달합니다.
                     onClose={() => setIsLibraryOpen(false)}
                     onSongSelect={handleSongChange}
                 />
