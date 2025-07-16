@@ -14,39 +14,47 @@ interface KeyProps {
 }
 
 // 컴포넌트 선언 방식을 최신 스타일로 변경하고 이벤트 핸들러 타입을 명확히 합니다.
-const Key = ({ note, type, style, isActive, onNoteDown, onNoteUp }: KeyProps) => {
+// ✨ 1. React.memo로 컴포넌트를 감싸 불필요한 리렌더링을 방지합니다.
+const Key = React.memo(({ note, type, style, isActive, onNoteDown, onNoteUp }: KeyProps) => {
     const { t } = useTranslation();
 
     // 'C#4' -> 'C#', 'C4' -> 'C' 와 같이 옥타브를 제거하여 순수 음이름을 추출합니다.
     const noteName = note.replace(/\d/g, '');
     // i18next 키 형식에 맞게 '#'을 'sharp'로 변경합니다. (예: 'notes.Csharp')
     const translationKey = `notes.${noteName.replace('#', 'sharp')}`;
+    const translatedNoteName = t(translationKey, noteName);
 
-    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.currentTarget.setPointerCapture(e.pointerId);
         onNoteDown(note);
     };
 
-    const handlePointerUpOrLeave = (e: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerUpOrLeave = (e: React.PointerEvent<HTMLButtonElement>) => {
         e.currentTarget.releasePointerCapture(e.pointerId);
         onNoteUp(note);
     };
 
+    // ✨ 2. 스크린 리더가 읽을 명확한 ARIA 레이블을 생성합니다. (예: "C# 4")
+    const ariaLabel = `${translatedNoteName} ${note.slice(-1)}`;
+
     return (
-        <div
+        // ✨ 3. <div>를 <button>으로 변경하여 접근성과 시맨틱을 개선합니다.
+        // 참고: Piano.css에서 button의 기본 스타일(border, background 등)을 리셋해야 할 수 있습니다.
+        <button
             className={`key ${type}-key ${isActive ? 'active' : ''}`}
             data-note={note}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUpOrLeave}
             onPointerLeave={handlePointerUpOrLeave}
             style={style}
+            aria-label={ariaLabel}
         >
             {/* 번역된 음이름을 표시합니다. 번역 키가 없으면 noteName을 그대로 보여줍니다. */}
-            <span className="key-note-name">{t(translationKey, noteName)}</span>
-        </div>
+            <span className="key-note-name">{translatedNoteName}</span>
+        </button>
     );
-};
+});
 
 const KEY_MAP: { [key: string]: string } = {
     'a': 'C4', 'w': 'C#4', 's': 'D4', 'e': 'D#4', 'd': 'E4',
