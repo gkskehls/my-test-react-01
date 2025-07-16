@@ -1,11 +1,14 @@
 // src/pages/SheetMusicPage.tsx
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import SongLibraryModal from '../components/library/SongLibraryModal';
 import { Song, SongNote } from '../songs';
 import './SheetMusicPage.css';
 import { useSheetMusicLayout, type LayoutMetrics } from '../hooks/useSheetMusicLayout';
+
+// [수정] React.lazy를 사용하여 SongLibraryModal을 동적으로 가져옵니다.
+// 이렇게 하면 이 컴포넌트의 코드가 별도의 청크로 분리됩니다.
+const SongLibraryModal = lazy(() => import('../components/library/SongLibraryModal'));
 
 /**
  * 화면 너비에 따라 악보의 마디(bar)들을 여러 줄로 나누는 핵심 로직입니다.
@@ -93,13 +96,17 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ songs, song, onSongChan
                 ))}
             </div>
 
-            {isLibraryOpen && (
-                <SongLibraryModal
-                    songs={songs}
-                    onClose={() => setIsLibraryOpen(false)}
-                    onSongSelect={onSongChange}
-                />
-            )}
+            {/* [수정] Suspense로 모달을 감싸줍니다. */}
+            {/* 모달 코드를 다운로드하는 동안 fallback(여기서는 아무것도 표시하지 않음)을 보여줍니다. */}
+            <Suspense fallback={null}>
+                {isLibraryOpen && (
+                    <SongLibraryModal
+                        songs={songs}
+                        onClose={() => setIsLibraryOpen(false)}
+                        onSongSelect={onSongChange}
+                    />
+                )}
+            </Suspense>
         </div>
     );
 };
