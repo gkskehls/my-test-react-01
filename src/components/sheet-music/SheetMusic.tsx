@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SongNote } from '../../songs';
 import { getNoteStepDifference } from '../../lib/musicUtils';
 import Note from './Note';
@@ -10,7 +11,9 @@ interface SheetMusicProps {
     idPrefix?: string;
 }
 
-const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPrefix }) => {
+const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPrefix, }) => {
+    const { t } = useTranslation();
+
     return (
         <div
             className="sheet-music-wrapper"
@@ -49,14 +52,16 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPref
                     const lyricId = idPrefix ? `${idPrefix}-${index}` : `${index}`;
                     const key = `lyric-${lyricId}`;
 
+                    const translatedLyric = songNote.lyricKey ? t(songNote.lyricKey) : null;
+
                     return (
-                        songNote.lyric && (
+                        translatedLyric && (
                             <span
                                 key={key}
                                 className="lyric"
                                 style={{ '--note-index': index } as React.CSSProperties}
                             >
-                                {songNote.lyric}
+                                {translatedLyric}
                             </span>
                         )
                     );
