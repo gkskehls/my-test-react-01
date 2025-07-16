@@ -1,13 +1,15 @@
 // src/components/ui/Header.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
 
 const Header: React.FC = () => {
     const { t, i18n } = useTranslation();
+    // 각 드롭다운/메뉴의 DOM 요소를 참조하기 위해 ref를 생성합니다.
+    const langSelectorRef = useRef<HTMLDivElement>(null);
+    const mobileNavRef = useRef<HTMLElement>(null);
     const [isLangDropdownOpen, setLangDropdownOpen] = useState(false);
-    // 1. 모바일 메뉴의 열림/닫힘 상태를 관리할 state 추가
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     // 언어가 변경될 때마다 HTML 문서의 lang 속성을 업데이트합니다.
@@ -17,28 +19,46 @@ const Header: React.FC = () => {
 
     const changeLanguage = (lng: 'ko' | 'en') => {
         i18n.changeLanguage(lng);
+        // 모든 메뉴를 닫습니다.
         setLangDropdownOpen(false);
-        // 모바일 메뉴에서도 언어 변경 후 메뉴가 닫히도록 합니다.
         setMobileMenuOpen(false);
     };
 
-    // 2. 메뉴 링크나 로고를 클릭하면 모바일 메뉴가 닫히도록 처리하는 함수
+    // 메뉴 링크나 로고를 클릭하면 모바일 메뉴가 닫히도록 처리하는 함수
     const closeMobileMenu = () => {
         setMobileMenuOpen(false);
     };
 
-    // 3. 모바일 메뉴가 열렸을 때 배경 스크롤을 막는 로직 추가
+    // 모바일 메뉴가 열렸을 때 배경 스크롤을 막고, 외부 클릭 시 메뉴를 닫는 로직
     useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            // 언어 선택 메뉴 외부 클릭 감지
+            if (langSelectorRef.current && !langSelectorRef.current.contains(event.target as Node)) {
+                setLangDropdownOpen(false);
+            }
+            // 모바일 메뉴 외부 클릭 감지 (햄버거 버튼 자체는 제외)
+            if (mobileNavRef.current && !mobileNavRef.current.contains(event.target as Node) && !(event.target as HTMLElement).closest('.mobile-menu-toggle')) {
+                setMobileMenuOpen(false);
+            }
+        };
+
         if (isMobileMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
         }
-        // 컴포넌트가 사라질 때 원래대로 되돌리는 정리(cleanup) 함수
+
+        // 외부 클릭 이벤트 리스너 추가
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        // 컴포넌트가 언마운트되거나 의존성이 변경될 때 정리(cleanup) 함수 실행
         return () => {
             document.body.style.overflow = 'auto';
+            document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [isMobileMenuOpen]);
+        // isMobileMenuOpen 상태가 바뀔 때마다 스크롤 잠금/해제 로직이 실행됩니다.
+        // isLangDropdownOpen은 외부 클릭을 감지하기 위해 의존성 배열에 추가합니다.
+    }, [isMobileMenuOpen, isLangDropdownOpen]);
 
 
     return (
@@ -49,7 +69,9 @@ const Header: React.FC = () => {
             <button
                 className="mobile-menu-toggle"
                 onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="메뉴 열기/닫기"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="main-nav"
+                aria-label={t(isMobileMenuOpen ? 'nav.closeMenu' : 'nav.openMenu', 'Toggle navigation')}
             >
                 <div className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}>
                     <span></span>
@@ -59,16 +81,18 @@ const Header: React.FC = () => {
             </button>
 
             {/* 5. isMobileMenuOpen 상태에 따라 'open' 클래스를 동적으로 부여 */}
-            <nav className={isMobileMenuOpen ? 'open' : ''}>
+            <nav id="main-nav" ref={mobileNavRef} className={isMobileMenuOpen ? 'open' : ''}>
                 <NavLink to="/practice" onClick={closeMobileMenu}>{t('nav.practice')}</NavLink>
                 <NavLink to="/sheet-music" onClick={closeMobileMenu}>{t('nav.sheetMusic')}</NavLink>
                 <NavLink to="/profile" onClick={closeMobileMenu}>{t('nav.profile')}</NavLink>
 
                 {/* 언어 변경 드롭다운 */}
-                <div className="language-selector">
+                <div className="language-selector" ref={langSelectorRef}>
                     <button
                         className="language-button"
                         onClick={() => setLangDropdownOpen(!isLangDropdownOpen)}
+                        aria-haspopup="listbox"
+                        aria-expanded={isLangDropdownOpen}
                     >
                         {i18n.language.toUpperCase()}
                         <span className="arrow-down"></span>
