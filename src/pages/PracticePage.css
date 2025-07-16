@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    /* 화면의 가용 높이를 꽉 채우도록 변경합니다. (헤더 60px + 상하패딩 40px 제외) */
+    height: calc(100vh - 100px);
+    /* 자식 요소에서 직접 간격을 제어하므로 gap을 제거합니다. */
 }
 
 /* --- 추가된 부분: '악보 보기' 페이지와 동일한 곡 선택 UI 스타일 --- */
@@ -10,6 +12,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* 컨테이너의 일부로서 축소되지 않도록 설정합니다. */
+    flex-shrink: 0;
+    /* 상하에 적절한 여백을 줍니다. */
+    padding: 1.5rem 0;
 }
 
 .song-selector-button {
@@ -41,13 +47,18 @@
 .practice-sheet-wrapper {
     width: 100%;
     max-width: 860px;
-    overflow-x: auto;
-    padding: 20px 0;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     position: relative;
-    min-height: 240px; /* 최소 높이 지정 */
+    /* 남은 세로 공간을 모두 차지하도록 설정합니다. */
+    flex-grow: 1;
+    /* 내용이 많아지면 내부에서 스크롤되도록 하여 레이아웃이 깨지는 것을 방지합니다. */
+    overflow: auto;
+    /* 최소 높이를 설정하여 내용이 적을 때도 영역을 유지합니다. */
+    min-height: 150px;
+    /* 악보 콘텐츠를 위한 내부 패딩 */
+    padding: 20px 0;
 }
 
 .practice-sheet-wrapper.is-finished {
@@ -57,6 +68,12 @@
 .congrats-message {
     text-align: center;
     color: #096dd9;
+    /* wrapper가 스크롤될 때도 중앙에 위치하도록 flex를 사용합니다. */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .congrats-message h2 {
@@ -103,6 +120,7 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: auto; /* 추가: 피아노를 하단에 붙이도록 도와줍니다. */
-    padding: 20px 0; /* 추가: 상하 여백 */
+    /* 컨테이너의 일부로서 축소되지 않도록 하고, 하단에 위치시킵니다. */
+    flex-shrink: 0;
+    padding: 20px 0;
 }
