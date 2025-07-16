@@ -1,26 +1,58 @@
 // src/pages/SheetMusicPage.tsx
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'; // `SongTabs`가 제거되었으므로 관련 import는 필요 없습니다.
+import React, { useState, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import SongLibraryModal from '../components/library/SongLibraryModal'; // 새로 만든 모달 컴포넌트를 가져옵니다.
-import { Song, SongNote } from '../songs'; // SONG_LIST는 이제 모달 내부에서 사용됩니다.
+import SongLibraryModal from '../components/library/SongLibraryModal';
+import { Song, SongNote } from '../songs';
 import './SheetMusicPage.css';
+import { useSheetMusicLayout, type LayoutMetrics } from '../hooks/useSheetMusicLayout';
 
-// --- 추가된 부분: 계산을 위한 상수 정의 ---
-// 참고: 이 상수들은 ./SheetMusicPage.css 안의 CSS 변수들과 동기화되어야 합니다.
-const DURATION_WIDTHS: { [key: string]: number } = {
-    'q': 45, // 4분음표
-    'h': 60, // 2분음표
-    'w': 80, // 온음표
+/**
+ * 화면 너비에 따라 악보의 마디(bar)들을 여러 줄로 나누는 핵심 로직입니다.
+ * @param song - 현재 표시할 곡 데이터
+ * @param layout - useSheetMusicLayout 훅에서 제공하는 현재 레이아웃 측정값
+ * @returns {SongNote[][]} 여러 줄로 그룹화된 음표 배열
+ */
+const groupBarsIntoLines = (song: Song, layout: LayoutMetrics): SongNote[][] => {
+    // 레이아웃 값이 준비되지 않았으면 빈 배열을 반환하여 렌더링을 방지합니다.
+    if (layout.containerWidth === 0) {
+        return [];
+    }
+
+    // 1. CSS와 동일한 로직으로 각 마디의 너비를 계산합니다.
+    //    음표 개수 * 음표 간격으로 계산하여, 기존의 부정확한 로직을 수정합니다.
+    const barWidths = song.lines.map(bar => bar.length * layout.noteSpacing);
+
+    const newGroupedLines: SongNote[][] = [];
+    let currentLineNotes: SongNote[] = [];
+    // 2. 한 줄에 들어갈 수 있는 전체 너비에서 좌우 여백을 제외하여 실제 콘텐츠 영역 너비를 계산합니다.
+    const contentWidth = layout.containerWidth - layout.staffPaddingLeft - layout.staffPaddingRight;
+    let currentLineWidth = 0;
+
+    song.lines.forEach((bar, index) => {
+        const barWidth = barWidths[index];
+        // 현재 라인에 이미 마디가 있다면 마디 사이 간격을 추가합니다.
+        const spacing = currentLineNotes.length > 0 ? layout.minBarSpacing : 0;
+
+        // 3. 콘텐츠 영역 너비(contentWidth)를 기준으로 오버플로우를 확인합니다.
+        if (currentLineNotes.length > 0 && currentLineWidth + spacing + barWidth > contentWidth) {
+            newGroupedLines.push(currentLineNotes);
+            currentLineNotes = bar; // 새 줄 시작
+            currentLineWidth = barWidth;
+        } else {
+            // 현재 줄에 마디를 추가합니다.
+            currentLineNotes = [...currentLineNotes, ...bar];
+            currentLineWidth += spacing + barWidth;
+        }
+    });
+
+    // 마지막에 남은 라인을 추가합니다.
+    if (currentLineNotes.length > 0) {
+        newGroupedLines.push(currentLineNotes);
+    }
+
+    return newGroupedLines;
 };
-const DEFAULT_NOTE_WIDTH = DURATION_WIDTHS['q'];
-
-// 악보의 좌우 여백과 최소 마디 간 간격입니다.
-const STAFF_PADDING_LEFT = 80;
-const STAFF_PADDING_RIGHT = 40;
-const MIN_BAR_SPACING = 20; // 마디와 마디 사이의 최소 간격
-
-// --- 여기까지 ---
 
 interface SheetMusicPageProps {
     songs: Song[];
@@ -30,76 +62,14 @@ interface SheetMusicPageProps {
 
 const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
-    const [groupedLines, setGroupedLines] = useState<SongNote[][]>([]);
-    const [isLibraryOpen, setIsLibraryOpen] = useState(false); // 모달의 표시 여부를 관리하는 상태
+    const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // useMemo를 사용해 각 마디의 너비를 미리 계산해 둡니다. (성능 최적화)
-    const barWidths = useMemo(() => {
-        return song.lines.map(line => {
-            const notesWidth = line.reduce((total, note) => {
-                return total + (DURATION_WIDTHS[note.duration] || DEFAULT_NOTE_WIDTH);
-            }, 0);
-            // 각 마디의 너비는 음표 너비 합 + 좌우 여백입니다.
-            return notesWidth + STAFF_PADDING_LEFT + STAFF_PADDING_RIGHT;
-        });
-    }, [song.lines]);
+    // 4. 커스텀 훅을 사용하여 반응형 레이아웃 값들을 가져옵니다.
+    const layout = useSheetMusicLayout(wrapperRef);
 
-    // useCallback을 사용해 마디 그룹핑 함수를 메모이제이션합니다.
-    const groupBarsIntoLines = useCallback(() => {
-        if (!wrapperRef.current || barWidths.length === 0) return;
-
-        const containerWidth = wrapperRef.current.offsetWidth;
-
-        const newGroupedLines: SongNote[][] = [];
-        let currentLineNotes: SongNote[] = [];
-        let currentLineWidth = 0;
- 
-        song.lines.forEach((bar, index) => {
-            const barWidth = barWidths[index];
-            // 현재 라인에 첫 번째 마디가 아닐 경우에만 간격을 추가합니다.
-            const spacing = currentLineNotes.length > 0 ? MIN_BAR_SPACING : 0;
- 
-            if (currentLineNotes.length > 0 && currentLineWidth + spacing + barWidth > containerWidth) {
-                // 현재 라인이 가득 찼으면, 이 라인을 확정합니다.
-                newGroupedLines.push(currentLineNotes);
-                // 새 라인을 현재 마디로 시작합니다.
-                currentLineNotes = bar;
-                currentLineWidth = barWidth;
-            } else {
-                // 현재 라인에 마디와 너비를 추가합니다.
-                currentLineNotes = [...currentLineNotes, ...bar];
-                currentLineWidth += spacing + barWidth;
-            }
-        });
-
-        // 마지막에 남은 라인이 있다면 추가합니다.
-        if (currentLineNotes.length > 0) {
-            newGroupedLines.push(currentLineNotes);
-        }
-
-        // 실제 그룹 구성이 변경되었을 때만 상태를 업데이트하여 불필요한 리렌더링을 방지합니다.
-        setGroupedLines(prev => {
-            if (JSON.stringify(prev) === JSON.stringify(newGroupedLines)) {
-                return prev;
-            }
-            return newGroupedLines;
-        });
-
-    }, [song.lines, barWidths]);
-
-    // ResizeObserver를 설정하여 컨테이너 너비 변경을 감지합니다.
-    useEffect(() => {
-        const wrapperElement = wrapperRef.current;
-        if (!wrapperElement) return;
-
-        const observer = new ResizeObserver(groupBarsIntoLines);
-        observer.observe(wrapperElement);
-
-        groupBarsIntoLines(); // 초기 계산 실행
-
-        return () => observer.disconnect();
-    }, [groupBarsIntoLines]);
+    // 5. useMemo를 사용하여 song이나 layout 값이 변경될 때만 그룹핑을 다시 계산합니다.
+    const groupedLines = useMemo(() => groupBarsIntoLines(song, layout), [song, layout]);
 
     return (
         <div className="sheet-music-page-container">

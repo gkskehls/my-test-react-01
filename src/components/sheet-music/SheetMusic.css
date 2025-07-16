@@ -6,7 +6,7 @@
     --base-note-top: 68px; /* 기준음(G4)의 상단 위치 */
     --wrapper-height: 200px;
     --note-spacing: 45px; /* 음표 간 가로 간격 */
-    --staff-padding-left: 80px;
+    --staff-padding-left: 100px; /* JS 로직과 동기화: 높은음자리표와 음표가 겹치지 않도록 충분한 공간을 확보합니다. */
     --staff-padding-right: 40px;
     --clef-font-size: 100px;
     --clef-top: 15px;
@@ -35,8 +35,8 @@
 .staff {
     position: absolute;
     top: var(--staff-top);
-    left: 20px;
-    right: 20px;
+    left: 0;
+    width: 100%; /* [수정] wrapper 전체 너비를 차지하도록 하여 음표가 항상 오선지 위에 그려지도록 합니다. */
 }
 
 .staff-line {
@@ -153,8 +153,8 @@
         --base-note-top: 52px;
         --wrapper-height: 150px;
         --note-spacing: 38px;
-        --staff-padding-left: 50px;
-        --staff-padding-right: 20px;
+        --staff-padding-left: 60px; /* JS 로직과 동기화: 모바일에서도 높은음자리표 공간을 확보합니다. */
+        --staff-padding-right: 10px; /* JS 로직과 동기화: 핸드폰 화면 오른쪽 여백 축소 */
         --clef-font-size: 75px;
         --clef-top: 12px;
         /* 작은 화면에서 가사 위치 조정 */
