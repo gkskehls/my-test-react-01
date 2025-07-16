@@ -78,7 +78,7 @@
 
 .song-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 카드의 최소 너비를 줄여 모바일 화면에서 2열 배치를 유도합니다. */
     gap: 1.5rem;
     padding: 0.5rem;
 }

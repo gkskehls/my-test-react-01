@@ -10,7 +10,6 @@
     cursor: pointer;
     text-align: center;
     transition: all 0.2s ease-in-out;
-    width: 150px; /* 고정 너비 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
