@@ -39,6 +39,7 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPref
                             stepDifference={getNoteStepDifference(songNote.note)}
                             isHighlighted={index === currentNoteIndex}
                             pitch={songNote.note}
+                            duration={songNote.duration}
                         />
                     );
                 })}

@@ -66,12 +66,27 @@
     height: var(--note-head-height);
     background-color: #333;
     border-radius: 50%;
-    transform: rotate(-15deg);
+    transform: rotate(-20deg); /* 기울기를 조금 더 주어 자연스러운 모양으로 만듭니다. */
     transition: background-color 0.2s;
     /* 텍스트를 중앙에 배치하기 위한 스타일 추가 */
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* --- 음표 길이별 스타일 --- */
+
+/* 2분음표(half note) 머리는 비워줍니다. */
+.note.duration-h .note-head {
+    background-color: white;
+    border: 2px solid #333;
+    /* 테두리 두께만큼 너비/높이를 조정하여 크기를 유지합니다. */
+    box-sizing: border-box;
+}
+
+/* 2분음표의 계이름은 검은색으로 표시하여 가독성을 확보합니다. */
+.note.duration-h .note-syllable {
+    color: #333;
 }
 
 .stem {
@@ -90,7 +105,7 @@
     font-weight: bold;
     user-select: none;
     pointer-events: none;
-    transform: rotate(15deg); /* 음표 머리가 기울어져 있으므로 텍스트는 바로 세웁니다. */
+    transform: rotate(20deg); /* 음표 머리가 기울어진 만큼 텍스트는 바로 세웁니다. */
 }
 
 

@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './SheetMusic.css';
@@ -8,10 +9,11 @@ interface NoteProps {
     stepDifference: number;
     isHighlighted: boolean;
     pitch: string;
+    duration: 'q' | 'h'; // 4분음표(quarter), 2분음표(half) 등
 }
 
 // React.FC 대신, props를 직접 타이핑하는 현대적인 함수 컴포넌트 선언 방식을 사용합니다.
-const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch }: NoteProps) => {
+const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch, duration }: NoteProps) => {
     const { t } = useTranslation();
 
     // CSS 변수를 사용하여 음표의 동적 위치를 지정합니다.
@@ -26,9 +28,12 @@ const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch }: NoteProps
     };
 
     // 조건부 클래스를 더 명확하고 확장 가능하게 관리합니다.
-    const noteClasses = ['note', isHighlighted && 'highlighted']
-        .filter(Boolean)
-        .join(' ');
+    const noteClasses = [
+        'note',
+        isHighlighted && 'highlighted',
+        // 음표 길이에 따른 클래스를 추가합니다. (예: duration-q, duration-h)
+        `duration-${duration}`,
+    ].filter(Boolean).join(' ');
 
     // i18n을 사용하여 음이름을 번역합니다.
     const noteName = pitch.replace(/\d/g, ''); // 'C#4' -> 'C#'
