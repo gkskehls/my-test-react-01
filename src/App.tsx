@@ -34,7 +34,11 @@ function App() {
                 <Suspense fallback={<div className="page-loading">Loading...</div>}>
                     <Routes>
                         <Route path="/" element={<HomePage />} />
-                        <Route path="/practice" element={<PracticePage song={currentSong} />} />
+                        {/* PracticePage에도 onSongChange 핸들러를 전달하여 상태를 동기화합니다. */}
+                        <Route
+                            path="/practice"
+                            element={<PracticePage song={currentSong} onSongChange={handleSongChange} />}
+                        />
                         <Route
                             path="/sheet-music"
                             element={<SheetMusicPage song={currentSong} onSongChange={handleSongChange} />}
