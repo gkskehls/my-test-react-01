@@ -13,8 +13,8 @@ interface NoteProps {
     duration: NoteDuration; // 8분음표, 4분음표, 2분음표, 온음표 등
 }
 
-// React.FC 대신, props를 직접 타이핑하는 현대적인 함수 컴포넌트 선언 방식을 사용합니다.
-const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch, duration }: NoteProps) => {
+// React.memo를 사용하여 props가 변경되지 않은 음표의 불필요한 리렌더링을 방지합니다. (성능 최적화)
+const Note = React.memo(({ id, noteIndex, stepDifference, isHighlighted, pitch, duration }: NoteProps) => {
     const { t } = useTranslation();
 
     // CSS 변수를 사용하여 음표의 동적 위치를 지정합니다.
@@ -55,6 +55,6 @@ const Note = ({ id, noteIndex, stepDifference, isHighlighted, pitch, duration }:
             {duration === '8' && <div className="flag"></div>}
         </div>
     );
-};
+});
 
 export default Note;

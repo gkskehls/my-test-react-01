@@ -28,42 +28,32 @@ const SheetMusic: React.FC<SheetMusicProps> = ({ notes, currentNoteIndex, idPref
                 <div className="staff-line" />
             </div>
             <div className="notes-container">
-                {/* 1. 음표 렌더링 */}
                 {notes.map((songNote, index) => {
-                    // === 수정: idPrefix 유무에 따라 ID와 key를 유연하게 생성합니다. ===
+                    // 음표와 가사에 사용할 고유 ID와 key를 생성합니다.
                     const noteId = idPrefix ? `${idPrefix}-${index}` : `${index}`;
-                    const key = `note-${noteId}`;
-
-                    return (
-                        <Note
-                            key={key}
-                            id={noteId}
-                            noteIndex={index}
-                            stepDifference={getNoteStepDifference(songNote.note)}
-                            isHighlighted={index === currentNoteIndex}
-                            pitch={songNote.note}
-                            duration={songNote.duration}
-                        />
-                    );
-                })}
-                {/* 2. 가사 렌더링 */}
-                {notes.map((songNote, index) => {
-                    // === 수정: key를 고유하게 만듭니다. ===
-                    const lyricId = idPrefix ? `${idPrefix}-${index}` : `${index}`;
-                    const key = `lyric-${lyricId}`;
-
                     const translatedLyric = songNote.lyricKey ? t(songNote.lyricKey) : null;
 
                     return (
-                        translatedLyric && (
-                            <span
-                                key={key}
-                                className="lyric"
-                                style={{ '--note-index': index } as React.CSSProperties}
-                            >
-                                {translatedLyric}
-                            </span>
-                        )
+                        // React.Fragment를 사용하여 음표와 가사를 하나의 그룹으로 묶습니다.
+                        // 이렇게 하면 배열을 한 번만 순회하여 성능과 가독성을 높일 수 있습니다.
+                        <React.Fragment key={`item-${noteId}`}>
+                            <Note
+                                id={noteId}
+                                noteIndex={index}
+                                stepDifference={getNoteStepDifference(songNote.note)}
+                                isHighlighted={index === currentNoteIndex}
+                                pitch={songNote.note}
+                                duration={songNote.duration}
+                            />
+                            {translatedLyric && (
+                                <span
+                                    className="lyric"
+                                    style={{ '--note-index': index } as React.CSSProperties}
+                                >
+                                    {translatedLyric}
+                                </span>
+                            )}
+                        </React.Fragment>
                     );
                 })}
             </div>
