@@ -12,19 +12,18 @@ interface KeyProps {
     onNoteUp: (note: string) => void;
 }
 
-const Key: React.FC<KeyProps> = ({ note, type, style, isActive, onNoteDown, onNoteUp }) => {
+// 컴포넌트 선언 방식을 최신 스타일로 변경하고 이벤트 핸들러 타입을 명확히 합니다.
+const Key = ({ note, type, style, isActive, onNoteDown, onNoteUp }: KeyProps) => {
     const noteName = note.slice(0, -1);
 
-    const handlePointerDown = (e: React.PointerEvent) => {
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         e.preventDefault();
-        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+        e.currentTarget.setPointerCapture(e.pointerId);
         onNoteDown(note);
     };
 
-    const handlePointerUpOrLeave = (e: React.PointerEvent) => {
-        if ((e.target as HTMLElement).hasPointerCapture(e.pointerId)) {
-            (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-        }
+    const handlePointerUpOrLeave = (e: React.PointerEvent<HTMLDivElement>) => {
+        e.currentTarget.releasePointerCapture(e.pointerId);
         onNoteUp(note);
     };
 
@@ -53,8 +52,8 @@ interface PianoProps {
     onNotePlayed?: (note: string) => void;
 }
 
-// === ⭐️ 근본적으로 수정된 Piano 컴포넌트 ⭐️ ===
-const Piano: React.FC<PianoProps> = ({ numOctaves = 2, onNotePlayed }) => {
+// 컴포넌트 선언 방식을 최신 스타일로 통일합니다.
+const Piano = ({ numOctaves = 2, onNotePlayed }: PianoProps) => {
     // ... (다른 state와 hook들은 변경 없음) ...
     const synth = useRef<Tone.Synth | null>(null);
     const isAudioUnlocked = useRef(false);
@@ -127,8 +126,16 @@ const Piano: React.FC<PianoProps> = ({ numOctaves = 2, onNotePlayed }) => {
         return groups;
     }, [numOctaves]);
 
+    // CSS 변수로 흰 건반의 개수를 전달하여 반응형 너비를 계산합니다.
+    // ✨ 이 부분이 TypeScript에 사용자 정의 속성을 알려주어 타입 오류를 해결하는 핵심입니다.
+    const pianoStyle: React.CSSProperties & {
+        '--num-white-keys'?: number;
+    } = {
+        '--num-white-keys': pianoKeyGroups.length,
+    };
+
     return (
-        <div className="piano">
+        <div className="piano" style={pianoStyle}>
             {pianoKeyGroups.map(({ whiteKey, blackKey }) => (
                 <div key={whiteKey} className="key-container">
                     <Key
