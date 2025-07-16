@@ -163,7 +163,9 @@ i18n
         interpolation: {
             escapeValue: false
         },
-        debug: true
+        // 개발 환경에서만 디버그 메시지를 활성화하여 프로덕션 빌드의 콘솔을 깨끗하게 유지합니다.
+        // Vite는 `import.meta.env.DEV`를 통해 개발 모드 여부를 알려줍니다.
+        debug: import.meta.env.DEV
     });
 
 export default i18n;
