@@ -1,5 +1,5 @@
 // src/components/library/SongLibraryModal.tsx
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Song } from '../../songs'; // 정적 SONG_LIST import를 제거합니다.
@@ -8,13 +8,27 @@ import './SongLibraryModal.css';
 
 interface SongLibraryModalProps {
     songs: Song[]; // 부모로부터 동적 곡 목록을 받도록 prop을 추가합니다.
+    currentSong: Song; // 현재 선택된 곡 정보를 받습니다.
     onClose: () => void;
     onSongSelect: (song: Song) => void;
 }
 
-const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ songs, onClose, onSongSelect }) => {
+const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ songs, currentSong, onClose, onSongSelect }) => {
     const { t } = useTranslation();
     const modalRef = useRef<HTMLDivElement>(null);
+
+    // [추가] 현재 선택된 카테고리를 관리하는 상태. 'All'이 기본값입니다.
+    const [selectedCategory, setSelectedCategory] = useState('All');
+
+    // [추가] 전체 곡 목록에서 중복되지 않는 카테고리 목록을 생성합니다. (e.g., ["All", "동요", "클래식"])
+    // useMemo를 사용해 songs prop이 바뀔 때만 재계산합니다.
+    const categories = useMemo(() => {
+        const uniqueCategories = [...new Set(songs.map(s => t(s.categoryKey)))];
+        return ['All', ...uniqueCategories];
+    }, [songs, t]);
+
+    // [추가] 선택된 카테고리에 따라 보여줄 곡 목록을 필터링합니다.
+    const filteredSongs = useMemo(() => (selectedCategory === 'All' ? songs : songs.filter(s => t(s.categoryKey) === selectedCategory)), [songs, selectedCategory, t]);
 
     const handleSongCardClick = (song: Song) => {
         onSongSelect(song);
@@ -63,11 +77,26 @@ const SongLibraryModal: React.FC<SongLibraryModalProps> = ({ songs, onClose, onS
                     </button>
                 </div>
                 <div className="modal-body">
+                    {/* [추가] 카테고리 필터(태그) 영역 */}
+                    <div className="category-filters">
+                        {categories.map(category => (
+                            <button
+                                key={category}
+                                className={`category-button ${selectedCategory === category ? 'active' : ''}`}
+                                onClick={() => setSelectedCategory(category)}
+                            >
+                                {/* 'All'은 공통 번역 키를 사용하고, 나머지는 카테고리명을 그대로 표시합니다. */}
+                                {category === 'All' ? t('common.all') : category}
+                            </button>
+                        ))}
+                    </div>
                     <div className="song-grid">
-                        {songs.map(song => ( // 정적 SONG_LIST 대신 props로 받은 songs를 사용합니다.
+                        {/* [수정] 전체 songs 배열 대신 필터링된 filteredSongs 배열을 사용합니다. */}
+                        {filteredSongs.map(song => (
                             <SongCard
                                 key={song.id}
                                 song={song}
+                                isActive={song.id === currentSong.id}
                                 onSelect={() => handleSongCardClick(song)}
                             />
                         ))}

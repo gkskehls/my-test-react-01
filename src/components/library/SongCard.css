@@ -1,39 +1,134 @@
+/* [수정] 전체적인 스타일을 앨범 아트 형태에서 간결한 '칩(Chip)' 버튼 형태로 변경합니다. */
 .song-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem 1.5rem;
+  background-color: #f3f4f6;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  text-align: center;
+  overflow: hidden; /* 확장 애니메이션이 부드럽게 보이도록 합니다. */
 }
 
-.song-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    border-color: #61dafb;
+/* [추가] 제목과 확장 버튼을 담는 컨테이너 */
+.song-card-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
 }
 
-.song-card-artwork {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    aspect-ratio: 1 / 1; /* 정사각형 비율 */
-    background-color: #f0f4f8;
-    border-radius: 8px;
-    font-size: 3rem;
-    color: #a0aec0;
+/* 현재 선택된 곡을 표시하기 위한 active 스타일입니다. */
+.song-card.active {
+  background-color: #61dafb;
+  color: #1a202c;
+  box-shadow: 0 0 0 2px #61dafb;
+}
+
+.song-card.active .song-card-title {
+  font-weight: 700;
 }
 
 .song-card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #2d3748;
-    line-height: 1.2;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-grow: 1; /* 제목이 공간을 최대한 차지하도록 함 */
+  text-align: center; /* 제목을 가운데 정렬 */
+}
+
+/* 태그들을 담는 컨테이너 */
+.song-card-tags {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  /* [핵심] 평소에는 태그 영역을 숨깁니다. */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+}
+
+/* [핵심] 모바일: is-expanded 클래스가 있으면 태그 영역을 보여줍니다. */
+.song-card.is-expanded .song-card-tags {
+  margin-top: 0.75rem; /* 제목과 간격을 둡니다. */
+  max-height: 30px;
+  opacity: 1;
+}
+
+/* 개별 태그 스타일 */
+.tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #4b5563;
+}
+
+.song-card.active .tag {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #1a202c;
+}
+
+/* --- 반응형 로직 --- */
+
+/* [추가] 모바일용 확장 버튼 */
+.card-expander {
+  display: flex; /* 모바일에서 기본적으로 표시 */
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+/* 확장 버튼 내부의 화살표(chevron) 아이콘 */
+.chevron {
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  border-color: #9ca3af;
+  transform: rotate(45deg); /* 아래쪽 화살표 */
+  transition: transform 0.3s ease;
+}
+
+.song-card.is-expanded .chevron {
+  transform: rotate(-135deg); /* 위쪽 화살표 */
+}
+
+/* 
+  [핵심] @media (hover: hover)
+  마우스 사용이 가능한 데스크톱과 같은 환경에만 적용됩니다.
+*/
+@media (hover: hover) {
+  /* 1. 데스크톱에서는 확장 버튼을 숨깁니다. */
+  .card-expander {
+    display: none;
+  }
+
+  /* 2. 데스크톱에서는 호버 효과를 다시 활성화합니다. */
+  .song-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    border-color: #61dafb;
+  }
+
+  /* 3. 데스크톱에서 호버 시 태그를 보여줍니다. */
+  .song-card:hover .song-card-tags {
+    margin-top: 0.75rem;
+    max-height: 30px;
+    opacity: 1;
+  }
 }

@@ -101,6 +101,7 @@ const SheetMusicPage: React.FC<SheetMusicPageProps> = ({ songs, song, onSongChan
             <Suspense fallback={null}>
                 {isLibraryOpen && (
                     <SongLibraryModal
+                        currentSong={song}
                         songs={songs}
                         onClose={() => setIsLibraryOpen(false)}
                         onSongSelect={onSongChange}

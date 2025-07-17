@@ -1,11 +1,13 @@
 // src/pages/PracticePage.tsx
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import Piano from '../components/piano/Piano';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import SongLibraryModal from '../components/library/SongLibraryModal'; // 1. 라이브러리 모달 import
 import { Song } from '../songs'; // SONG_LIST를 직접 사용하지 않으므로 제거합니다.
 import './PracticePage.css';
+
+// SheetMusicPage와 동일하게, Modal을 동적으로 로드하여 성능을 최적화합니다.
+const SongLibraryModal = lazy(() => import('../components/library/SongLibraryModal'));
 
 // 1. App.tsx로부터 song과 onSongChange를 props로 받도록 인터페이스를 정의합니다.
 interface PracticePageProps {
@@ -87,13 +89,16 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
             </div>
 
             {/* 라이브러리 모달 렌더링 로직 추가 */}
-            {isLibraryOpen && (
-                <SongLibraryModal
-                    songs={songs} // 전체 곡 목록을 모달에 전달합니다.
-                    onClose={() => setIsLibraryOpen(false)}
-                    onSongSelect={handleSongChange}
-                />
-            )}
+            <Suspense fallback={null}>
+                {isLibraryOpen && (
+                    <SongLibraryModal
+                        songs={songs} // 전체 곡 목록을 모달에 전달합니다.
+                        currentSong={song} // [수정] 현재 선택된 곡 정보를 전달하여 오류를 해결합니다.
+                        onClose={() => setIsLibraryOpen(false)}
+                        onSongSelect={handleSongChange}
+                    />
+                )}
+            </Suspense>
         </div>
     );
 };

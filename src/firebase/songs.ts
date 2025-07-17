@@ -40,6 +40,8 @@ const songConverter: FirestoreDataConverter<Song> = {
     return {
       id: snapshot.id,
       titleKey: data.titleKey,
+      categoryKey: data.categoryKey ?? 'category.unknown', // Firestore에서 categoryKey 필드를 읽어옵니다. 없으면 기본값을 지정합니다.
+      difficultyKey: data.difficultyKey ?? 'difficulty.unknown', // 난이도 키를 읽어오고, 없으면 기본값을 지정합니다.
       lines: sortedLines,
     };
   },

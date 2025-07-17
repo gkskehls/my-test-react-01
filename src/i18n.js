@@ -19,6 +19,20 @@ const resources = {
             "home.description": "Use the top menu to navigate to the desired function.",
             "home.startPractice": "Start Practicing",
 
+            // 카테고리
+            "category": {
+                "childrens": "Children's Song",
+                "classical": "Classical",
+                "unknown": "Uncategorized"
+            },
+
+            // 난이도
+            "difficulty": {
+                "beginner": "Beginner",
+                "intermediate": "Intermediate",
+                "unknown": "N/A"
+            },
+
             // 연습 페이지
             "practicePageTitle": "Practice: {{title}}",
             "congratsMessage": "Well Done!",
@@ -68,6 +82,7 @@ const resources = {
 
             // 앱 전반에서 사용되는 공통 UI 텍스트
             "common": {
+                "all": "All",
                 "close": "Close",
                 "loading": "Loading...",
                 "noSongsAvailable": "No songs available to play."
@@ -92,6 +107,20 @@ const resources = {
             "home.welcome": "피아노 연습 프로젝트에 오신 것을 환영합니다!",
             "home.description": "상단 메뉴를 통해 원하는 기능으로 이동하세요.",
             "home.startPractice": "연습 시작하기",
+
+            // 카테고리
+            "category": {
+                "childrens": "동요",
+                "classical": "클래식",
+                "unknown": "미분류"
+            },
+
+            // 난이도
+            "difficulty": {
+                "beginner": "초급",
+                "intermediate": "중급",
+                "unknown": "미정"
+            },
 
             // 연습 페이지
             "practicePageTitle": "연습하기: {{title}}",
@@ -142,6 +171,7 @@ const resources = {
 
             // 앱 전반에서 사용되는 공통 UI 텍스트
             "common": {
+                "all": "전체",
                 "close": "닫기",
                 "loading": "로딩 중...",
                 "noSongsAvailable": "연주할 수 있는 곡이 없습니다."
