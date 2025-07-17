@@ -79,6 +79,25 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* ✨ 1. 다음에 눌러야 할 건반(가이드 키)에 대한 스타일을 정의합니다. */
+@keyframes pulse-guide {
+    0% {
+        box-shadow: 0 0 10px 2px var(--guide-color-glow);
+    }
+    50% {
+        box-shadow: 0 0 18px 5px var(--guide-color-glow);
+    }
+    100% {
+        box-shadow: 0 0 10px 2px var(--guide-color-glow);
+    }
+}
+
+.key.guide {
+    /* ✨ 2. 가이드 키의 배경색과 함께, 은은하게 깜빡이는 애니메이션을 적용합니다. */
+    background-color: var(--guide-color-bg);
+    animation: pulse-guide 2s infinite ease-in-out;
+}
+
 .white-key {
     width: 100%; /* 부모인 .key-container의 너비를 항상 100% 채웁니다. */
     height: 240px;

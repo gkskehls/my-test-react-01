@@ -85,7 +85,12 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                 )}
             </div>
             <div className="piano-wrapper">
-                <Piano numOctaves={2} onNotePlayed={handleNotePlayed} />
+                <Piano
+                    numOctaves={2}
+                    onNotePlayed={handleNotePlayed}
+                    // ✨ 다음에 연주할 음표 정보를 Piano 컴포넌트로 전달합니다.
+                    guideNote={targetNote?.note}
+                />
             </div>
 
             {/* 라이브러리 모달 렌더링 로직 추가 */}

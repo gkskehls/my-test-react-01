@@ -9,13 +9,14 @@ interface KeyProps {
     type: 'white' | 'black';
     style?: React.CSSProperties;
     isActive: boolean;
+    isGuide: boolean;
     onNoteDown: (note: string) => void;
     onNoteUp: (note: string) => void;
 }
 
 // 컴포넌트 선언 방식을 최신 스타일로 변경하고 이벤트 핸들러 타입을 명확히 합니다.
 // ✨ 1. React.memo로 컴포넌트를 감싸 불필요한 리렌더링을 방지합니다.
-const Key = React.memo(({ note, type, style, isActive, onNoteDown, onNoteUp }: KeyProps) => {
+const Key = React.memo(({ note, type, style, isActive, isGuide, onNoteDown, onNoteUp }: KeyProps) => {
     const { t } = useTranslation();
 
     // 'C#4' -> 'C#', 'C4' -> 'C' 와 같이 옥타브를 제거하여 순수 음이름을 추출합니다.
@@ -42,7 +43,9 @@ const Key = React.memo(({ note, type, style, isActive, onNoteDown, onNoteUp }: K
         // ✨ 3. <div>를 <button>으로 변경하여 접근성과 시맨틱을 개선합니다.
         // 참고: Piano.css에서 button의 기본 스타일(border, background 등)을 리셋해야 할 수 있습니다.
         <button
-            className={`key ${type}-key ${isActive ? 'active' : ''}`}
+            // ✨ 4. 가이드 키 스타일링을 위해 isGuide와 !isActive 조건을 함께 사용하여 클래스를 추가합니다.
+            // 사용자가 올바른 키를 누르면 guide 클래스는 사라지고 active 클래스만 남습니다.
+            className={`key ${type}-key ${isActive ? 'active' : ''} ${isGuide && !isActive ? 'guide' : ''}`}
             data-note={note}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUpOrLeave}
@@ -65,10 +68,11 @@ const KEY_MAP: { [key: string]: string } = {
 interface PianoProps {
     numOctaves?: number;
     onNotePlayed?: (note: string) => void;
+    guideNote?: string;
 }
 
 // 컴포넌트 선언 방식을 최신 스타일로 통일합니다.
-const Piano = ({ numOctaves = 2, onNotePlayed }: PianoProps) => {
+const Piano = ({ numOctaves = 2, onNotePlayed, guideNote }: PianoProps) => {
     // ✨ 1. Synth를 PolySynth로 교체하여 여러 음을 동시에 연주(화음)할 수 있도록 합니다.
     const synth = useRef<Tone.PolySynth | null>(null);
     const isAudioUnlocked = useRef(false);
@@ -172,6 +176,7 @@ const Piano = ({ numOctaves = 2, onNotePlayed }: PianoProps) => {
                         note={whiteKey}
                         type="white"
                         isActive={activeNotes.includes(whiteKey)}
+                        isGuide={whiteKey === guideNote}
                         onNoteDown={handleNoteDown}
                         onNoteUp={handleNoteUp}
                     />
@@ -180,6 +185,7 @@ const Piano = ({ numOctaves = 2, onNotePlayed }: PianoProps) => {
                             note={blackKey}
                             type="black"
                             isActive={activeNotes.includes(blackKey)}
+                            isGuide={blackKey === guideNote}
                             onNoteDown={handleNoteDown}
                             onNoteUp={handleNoteUp}
                         />

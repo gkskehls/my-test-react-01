@@ -16,6 +16,9 @@
   --modal-overlay-bg: rgba(0, 0, 0, 0.6);
   --accent-primary: #3b82f6; /* 활성 버튼 등 강조 요소 */
   --accent-text: #ffffff; /* 강조 요소 위의 텍스트 */
+  /* Guide Key Colors */
+  --guide-color-bg: #a0d8f8; /* 은은한 하늘색 */
+  --guide-color-glow: rgba(160, 216, 248, 0.7); /* 가이드 키 발광 효과 색상 */
 }
 
 html.dark {
@@ -32,6 +35,9 @@ html.dark {
   --modal-overlay-bg: rgba(0, 0, 0, 0.8);
   --accent-primary: #60a5fa;
   --accent-text: #1a202c;
+  /* Guide Key Colors (Dark) */
+  --guide-color-bg: #4a5568; /* 어두운 테마에 어울리는 가이드 색상 */
+  --guide-color-glow: rgba(74, 85, 104, 0.8); /* 어두운 테마 가이드 발광 효과 */
 }
 
 /* Global Styles */
