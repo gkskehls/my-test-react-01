@@ -69,37 +69,52 @@ interface PianoProps {
 
 // 컴포넌트 선언 방식을 최신 스타일로 통일합니다.
 const Piano = ({ numOctaves = 2, onNotePlayed }: PianoProps) => {
-    // ... (다른 state와 hook들은 변경 없음) ...
-    const synth = useRef<Tone.Synth | null>(null);
+    // ✨ 1. Synth를 PolySynth로 교체하여 여러 음을 동시에 연주(화음)할 수 있도록 합니다.
+    const synth = useRef<Tone.PolySynth | null>(null);
     const isAudioUnlocked = useRef(false);
     const [activeNotes, setActiveNotes] = useState<string[]>([]);
 
     useEffect(() => {
-        synth.current = new Tone.Synth().toDestination();
+        // ✨ 2. PolySynth를 초기화하고, 피아노와 유사한 사운드 엔벨로프(ADSR)를 설정합니다.
+        synth.current = new Tone.PolySynth(Tone.Synth).toDestination();
+        synth.current.set({
+            envelope: {
+                attack: 0.02,  // 소리가 시작되어 최대 볼륨에 도달하는 시간 (짧을수록 타건 느낌)
+                decay: 0.1,   // 최대 볼륨에서 서스테인 레벨까지 감소하는 시간
+                sustain: 0.3, // 건반을 누르고 있는 동안 유지되는 볼륨 레벨
+                release: 1,   // 건반에서 손을 떼었을 때 소리가 완전히 사라지기까지의 시간 (여운)
+            },
+        });
+
         return () => {
             synth.current?.dispose();
         };
     }, []);
 
-    const playNote = useCallback(async (note: string) => {
-        if (!synth.current) return;
+    // ✨ 3. playNote 함수를 제거하고, handleNoteDown/Up에서 직접 사운드를 제어합니다.
+    const handleNoteDown = useCallback(async (note: string) => {
+        // 이미 활성화된 노트이거나 synth가 준비되지 않았으면 아무것도 하지 않습니다.
+        if (activeNotes.includes(note) || !synth.current) return;
+
+        // 오디오 컨텍스트가 잠겨있으면 사용자 상호작용 시 풀어줍니다.
         if (!isAudioUnlocked.current) {
             await Tone.start();
             isAudioUnlocked.current = true;
         }
-        synth.current.triggerAttackRelease(note, '0.5');
-    }, []);
 
-    const handleNoteDown = useCallback((note: string) => {
-        if (activeNotes.includes(note)) return;
-        playNote(note);
+        // triggerAttack으로 소리 재생을 "시작"합니다.
+        synth.current.triggerAttack(note);
+
         setActiveNotes(prev => [...prev, note]);
         if (onNotePlayed) {
             onNotePlayed(note);
         }
-    }, [activeNotes, playNote, onNotePlayed]);
+    }, [activeNotes, onNotePlayed]);
 
     const handleNoteUp = useCallback((note: string) => {
+        if (!synth.current) return;
+        // triggerRelease로 소리 재생을 "종료"합니다 (설정된 release 시간에 따라 여운이 남음).
+        synth.current.triggerRelease(note);
         setActiveNotes(prev => prev.filter(n => n !== note));
     }, []);
 

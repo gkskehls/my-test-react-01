@@ -66,8 +66,17 @@
 
 .key:active,
 .key.active {
-    background-color: #61dafb;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    /* ✨ CSS 변수를 사용하여 테마와 일관된 활성 색상을 적용합니다. */
+    background-color: var(--accent-primary);
+    /* ✨ 활성 상태일 때 그림자를 좀 더 어둡게 하여 깊이감을 줍니다. */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* ✨ 활성 상태일 때 계이름 색상을 변경하여 가독성을 높입니다. */
+.key.active .key-note-name {
+    color: var(--accent-text);
+    /* 그림자 효과를 살짝 주어 텍스트를 더 돋보이게 합니다. */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .white-key {
