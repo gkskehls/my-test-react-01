@@ -27,7 +27,8 @@ const SongCard: React.FC<SongCardProps> = ({ song, isActive, onSelect }) => {
   return (
     <div className={cardClassName} onClick={onSelect}>
       <div className="song-card-main">
-        <div className="song-card-title">{t(song.titleKey)}</div>
+        {/* [추가] title 속성을 추가하여 말줄임표로 잘린 전체 제목을 툴팁으로 보여줍니다. */}
+        <div className="song-card-title" title={t(song.titleKey)}>{t(song.titleKey)}</div>
         <button className="card-expander" onClick={handleToggleExpand} aria-label={isExpanded ? 'Collapse' : 'Expand'}>
           <span className="chevron" />
         </button>

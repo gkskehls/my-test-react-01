@@ -8,10 +8,9 @@
   border: 1px solid transparent;
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 180px;
   text-align: center;
-  overflow: hidden; /* 확장 애니메이션이 부드럽게 보이도록 합니다. */
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 /* [추가] 제목과 확장 버튼을 담는 컨테이너 */
@@ -40,6 +39,9 @@
   color: #374151;
   line-height: 1.2;
   white-space: nowrap;
+  /* [추가] 제목이 길 경우 말줄임표(...) 처리를 위함 */
+  overflow: hidden;
+  text-overflow: ellipsis;
   flex-grow: 1; /* 제목이 공간을 최대한 차지하도록 함 */
   text-align: center; /* 제목을 가운데 정렬 */
 }
