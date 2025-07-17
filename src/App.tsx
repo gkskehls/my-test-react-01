@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next'; // useTranslation 추가
 import { Song } from './songs/types'; // SONG_LIST 대신 타입만 가져옵니다.
 import { getSongs } from './firebase/songs'; // 새로 만든 데이터 조회 서비스를 가져옵니다.
+import { ThemeProvider } from './context/ThemeContext';
 
 import Header from './components/ui/Header';
 // 페이지 컴포넌트들을 lazy를 사용해 동적으로 import 합니다.
@@ -61,26 +62,28 @@ function App() {
     }
 
     return (
-        <Router>
-            <Header />
-            <main className="app-content">
-                {/* Routes를 Suspense로 감싸고, 로딩 중에 보여줄 UI를 fallback으로 지정합니다. */}
-                <Suspense fallback={<div className="page-loading">{t('common.loading')}</div>}>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route
-                        path="/practice"
-                        element={<PracticePage songs={songs} song={currentSong} onSongChange={handleSongChange} />}
-                    />
-                    <Route
-                        path="/sheet-music"
-                        element={<SheetMusicPage songs={songs} song={currentSong} onSongChange={handleSongChange} />}
-                    />
-                    <Route path="/profile" element={<ProfilePage />} />
-                </Routes>
-                </Suspense>
-            </main>
-        </Router>
+        <ThemeProvider>
+            <Router>
+                <Header />
+                <main className="app-content">
+                    {/* Routes를 Suspense로 감싸고, 로딩 중에 보여줄 UI를 fallback으로 지정합니다. */}
+                    <Suspense fallback={<div className="page-loading">{t('common.loading')}</div>}>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route
+                            path="/practice"
+                            element={<PracticePage songs={songs} song={currentSong} onSongChange={handleSongChange} />}
+                        />
+                        <Route
+                            path="/sheet-music"
+                            element={<SheetMusicPage songs={songs} song={currentSong} onSongChange={handleSongChange} />}
+                        />
+                        <Route path="/profile" element={<ProfilePage />} />
+                    </Routes>
+                    </Suspense>
+                </main>
+            </Router>
+        </ThemeProvider>
     );
 }
 

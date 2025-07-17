@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
+import ThemeToggleButton from './ThemeToggleButton';
 
 const Header: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -104,6 +105,9 @@ const Header: React.FC = () => {
                         </ul>
                     )}
                 </div>
+
+                {/* 테마 변경 버튼을 언어 선택기 옆에 추가합니다. */}
+                <ThemeToggleButton />
             </nav>
         </header>
     );
