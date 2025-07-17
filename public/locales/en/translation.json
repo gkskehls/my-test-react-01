@@ -1,0 +1,58 @@
+{
+  "nav.practice": "Practice",
+  "nav.sheetMusic": "Sheet Music",
+  "nav.profile": "Profile",
+  "home.title": "My Piano App",
+  "nav.openMenu": "Open navigation menu",
+  "nav.closeMenu": "Close navigation menu",
+  "home.welcome": "Welcome to the Piano Practice Project!",
+  "home.description": "Use the top menu to navigate to the desired function.",
+  "home.startPractice": "Start Practicing",
+  "category": {
+    "childrens": "Children's Song",
+    "classical": "Classical",
+    "unknown": "Uncategorized"
+  },
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "unknown": "N/A"
+  },
+  "practicePageTitle": "Practice: {{title}}",
+  "congratsMessage": "Well Done!",
+  "retryButton": "Retry",
+  "songs": {
+    "twinkle-twinkle": "Twinkle, Twinkle, Little Star",
+    "three-blind-mice": "Three Blind Mice"
+  },
+  "sheetMusic.selectSong": "Select a Song",
+  "profile.title": "My Profile",
+  "profile.inPreparation": "This page is under construction.",
+  "notes": {
+    "C": "C", "Csharp": "C#", "D": "D", "Dsharp": "D#", "E": "E", "F": "F", "Fsharp": "F#", "G": "G", "Gsharp": "G#", "A": "A", "Asharp": "A#", "B": "B"
+  },
+  "lyrics": {
+    "twinkle": {
+      "0": { "0": "Twin", "1": "kle,", "2": "twin", "3": "kle,", "4": "lit", "5": "tle", "6": "star" },
+      "1": { "0": "How", "1": "I", "2": "won", "3": "der", "4": "what", "5": "you", "6": "are" },
+      "2": { "0": "Up", "1": "a", "2": "bove", "3": "the", "4": "world", "5": "so", "6": "high" },
+      "3": { "0": "Like", "1": "a", "2": "dia", "3": "mond", "4": "in", "5": "the", "6": "sky" },
+      "4": { "0": "Twin", "1": "kle,", "2": "twin", "3": "kle,", "4": "lit", "5": "tle", "6": "star" },
+      "5": { "0": "How", "1": "I", "2": "won", "3": "der", "4": "what", "5": "you", "6": "are" }
+    },
+    "threeBlindMice": {
+      "0": { "0": "Three", "1": "blind", "2": "mice", "3": "Three", "4": "blind", "5": "mice" },
+      "1": { "0": "See", "1": "how", "2": "they run", "3": "See", "4": "how", "5": "they run" },
+      "2": { "0": "They", "1": "all", "2": "ran", "3": "af-", "4": "ter", "5": "the", "6": "wife," },
+      "3": { "0": "Who", "1": "cut", "2": "off", "3": "their", "4": "tails", "5": "with a", "6": "knife," },
+      "4": { "0": "Did", "1": "you", "2": "e-ver", "3": "see", "4": "such a", "5": "sight," },
+      "5": { "0": "As", "1": "three", "2": "blind mice." }
+    }
+  },
+  "common": {
+    "all": "All", "close": "Close", "loading": "Loading...", "noSongsAvailable": "No songs available to play."
+  },
+  "meta": {
+    "documentTitle": "My Piano"
+  }
+}
