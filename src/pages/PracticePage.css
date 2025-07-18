@@ -1,3 +1,4 @@
+/* src/pages/PracticePage.css */
 .practice-container {
     display: flex;
     flex-direction: column;
@@ -15,7 +16,9 @@
     /* 컨테이너의 일부로서 축소되지 않도록 설정합니다. */
     flex-shrink: 0;
     /* 상하에 적절한 여백을 줍니다. */
-    padding: 1.5rem 0;
+    padding: 1.5rem 1rem; /* 좌우 패딩 추가 */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .song-selector-button {
@@ -43,6 +46,37 @@
     font-size: 0.7em;
     color: #6b7280;
 }
+
+/* [제거] 계이름 표시 토글 스위치 스타일을 모두 제거합니다. */
+/*
+.settings-toggle { ... }
+.settings-toggle label { ... }
+.settings-toggle span { ... }
+.settings-toggle input[type="checkbox"] { ... }
+*/
+
+/* [추가] 설정 아이콘 버튼 스타일 */
+.settings-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem; /* 아이콘 크기 */
+    margin-left: 1rem;
+    padding: 0.5rem;
+    line-height: 1;
+    border-radius: 50%; /* 원형 버튼 */
+    transition: background-color 0.2s, transform 0.2s;
+    color: #4b5563;
+}
+
+.settings-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.settings-button:active {
+    transform: scale(0.9);
+}
+
 
 .practice-sheet-wrapper {
     width: 100%;

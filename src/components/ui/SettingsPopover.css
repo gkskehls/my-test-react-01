@@ -1,0 +1,70 @@
+/* src/components/ui/SettingsPopover.css */
+.settings-popover {
+    position: fixed; /* 뷰포트를 기준으로 위치를 잡습니다. */
+    z-index: 1000;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    /* style prop에서 계산된 left 위치를 기준으로 수평 중앙 정렬합니다. */
+    transform: translateX(-50%);
+    min-width: 200px;
+    animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+
+.popover-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.popover-item label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #374151;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.popover-item label:hover {
+    background-color: #f3f4f6;
+}
+
+.popover-item input[type="checkbox"] {
+    width: 1.2em;
+    height: 1.2em;
+    cursor: pointer;
+    margin-left: 1rem;
+}
+
+/* 다크 모드 스타일 */
+.dark .settings-popover {
+    background-color: #2d3748;
+    border-color: #4a5568;
+}
+
+.dark .popover-item label {
+    color: #e2e8f0;
+}
+
+.dark .popover-item label:hover {
+    background-color: #4a5568;
+}

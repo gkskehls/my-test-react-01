@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect, useMemo, lazy, Suspense, useRef } fro
 import { useTranslation } from 'react-i18next';
 import Piano from '../components/piano/Piano';
 import SheetMusic from '../components/sheet-music/SheetMusic';
+import { SettingsPopover } from '../components/ui/SettingsPopover'; // [추가]
 import { Song } from '../songs';
 import './PracticePage.css';
 import { useSheetMusicLayout } from '../hooks/useSheetMusicLayout';
@@ -19,11 +20,13 @@ interface PracticePageProps {
 const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false); // [추가] 팝오버 상태 관리
+    const settingsButtonRef = useRef<HTMLButtonElement>(null); // [추가] 설정 버튼 ref
+
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
-    const wrapperRef = useRef<HTMLDivElement>(null); // [추가]
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // [추가] SheetMusicPage와 동일하게 레이아웃 훅을 사용합니다.
     const layout = useSheetMusicLayout(wrapperRef);
     const lyricWidths = useLyricWidths(song);
 
@@ -72,8 +75,26 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                     <span>{t(song.titleKey)}</span>
                     <span className="dropdown-icon">▼</span>
                 </button>
+
+                {/* [수정] 기존 토글 스위치를 설정 아이콘 버튼으로 대체 */}
+                <button
+                    ref={settingsButtonRef}
+                    className="settings-button"
+                    onClick={() => setIsSettingsOpen(prev => !prev)}
+                    aria-label={t('settings.title', '설정')}
+                    title={t('settings.title', '설정')} // 마우스 호버 시 툴팁 추가
+                >
+                    ⚙️
+                </button>
             </div>
-            {/* [수정] ref를 연결합니다. */}
+
+            {/* [추가] 팝오버 컴포넌트 렌더링 */}
+            <SettingsPopover
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+                anchorEl={settingsButtonRef.current}
+            />
+
             <div ref={wrapperRef} className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
                     <div className="congrats-message">
@@ -84,7 +105,6 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                     <SheetMusic
                         notes={flatNotes}
                         currentNoteIndex={currentNoteIndex}
-                        // [추가] 계산된 layout과 lyricWidths를 전달합니다.
                         layout={layout}
                         lyricWidths={lyricWidths}
                     />
