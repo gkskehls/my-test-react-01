@@ -17,35 +17,60 @@ const SongLibraryModal = lazy(() => import('../components/library/SongLibraryMod
  * @returns {SongNote[][]} 여러 줄로 그룹화된 음표 배열
  */
 const groupBarsIntoLines = (song: Song, layout: LayoutMetrics): SongNote[][] => {
-    // 레이아웃 값이 준비되지 않았으면 빈 배열을 반환하여 렌더링을 방지합니다.
-    if (layout.containerWidth === 0) {
+    // 레이아웃 값이 준비되지 않았으면(특히 noteSpacing) 계산을 중단합니다.
+    if (layout.containerWidth === 0 || layout.noteSpacing === 0) {
         return [];
     }
 
-    // 1. CSS와 동일한 로직으로 각 마디의 너비를 계산합니다.
-    //    음표 개수 * 음표 간격으로 계산하여, 기존의 부정확한 로직을 수정합니다.
-    const barWidths = song.lines.map(bar => bar.length * layout.noteSpacing);
+    const SAFETY_MARGIN = 10;
+    const contentWidth = layout.containerWidth - layout.staffPaddingLeft - layout.staffPaddingRight - SAFETY_MARGIN;
 
+    // --- 1단계: 너무 긴 마디를 미리 분할하기 ---
+    // 한 줄에 들어갈 수 있는 한 마디 안의 최대 음표 개수를 계산합니다.
+    // 너비 공식: (k-1) * noteSpacing <= contentWidth  => k <= contentWidth / noteSpacing + 1
+    const maxNotesInBarOnOneLine = Math.floor(contentWidth / layout.noteSpacing) + 1;
+
+    const processedSongLines: SongNote[][] = [];
+    song.lines.forEach(bar => {
+        if (bar.length > maxNotesInBarOnOneLine) {
+            // 마디가 너무 길면, 최대 너비에 맞게 여러 개의 작은 마디로 분할합니다.
+            let remainingNotes = [...bar];
+            while (remainingNotes.length > 0) {
+                const chunk = remainingNotes.splice(0, maxNotesInBarOnOneLine);
+                processedSongLines.push(chunk);
+            }
+        } else {
+            // 마디 길이가 적절하면 그대로 사용합니다.
+            processedSongLines.push(bar);
+        }
+    });
+
+    // --- 2단계: 분할된 마디들을 가지고 줄 배치하기 ---
     const newGroupedLines: SongNote[][] = [];
     let currentLineNotes: SongNote[] = [];
-    // 2. 한 줄에 들어갈 수 있는 전체 너비에서 좌우 여백을 제외하여 실제 콘텐츠 영역 너비를 계산합니다.
-    const contentWidth = layout.containerWidth - layout.staffPaddingLeft - layout.staffPaddingRight;
-    let currentLineWidth = 0;
+    let barsInCurrentLine = 0;
 
-    song.lines.forEach((bar, index) => {
-        const barWidth = barWidths[index];
-        // 현재 라인에 이미 마디가 있다면 마디 사이 간격을 추가합니다.
-        const spacing = currentLineNotes.length > 0 ? layout.minBarSpacing : 0;
+    const calculateWidth = (notes: SongNote[], barCount: number): number => {
+        if (barCount === 0 || notes.length === 0) return 0;
+        const noteSpaces = notes.length - barCount;
+        const barSpaces = barCount > 1 ? (barCount - 1) : 0;
+        return (noteSpaces * layout.noteSpacing) + (barSpaces * layout.minBarSpacing);
+    };
 
-        // 3. 콘텐츠 영역 너비(contentWidth)를 기준으로 오버플로우를 확인합니다.
-        if (currentLineNotes.length > 0 && currentLineWidth + spacing + barWidth > contentWidth) {
+    processedSongLines.forEach(bar => {
+        if (bar.length === 0) return;
+
+        const potentialNotes = [...currentLineNotes, ...bar];
+        const potentialBarsInLine = barsInCurrentLine + 1;
+        const notesAreaWidth = calculateWidth(potentialNotes, potentialBarsInLine);
+
+        if (currentLineNotes.length > 0 && notesAreaWidth > contentWidth) {
             newGroupedLines.push(currentLineNotes);
-            currentLineNotes = bar; // 새 줄 시작
-            currentLineWidth = barWidth;
+            currentLineNotes = bar;
+            barsInCurrentLine = 1;
         } else {
-            // 현재 줄에 마디를 추가합니다.
-            currentLineNotes = [...currentLineNotes, ...bar];
-            currentLineWidth += spacing + barWidth;
+            currentLineNotes.push(...bar);
+            barsInCurrentLine++;
         }
     });
 

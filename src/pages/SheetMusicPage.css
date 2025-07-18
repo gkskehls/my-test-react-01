@@ -43,7 +43,10 @@
 
 .sheet-music-lines-wrapper {
     width: 100%;
-    margin-bottom: 2rem;
+    /* [추가] 연습 페이지와 유사하게 최대 너비를 설정하여 레이아웃을 안정시킵니다. */
+    max-width: 860px;
+    /* [수정] 컨테이너 내에서 스스로 중앙 정렬되도록 margin을 수정합니다. */
+    margin: 0 auto 2rem auto;
     /* [추가] 연습 페이지와의 일관성을 위해 카드 스타일을 적용합니다. */
     background-color: #fff;
     border-radius: 8px;
@@ -51,8 +54,8 @@
     position: relative;
     overflow: auto;
     min-height: 150px;
-    /* 악보 콘텐츠를 위한 내부 패딩 */
-    padding: 20px;
+    /* [수정] 상하 패딩만 남겨 악보 줄이 내부에서 정확히 중앙 정렬되도록 합니다. */
+    padding: 20px 0;
 }
 
 /* 각 악보 줄을 감싸는 div (반응형 레이아웃에 사용) */
