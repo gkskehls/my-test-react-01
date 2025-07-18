@@ -1,15 +1,15 @@
 // src/pages/PracticePage.tsx
-import { useState, useCallback, useEffect, useMemo, lazy, Suspense } from 'react';
+import { useState, useCallback, useEffect, useMemo, lazy, Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Piano from '../components/piano/Piano';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import { Song } from '../songs'; // SONG_LIST를 직접 사용하지 않으므로 제거합니다.
+import { Song } from '../songs';
 import './PracticePage.css';
+import { useSheetMusicLayout } from '../hooks/useSheetMusicLayout';
+import { useLyricWidths } from '../hooks/useLyricWidths';
 
-// SheetMusicPage와 동일하게, Modal을 동적으로 로드하여 성능을 최적화합니다.
 const SongLibraryModal = lazy(() => import('../components/library/SongLibraryModal'));
 
-// 1. App.tsx로부터 song과 onSongChange를 props로 받도록 인터페이스를 정의합니다.
 interface PracticePageProps {
     songs: Song[];
     song: Song;
@@ -18,12 +18,15 @@ interface PracticePageProps {
 
 const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
-    // 2. song 상태는 이제 props로 받으므로, 모달 표시 여부만 내부 상태로 관리합니다.
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
+    const wrapperRef = useRef<HTMLDivElement>(null); // [추가]
 
-    // 3. 곡이 변경되면 부모(App.tsx)의 상태를 업데이트하는 함수를 호출합니다.
+    // [추가] SheetMusicPage와 동일하게 레이아웃 훅을 사용합니다.
+    const layout = useSheetMusicLayout(wrapperRef);
+    const lyricWidths = useLyricWidths(song);
+
     const handleSongChange = (newSong: Song) => {
         onSongChange(newSong);
     };
@@ -64,14 +67,14 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
 
     return (
         <div className="practice-container">
-            {/* 페이지 제목을 제거하고, 곡 선택 버튼을 유일한 컨트롤로 사용합니다. */}
             <div className="practice-header">
                 <button className="song-selector-button" onClick={() => setIsLibraryOpen(true)}>
                     <span>{t(song.titleKey)}</span>
                     <span className="dropdown-icon">▼</span>
                 </button>
             </div>
-            <div className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
+            {/* [수정] ref를 연결합니다. */}
+            <div ref={wrapperRef} className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
                     <div className="congrats-message">
                         <h2>🎉 {t('congratsMessage')} 🎉</h2>
@@ -81,6 +84,9 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                     <SheetMusic
                         notes={flatNotes}
                         currentNoteIndex={currentNoteIndex}
+                        // [추가] 계산된 layout과 lyricWidths를 전달합니다.
+                        layout={layout}
+                        lyricWidths={lyricWidths}
                     />
                 )}
             </div>
@@ -88,17 +94,15 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                 <Piano
                     numOctaves={2}
                     onNotePlayed={handleNotePlayed}
-                    // ✨ 다음에 연주할 음표 정보를 Piano 컴포넌트로 전달합니다.
                     guideNote={targetNote?.note}
                 />
             </div>
 
-            {/* 라이브러리 모달 렌더링 로직 추가 */}
             <Suspense fallback={null}>
                 {isLibraryOpen && (
                     <SongLibraryModal
-                        songs={songs} // 전체 곡 목록을 모달에 전달합니다.
-                        currentSong={song} // [수정] 현재 선택된 곡 정보를 전달하여 오류를 해결합니다.
+                        songs={songs}
+                        currentSong={song}
                         onClose={() => setIsLibraryOpen(false)}
                         onSongSelect={handleSongChange}
                     />

@@ -1,3 +1,4 @@
+/* src/components/sheet-music/SheetMusic.css */
 .sheet-music-wrapper {
     /* CSS 변수를 사용해 악보의 각종 수치를 관리합니다. */
     --staff-top: 50px;
@@ -19,7 +20,8 @@
     position: relative;
     height: var(--wrapper-height);
     box-sizing: border-box;
-    width: calc(var(--staff-padding-left) + (var(--note-count, 0) * var(--note-spacing)) + var(--staff-padding-right));
+    /* [제거] 아래 width 속성을 제거합니다. 이제 인라인 스타일로 제어됩니다. */
+    /* width: calc(var(--staff-padding-left) + (var(--note-count, 0) * var(--note-spacing)) + var(--staff-padding-right)); */
 }
 
 .clef {
@@ -57,7 +59,8 @@
     position: absolute;
     /* CSS 변수를 사용해 음표의 위치를 동적으로 계산합니다. */
     top: calc(var(--base-note-top) + (var(--step-difference) * var(--step-height)));
-    left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing)));
+    /* [제거] 아래 left 속성을 제거합니다. 이제 인라인 스타일로 제어됩니다. */
+    /* left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing))); */
     transition: transform 0.1s ease-in-out;
 }
 
@@ -153,7 +156,7 @@
         --base-note-top: 52px;
         --wrapper-height: 150px;
         --note-spacing: 38px;
-        --staff-padding-left: 60px; /* JS 로직과 동기화: 모바일에서도 높은음자리표 공간을 확보합니다. */
+        --staff-padding-left: 60px; /* JS 로직과 동기화: 모바일에서도 높은음자리표 공간을 충분히 확보합니다. */
         --staff-padding-right: 10px; /* JS 로직과 동기화: 핸드폰 화면 오른쪽 여백 축소 */
         --clef-font-size: 75px;
         --clef-top: 12px;
@@ -167,8 +170,8 @@
     position: absolute;
     /* 1. 변수를 사용해 오선지 아래 고정된 높이에 위치시킵니다. */
     top: var(--lyric-top);
-    /* 2. 음표와 동일한 로직으로 수평 위치를 계산합니다. */
-    left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing)));
+    /* 2. [제거] 음표와 동일하게, 이제 left 속성은 인라인 스타일로 제어됩니다. */
+    /* left: calc(var(--staff-padding-left) + (var(--note-index, 0) * var(--note-spacing))); */
     /* 3. 계산된 위치를 기준으로 텍스트를 중앙 정렬합니다. */
     transform: translateX(-50%);
 
