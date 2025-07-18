@@ -50,7 +50,7 @@
     }
   },
   "common": {
-    "all": "All", "close": "Close", "loading": "Loading...", "noSongsAvailable": "No songs available to play.", "fetchError": "Failed to load songs. Please try again later."
+    "all": "All", "close": "Close", "loading": "Loading...", "noSongsAvailable": "No songs available to play.", "fetchError": "Failed to load songs. Please try again later.", "renderErrorTitle": "Something went wrong", "renderErrorBody": "An error occurred while displaying this page. Please try refreshing."
   },
   "meta": {
     "documentTitle": "My Piano"

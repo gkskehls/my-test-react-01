@@ -6,6 +6,7 @@ import { Song } from './songs/types'; // SONG_LIST 대신 타입만 가져옵니
 import { getSongs } from './firebase/songs'; // 새로 만든 데이터 조회 서비스를 가져옵니다.
 import { ThemeProvider } from './context/ThemeContext';
 
+import ErrorBoundary from './components/common/ErrorBoundary'; // [추가] 에러 경계 컴포넌트
 import Header from './components/ui/Header';
 // 페이지 컴포넌트들을 lazy를 사용해 동적으로 import 합니다.
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -20,7 +21,9 @@ function App() {
     const [songs, setSongs] = useState<Song[]>([]);
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null); // [추가] 데이터 로딩 에러 상태
+    // [수정] 데이터 로딩 에러 상태를 boolean으로 관리하여 데이터와 표현을 분리합니다.
+    // 이렇게 하면 에러 메시지가 항상 현재 언어로 표시됩니다.
+    const [hasFetchError, setHasFetchError] = useState(false);
 
     // 언어가 변경될 때마다 문서 타이틀을 업데이트합니다.
     useEffect(() => {
@@ -38,8 +41,8 @@ function App() {
                 }
             } catch (error) {
                 console.error("Failed to fetch songs:", error);
-                // [수정] 사용자에게 보여줄 오류 메시지를 상태에 저장합니다.
-                setError(t('common.fetchError'));
+                // [수정] 에러 발생 여부만 상태에 기록합니다.
+                setHasFetchError(true);
             } finally {
                 setIsLoading(false);
             }
@@ -53,8 +56,8 @@ function App() {
     };
 
     // 0. 데이터 로딩 중 에러가 발생한 경우, 에러 메시지를 표시합니다.
-    if (error) {
-        return <div className="page-loading">{error}</div>;
+    if (hasFetchError) {
+        return <div className="page-loading">{t('common.fetchError')}</div>;
     }
 
     // 1. 데이터 로딩 중인 경우, 명확하게 로딩 상태를 표시합니다.
@@ -71,24 +74,21 @@ function App() {
     return (
         <ThemeProvider>
             <Router>
-                <Header />
-                <main className="app-content">
-                    {/* Routes를 Suspense로 감싸고, 로딩 중에 보여줄 UI를 fallback으로 지정합니다. */}
-                    <Suspense fallback={<div className="page-loading">{t('common.loading')}</div>}>
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route
-                            path="/practice"
-                            element={<PracticePage songs={songs} song={currentSong} onSongChange={handleSongChange} />}
-                        />
-                        <Route
-                            path="/sheet-music"
-                            element={<SheetMusicPage songs={songs} song={currentSong} onSongChange={handleSongChange} />}
-                        />
-                        <Route path="/profile" element={<ProfilePage />} />
-                    </Routes>
-                    </Suspense>
-                </main>
+                {/* [수정] ErrorBoundary가 하위 컴포넌트 트리의 렌더링 에러를 감지하도록 감싸줍니다. */}
+                <ErrorBoundary>
+                    <Header />
+                    <main className="app-content">
+                        {/* Routes를 Suspense로 감싸고, 로딩 중에 보여줄 UI를 fallback으로 지정합니다. */}
+                        <Suspense fallback={<div className="page-loading">{t('common.loading')}</div>}>
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/practice" element={<PracticePage songs={songs} song={currentSong} onSongChange={handleSongChange} />} />
+                                <Route path="/sheet-music" element={<SheetMusicPage songs={songs} song={currentSong} onSongChange={handleSongChange} />} />
+                                <Route path="/profile" element={<ProfilePage />} />
+                            </Routes>
+                        </Suspense>
+                    </main>
+                </ErrorBoundary>
             </Router>
         </ThemeProvider>
     );
