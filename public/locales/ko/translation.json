@@ -1,13 +1,53 @@
 {
-  "nav.practice": "연습하기",
-  "nav.sheetMusic": "악보 보기",
-  "nav.profile": "내 정보",
-  "nav.openMenu": "네비게이션 메뉴 열기",
-  "nav.closeMenu": "네비게이션 메뉴 닫기",
-  "home.title": "My Piano 앱",
-  "home.welcome": "피아노 연습 프로젝트에 오신 것을 환영합니다!",
-  "home.description": "상단 메뉴를 통해 원하는 기능으로 이동하세요.",
-  "home.startPractice": "연습 시작하기",
+  "meta": {
+    "documentTitle": "마이 피아노"
+  },
+  "common": {
+    "all": "전체",
+    "close": "닫기",
+    "loading": "로딩 중...",
+    "noSongsAvailable": "연주할 수 있는 곡이 없습니다.",
+    "fetchError": "곡을 불러오는데 실패했습니다. 나중에 다시 시도해 주세요.",
+    "renderErrorTitle": "문제가 발생했습니다",
+    "renderErrorBody": "페이지를 표시하는 중 오류가 발생했습니다. 새로고침 후 다시 시도해 주세요."
+  },
+  "nav": {
+    "practice": "연습하기",
+    "sheetMusic": "악보 보기",
+    "profile": "내 정보",
+    "openMenu": "네비게이션 메뉴 열기",
+    "closeMenu": "네비게이션 메뉴 닫기"
+  },
+  "settings": {
+    "title": "설정",
+    "theme": "테마",
+    "light": "라이트",
+    "dark": "다크",
+    "showNoteNames": "계이름 표시",
+    "language": "언어"
+  },
+  "home": {
+    "title": "My Piano 앱",
+    "welcome": "피아노 연습 프로젝트에 오신 것을 환영합니다!",
+    "description": "상단 메뉴를 통해 원하는 기능으로 이동하세요.",
+    "startPractice": "연습 시작하기"
+  },
+  "practice": {
+    "pageTitle": "연습하기: {{title}}",
+    "congratsMessage": "참 잘했어요!",
+    "retryButton": "다시하기"
+  },
+  "sheetMusic": {
+    "selectSong": "곡을 선택하세요"
+  },
+  "profile": {
+    "title": "내 정보",
+    "inPreparation": "준비 중인 페이지입니다. 잠시만 기다려주세요."
+  },
+  "songs": {
+    "twinkle-twinkle": "반짝반짝 작은 별",
+    "three-blind-mice": "눈 먼 생쥐 세 마리"
+  },
   "category": {
     "childrens": "동요",
     "classical": "클래식",
@@ -18,16 +58,6 @@
     "intermediate": "중급",
     "unknown": "미정"
   },
-  "practicePageTitle": "연습하기: {{title}}",
-  "congratsMessage": "참 잘했어요!",
-  "retryButton": "다시하기",
-  "songs": {
-    "twinkle-twinkle": "반짝반짝 작은 별",
-    "three-blind-mice": "눈 먼 생쥐 세 마리"
-  },
-  "sheetMusic.selectSong": "곡을 선택하세요",
-  "profile.title": "내 정보",
-  "profile.inPreparation": "준비 중인 페이지입니다. 잠시만 기다려주세요.",
   "notes": {
     "C": "도", "Csharp": "도#", "D": "레", "Dsharp": "레#", "E": "미", "F": "파", "Fsharp": "파#", "G": "솔", "Gsharp": "솔#", "A": "라", "Asharp": "라#", "B": "시"
   },
@@ -48,11 +78,5 @@
       "4": { "0": "이런", "1": "광경을", "2": "본 적", "3": "있나요", "4": "내 평생", "5": "이런 일은," },
       "5": { "0": "눈 먼", "1": "생쥐", "2": "세 마리." }
     }
-  },
-  "common": {
-    "all": "전체", "close": "닫기", "loading": "로딩 중...", "noSongsAvailable": "연주할 수 있는 곡이 없습니다.", "fetchError": "곡을 불러오는데 실패했습니다. 나중에 다시 시도해 주세요.", "renderErrorTitle": "문제가 발생했습니다", "renderErrorBody": "페이지를 표시하는 중 오류가 발생했습니다. 새로고침 후 다시 시도해 주세요.", "title": "설정", "showNoteNames": "계이름 표시"
-  },
-  "meta": {
-    "documentTitle": "My Piano"
   }
 }

@@ -2,23 +2,23 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../context/SettingsContext';
+import { useTheme } from '../../context/ThemeContext';
 import './SettingsPopover.css';
 
 interface SettingsPopoverProps {
     isOpen: boolean;
     onClose: () => void;
-    anchorEl: HTMLElement | null; // 팝오버를 위치시킬 기준이 되는 요소
+    anchorEl: HTMLElement | null;
 }
 
 export const SettingsPopover: React.FC<SettingsPopoverProps> = ({ isOpen, onClose, anchorEl }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { showNoteNames, toggleNoteNames } = useSettings();
+    const { theme, setTheme } = useTheme();
     const popoverRef = useRef<HTMLDivElement>(null);
 
-    // 팝오버 외부를 클릭했을 때 닫히도록 하는 로직
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // 팝오버 자신이나, 팝오버를 연 버튼을 클릭한게 아니라면 닫기
             if (
                 popoverRef.current &&
                 !popoverRef.current.contains(event.target as Node) &&
@@ -42,27 +42,72 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({ isOpen, onClos
         return null;
     }
 
-    // 기준 요소(anchorEl)를 바탕으로 팝오버 위치 계산
     const rect = anchorEl.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+    const isMobile = windowWidth <= 768;
+
+    // [수정] 데스크톱과 모바일의 위치 계산 로직을 분리합니다.
     const popoverStyle: React.CSSProperties = {
-        top: `${rect.bottom + 8}px`, // 버튼 바로 아래에 약간의 간격을 두고 위치
-        left: `${rect.left + rect.width / 2}px`, // 버튼의 가로 중앙에 위치
+        top: `${rect.bottom + 8}px`,
+    };
+
+    // 데스크톱일 경우에만 right 속성을 동적으로 계산합니다.
+    if (!isMobile) {
+        popoverStyle.right = `${windowWidth - rect.right}px`;
+    }
+
+    const changeLanguage = (lang: 'ko' | 'en') => {
+        i18n.changeLanguage(lang);
     };
 
     return (
-        <div ref={popoverRef} className="settings-popover" style={popoverStyle}>
+        // [수정] 모바일 여부에 따라 클래스를 동적으로 추가합니다.
+        <div
+            ref={popoverRef}
+            className={`settings-popover ${isMobile ? 'is-mobile' : ''}`}
+            style={popoverStyle}
+        >
+            <h3 className="popover-title">{t('settings.title')}</h3>
             <div className="popover-content">
-                <div className="popover-item">
-                    <label>
-                        <span>{t('settings.showNoteNames', '계이름 표시')}</span>
+                {/* 1. 테마 설정 */}
+                <div className="setting-item">
+                    <label>{t('settings.theme')}</label>
+                    <div className="button-group">
+                        <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>
+                            {t('settings.light')}
+                        </button>
+                        <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>
+                            {t('settings.dark')}
+                        </button>
+                    </div>
+                </div>
+
+                {/* 2. 계이름 표시 설정 */}
+                <div className="setting-item">
+                    <label htmlFor="note-name-toggle">{t('settings.showNoteNames')}</label>
+                    <label className="switch">
                         <input
+                            id="note-name-toggle"
                             type="checkbox"
                             checked={showNoteNames}
                             onChange={toggleNoteNames}
                         />
+                        <span className="slider round"></span>
                     </label>
                 </div>
-                {/* 나중에 '메트로놈 소리' 등 다른 설정을 여기에 쉽게 추가할 수 있습니다. */}
+
+                {/* 3. 언어 설정 */}
+                <div className="setting-item">
+                    <label>{t('settings.language')}</label>
+                    <div className="button-group">
+                        <button onClick={() => changeLanguage('en')} className={i18n.language === 'en' ? 'active' : ''}>
+                            EN
+                        </button>
+                        <button onClick={() => changeLanguage('ko')} className={i18n.language === 'ko' ? 'active' : ''}>
+                            KO
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );

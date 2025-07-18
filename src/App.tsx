@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useState, lazy, Suspense, useEffect, useRef } from 'react'; // useRef 추가
+import { useState, lazy, Suspense, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Song } from './songs/types';
@@ -9,7 +9,7 @@ import { SettingsProvider } from './context/SettingsContext';
 
 import ErrorBoundary from './components/common/ErrorBoundary';
 import Header from './components/ui/Header';
-import { SettingsPopover } from './components/ui/SettingsPopover'; // [추가]
+import { SettingsPopover } from './components/ui/SettingsPopover';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const PracticePage = lazy(() => import('./pages/PracticePage'));
@@ -25,8 +25,8 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [hasFetchError, setHasFetchError] = useState(false);
 
-    // [추가] 설정 팝오버 상태와 버튼 ref를 최상위에서 관리합니다.
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    // [수정] non-null assertion(!) 대신 null로 초기화하여 타입 안정성을 높입니다.
     const settingsButtonRef = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
@@ -73,7 +73,6 @@ function App() {
             <SettingsProvider>
                 <Router>
                     <ErrorBoundary>
-                        {/* [수정] Header에 팝오버 제어 함수와 ref를 전달합니다. */}
                         <Header
                             onSettingsClick={() => setIsSettingsOpen(prev => !prev)}
                             settingsButtonRef={settingsButtonRef}
@@ -88,7 +87,6 @@ function App() {
                                 </Routes>
                             </Suspense>
                         </main>
-                        {/* [추가] 팝오버를 앱 레벨에서 렌더링하여 모든 페이지 위에 표시될 수 있게 합니다. */}
                         <SettingsPopover
                             isOpen={isSettingsOpen}
                             onClose={() => setIsSettingsOpen(false)}

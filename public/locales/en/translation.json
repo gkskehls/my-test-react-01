@@ -1,13 +1,53 @@
 {
-  "nav.practice": "Practice",
-  "nav.sheetMusic": "Sheet Music",
-  "nav.profile": "Profile",
-  "home.title": "My Piano App",
-  "nav.openMenu": "Open navigation menu",
-  "nav.closeMenu": "Close navigation menu",
-  "home.welcome": "Welcome to the Piano Practice Project!",
-  "home.description": "Use the top menu to navigate to the desired function.",
-  "home.startPractice": "Start Practicing",
+  "meta": {
+    "documentTitle": "My Piano"
+  },
+  "common": {
+    "all": "All",
+    "close": "Close",
+    "loading": "Loading...",
+    "noSongsAvailable": "No songs available to play.",
+    "fetchError": "Failed to load songs. Please try again later.",
+    "renderErrorTitle": "Something went wrong",
+    "renderErrorBody": "An error occurred while displaying this page. Please try refreshing."
+  },
+  "nav": {
+    "practice": "Practice",
+    "sheetMusic": "Sheet Music",
+    "profile": "Profile",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "showNoteNames": "Show Note Names",
+    "language": "Language"
+  },
+  "home": {
+    "title": "My Piano App",
+    "welcome": "Welcome to the Piano Practice Project!",
+    "description": "Use the top menu to navigate to the desired function.",
+    "startPractice": "Start Practicing"
+  },
+  "practice": {
+    "pageTitle": "Practice: {{title}}",
+    "congratsMessage": "Well Done!",
+    "retryButton": "Retry"
+  },
+  "sheetMusic": {
+    "selectSong": "Select a Song"
+  },
+  "profile": {
+    "title": "My Profile",
+    "inPreparation": "This page is under construction."
+  },
+  "songs": {
+    "twinkle-twinkle": "Twinkle, Twinkle, Little Star",
+    "three-blind-mice": "Three Blind Mice"
+  },
   "category": {
     "childrens": "Children's Song",
     "classical": "Classical",
@@ -18,16 +58,6 @@
     "intermediate": "Intermediate",
     "unknown": "N/A"
   },
-  "practicePageTitle": "Practice: {{title}}",
-  "congratsMessage": "Well Done!",
-  "retryButton": "Retry",
-  "songs": {
-    "twinkle-twinkle": "Twinkle, Twinkle, Little Star",
-    "three-blind-mice": "Three Blind Mice"
-  },
-  "sheetMusic.selectSong": "Select a Song",
-  "profile.title": "My Profile",
-  "profile.inPreparation": "This page is under construction.",
   "notes": {
     "C": "C", "Csharp": "C#", "D": "D", "Dsharp": "D#", "E": "E", "F": "F", "Fsharp": "F#", "G": "G", "Gsharp": "G#", "A": "A", "Asharp": "A#", "B": "B"
   },
@@ -48,11 +78,5 @@
       "4": { "0": "Did", "1": "you", "2": "e-ver", "3": "see", "4": "such a", "5": "sight," },
       "5": { "0": "As", "1": "three", "2": "blind mice." }
     }
-  },
-  "common": {
-    "all": "All", "close": "Close", "loading": "Loading...", "noSongsAvailable": "No songs available to play.", "fetchError": "Failed to load songs. Please try again later.", "renderErrorTitle": "Something went wrong", "renderErrorBody": "An error occurred while displaying this page. Please try refreshing.", "title": "Settings", "showNoteNames": "Show Note Names"
-  },
-  "meta": {
-    "documentTitle": "My Piano"
   }
 }
