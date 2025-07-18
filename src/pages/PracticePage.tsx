@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useMemo, lazy, Suspense, useRef } fro
 import { useTranslation } from 'react-i18next';
 import Piano from '../components/piano/Piano';
 import SheetMusic from '../components/sheet-music/SheetMusic';
-import { SettingsPopover } from '../components/ui/SettingsPopover'; // [추가]
+// [제거] import { SettingsPopover } from '../components/ui/SettingsPopover';
 import { Song } from '../songs';
 import './PracticePage.css';
 import { useSheetMusicLayout } from '../hooks/useSheetMusicLayout';
@@ -20,8 +20,9 @@ interface PracticePageProps {
 const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false); // [추가] 팝오버 상태 관리
-    const settingsButtonRef = useRef<HTMLButtonElement>(null); // [추가] 설정 버튼 ref
+    // [제거] 팝오버 상태와 버튼 ref를 제거합니다.
+    // const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    // const settingsButtonRef = useRef<HTMLButtonElement>(null);
 
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
@@ -70,30 +71,15 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
 
     return (
         <div className="practice-container">
+            {/* [수정] 헤더에서 설정 버튼을 제거합니다. */}
             <div className="practice-header">
                 <button className="song-selector-button" onClick={() => setIsLibraryOpen(true)}>
                     <span>{t(song.titleKey)}</span>
                     <span className="dropdown-icon">▼</span>
                 </button>
-
-                {/* [수정] 기존 토글 스위치를 설정 아이콘 버튼으로 대체 */}
-                <button
-                    ref={settingsButtonRef}
-                    className="settings-button"
-                    onClick={() => setIsSettingsOpen(prev => !prev)}
-                    aria-label={t('settings.title', '설정')}
-                    title={t('settings.title', '설정')} // 마우스 호버 시 툴팁 추가
-                >
-                    ⚙️
-                </button>
             </div>
 
-            {/* [추가] 팝오버 컴포넌트 렌더링 */}
-            <SettingsPopover
-                isOpen={isSettingsOpen}
-                onClose={() => setIsSettingsOpen(false)}
-                anchorEl={settingsButtonRef.current}
-            />
+            {/* [제거] 팝오버 컴포넌트 렌더링 코드를 제거합니다. */}
 
             <div ref={wrapperRef} className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {isSongFinished ? (
