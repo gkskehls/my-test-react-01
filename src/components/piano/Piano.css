@@ -1,159 +1,170 @@
+/* src/components/piano/Piano.css */
+
+/* --- 피아노 전체 컨테이너 --- */
 .piano {
     display: flex;
     position: relative;
     padding: 10px;
     border-radius: 10px;
-    background-color: #333;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    background-color: #2c2c2c; /* 약간 더 부드러운 검은색 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.1);
     margin-top: 2rem;
     box-sizing: border-box;
-
-    /* 화면보다 건반이 길어질 경우 가로 스크롤을 허용합니다. */
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤을 위함 */
-    overscroll-behavior-x: contain; /* 가로 스크롤 시 페이지 전체 스크롤 방지 */
-
+    overflow-x: auto; /* 화면보다 길어지면 가로 스크롤 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
     max-width: 860px;
     width: 100%;
 }
 
+/* --- 각 건반을 감싸는 컨테이너 (흰 건반 1개 + 검은 건반 1개) --- */
 .key-container {
     position: relative;
-    /*
-     * 화면이 넓을 때는 건반이 영역을 꽉 채우도록 너비를 유연하게 계산하고,
-     * 화면이 좁아져 계산된 너비가 50px보다 작아지면 최소 너비(50px)를 보장합니다.
-     * var의 두 번째 인자는 --num-white-keys 변수가 없을 경우의 기본값입니다.
-     */
+    /* 화면 너비에 맞춰 흰 건반 너비를 유연하게 조절 (최소 50px) */
     width: max(50px, calc(100% / var(--num-white-keys, 14)));
-    flex-shrink: 0; /* 컨테이너 너비가 줄어들어도 건반 너비가 줄어들지 않도록 설정 */
+    flex-shrink: 0; /* 컨테이너가 줄어들어도 건반 너비는 유지 */
 }
 
+/* --- 모든 건반의 공통 스타일 --- */
 .key {
     cursor: pointer;
     border: 1px solid #000;
-    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
-    transition: background-color 0.1s, box-shadow 0.1s, transform 0.05s ease-out;
+    transition: all 0.07s ease-out;
+    -webkit-tap-highlight-color: transparent; /* 모바일에서 클릭 시 파란 배경 제거 */
 }
 
+/* --- 흰 건반 스타일 --- */
+.white-key {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    border-radius: 0 0 6px 6px;
+    box-shadow: inset 0 -8px 2px rgba(0, 0, 0, 0.15);
+    position: relative;
+    /* [핵심] 흰 건반은 항상 아래쪽 레이어(1번)에 위치 */
+    z-index: 1;
+}
+
+/* --- 검은 건반 스타일 --- */
+.black-key {
+    width: 60%;
+    max-width: 36px;
+    height: 130px;
+    background: linear-gradient(to bottom, #4a4a4a, #222);
+    border-radius: 0 0 4px 4px;
+    border-width: 1px 2px 6px;
+    border-color: #555 #222 #111;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.4);
+    position: absolute;
+    top: 0;
+    left: 100%;
+    transform: translateX(-50%);
+    /* [핵심] 검은 건반은 항상 흰 건반 위(2번)에 위치 */
+    z-index: 2;
+}
+
+/* --- 건반 상태: 눌렸을 때 (Active) --- */
+.key.active {
+    background: var(--accent-primary);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+}
+.white-key.active {
+    transform: translateY(3px);
+    box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.2);
+}
+.black-key.active {
+    transform: translateX(-50%) translateY(2px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* --- 건반 상태: 가이드 (Guide) --- */
+.key.guide {
+    position: relative;
+    overflow: visible;
+}
+
+/* 가이드 효과를 위한 빛나는 오버레이 (가상 요소) */
+.key.guide::before {
+    content: '';
+    position: absolute;
+    /* [수정] 'top' 대신 'bottom'을 사용하여 효과를 건반 아래쪽에 배치합니다. */
+    bottom: 35px;
+    left: 50%;
+
+    width: 90%;
+    height: 50px;
+
+    background: radial-gradient(
+            circle,
+            hsla(196, 100%, 70%, 0.7) 0%,
+            hsla(196, 100%, 70%, 0) 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    animation: breath-guide 2s infinite ease-in-out;
+}
+
+/* 검은 건반의 가이드 효과는 조금 더 작고 어둡게 조정 */
+.black-key.guide::before {
+    width: 100%;
+    height: 35px;
+    /* [수정] 검은 건반도 동일하게 'bottom' 기준으로 위치를 조정합니다. */
+    bottom: 30px;
+    background: radial-gradient(
+            circle,
+            hsla(196, 80%, 75%, 0.8) 0%,
+            hsla(196, 80%, 75%, 0) 70%
+    );
+}
+
+/* '숨쉬는' 듯한 애니메이션 키프레임 */
+@keyframes breath-guide {
+    0% {
+        transform: translateX(-50%) scale(0.95);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateX(-50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) scale(0.95);
+        opacity: 0.7;
+    }
+}
+
+/* --- 건반 위 계이름 텍스트 --- */
 .key-note-name {
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
     pointer-events: none;
     user-select: none;
-    /* 계이름이 길어질 경우 줄바꿈되는 것을 방지합니다. */
     white-space: nowrap;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
-
 .white-key .key-note-name {
-    color: #888;
+    color: #555;
+    font-size: 14px;
 }
-
 .black-key .key-note-name {
-    color: #ccc;
+    color: #ddd;
     font-size: 12px;
+    bottom: 8px;
 }
-
-/* 한국어 계이름('도#')은 영어('C#')보다 폭이 넓으므로,
- * 한국어일 때 검은 건반의 글씨 크기를 약간 줄여 자연스럽게 보이도록 합니다. */
-:root[lang="ko"] .black-key .key-note-name {
-    font-size: 11px;
-}
-
-.key:active,
-.key.active {
-    /* ✨ CSS 변수를 사용하여 테마와 일관된 활성 색상을 적용합니다. */
-    background-color: var(--accent-primary);
-    /* ✨ 활성 상태일 때 그림자를 좀 더 어둡게 하여 깊이감을 줍니다. */
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* ✨ 활성 상태일 때 계이름 색상을 변경하여 가독성을 높입니다. */
 .key.active .key-note-name {
-    color: var(--accent-text);
-    /* 그림자 효과를 살짝 주어 텍스트를 더 돋보이게 합니다. */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: var(--accent-text, #fff);
 }
 
-/* ✨ 1. 다음에 눌러야 할 건반(가이드 키)에 대한 스타일을 정의합니다. */
-@keyframes pulse-guide {
-    0% {
-        box-shadow: 0 0 10px 2px var(--guide-color-glow);
-    }
-    50% {
-        box-shadow: 0 0 18px 5px var(--guide-color-glow);
-    }
-    100% {
-        box-shadow: 0 0 10px 2px var(--guide-color-glow);
-    }
-}
-
-.key.guide {
-    /* 기존 배경색 변경 대신, 은은하게 빛나는 효과를 줍니다. */
-    box-shadow: 0 0 15px 5px var(--guide-color-glow);
-    border-color: var(--guide-color-bg);
-    transform: scale(1.02);
-    z-index: 3; /* 다른 건반보다 위에 표시되도록 */
-}
-
-/* 가이드 상태일 때의 active 효과도 정의합니다. */
-.key.guide:active,
-.key.guide.active {
-    box-shadow: 0 0 15px 5px var(--guide-color-glow), inset 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-.white-key {
-    width: 100%; /* 부모인 .key-container의 너비를 항상 100% 채웁니다. */
-    height: 240px;
-    background-color: white;
-    border-radius: 0 0 5px 5px;
-    position: relative; /* z-index가 동작하도록 position 추가 */
-    z-index: 1;
-}
-
-.white-key:active,
-.white-key.active {
-    transform: translateY(2px);
-}
-
-.black-key {
-    /* 너비는 고정값 또는 %로 설정할 수 있습니다. */
-    width: 60%;
-    max-width: 38px;
-    height: 140px;
-    background: linear-gradient(to bottom, #444, #222);
-    border-radius: 0 0 3px 3px;
-    position: absolute;
-    z-index: 2;
-    top: 0; /* 부모 컨테이너의 상단에 위치하도록 명시합니다. */
-    left: 100%;
-    transform: translateX(-50%);
-}
-
-.black-key:active,
-.black-key.active {
-    transform: translateX(-50%) translateY(2px);
-}
-
-/* 미디어 쿼리는 이제 건반 높이만 조절하면 됩니다. */
+/* --- 반응형 스타일 --- */
 @media (max-width: 768px) {
-    .white-key {
-        height: 180px;
-    }
-    .black-key {
-        height: 100px;
-    }
+    .white-key { height: 180px; }
+    .black-key { height: 100px; }
 }
-
 @media (max-width: 480px) {
-    .white-key {
-        height: 150px;
-    }
-    .black-key {
-        height: 80px;
-    }
+    .white-key { height: 150px; }
+    .black-key { height: 80px; }
 }
