@@ -26,3 +26,6 @@ jobs:
         with:
           # --baseline 인수는 코드 품질 기준선을 설정하여 새로운 문제만 보고하도록 합니다.
           args: --baseline,qodana.sarif.json
+          # [수정] GitHub Actions에서 발생하는 캐시 복원 오류(Failed to restore: 400)를 해결하기 위해
+          # Qodana의 내부 캐시 사용을 명시적으로 비활성화합니다.
+          use-caches: false

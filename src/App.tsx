@@ -20,6 +20,7 @@ function App() {
     const [songs, setSongs] = useState<Song[]>([]);
     const [currentSong, setCurrentSong] = useState<Song | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null); // [추가] 데이터 로딩 에러 상태
 
     // 언어가 변경될 때마다 문서 타이틀을 업데이트합니다.
     useEffect(() => {
@@ -37,7 +38,8 @@ function App() {
                 }
             } catch (error) {
                 console.error("Failed to fetch songs:", error);
-                // 여기에 사용자에게 보여줄 오류 처리 로직을 추가할 수 있습니다.
+                // [수정] 사용자에게 보여줄 오류 메시지를 상태에 저장합니다.
+                setError(t('common.fetchError'));
             } finally {
                 setIsLoading(false);
             }
@@ -49,6 +51,11 @@ function App() {
     const handleSongChange = (newSong: Song) => {
         setCurrentSong(newSong);
     };
+
+    // 0. 데이터 로딩 중 에러가 발생한 경우, 에러 메시지를 표시합니다.
+    if (error) {
+        return <div className="page-loading">{error}</div>;
+    }
 
     // 1. 데이터 로딩 중인 경우, 명확하게 로딩 상태를 표시합니다.
     if (isLoading) {

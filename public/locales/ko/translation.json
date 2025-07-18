@@ -50,7 +50,7 @@
     }
   },
   "common": {
-    "all": "전체", "close": "닫기", "loading": "로딩 중...", "noSongsAvailable": "연주할 수 있는 곡이 없습니다."
+    "all": "전체", "close": "닫기", "loading": "로딩 중...", "noSongsAvailable": "연주할 수 있는 곡이 없습니다.", "fetchError": "곡을 불러오는데 실패했습니다. 나중에 다시 시도해 주세요."
   },
   "meta": {
     "documentTitle": "My Piano"

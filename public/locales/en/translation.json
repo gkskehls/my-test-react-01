@@ -50,7 +50,7 @@
     }
   },
   "common": {
-    "all": "All", "close": "Close", "loading": "Loading...", "noSongsAvailable": "No songs available to play."
+    "all": "All", "close": "Close", "loading": "Loading...", "noSongsAvailable": "No songs available to play.", "fetchError": "Failed to load songs. Please try again later."
   },
   "meta": {
     "documentTitle": "My Piano"
