@@ -1,25 +1,37 @@
 // src/context/SettingsContext.tsx
-import { createContext, useState, useContext, type ReactNode } from 'react';
+import { createContext, useState, useContext, useMemo, type ReactNode } from 'react';
+
+// [추가] 가이드 모드 타입을 정의합니다.
+export type GuideMode = 'full' | 'sheet-only' | 'rhythm-only' | 'none';
 
 // 1. Context에서 관리할 데이터의 타입을 정의합니다.
 interface SettingsContextType {
     showNoteNames: boolean;
     toggleNoteNames: () => void;
+    guideMode: GuideMode; // [추가]
+    setGuideMode: (mode: GuideMode) => void; // [추가]
 }
 
 // 2. Context 객체를 생성합니다.
-//    타입스크립트를 위해 기본값을 제공하지만, Provider 없이는 사용되지 않을 것입니다.
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 // 3. 하위 컴포넌트에 Context를 제공할 Provider 컴포넌트를 만듭니다.
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-    const [showNoteNames, setShowNoteNames] = useState(true); // 기본값은 '보이기'
+    const [showNoteNames, setShowNoteNames] = useState(true);
+    // [추가] 가이드 모드 상태를 추가하고, 기본값으로 'full'을 설정합니다.
+    const [guideMode, setGuideMode] = useState<GuideMode>('full');
 
     const toggleNoteNames = () => {
         setShowNoteNames(prev => !prev);
     };
 
-    const value = { showNoteNames, toggleNoteNames };
+    // [수정] useMemo와 value에 새로운 상태와 함수를 포함시킵니다.
+    const value = useMemo(() => ({
+        showNoteNames,
+        toggleNoteNames,
+        guideMode,
+        setGuideMode,
+    }), [showNoteNames, guideMode]);
 
     return (
         <SettingsContext.Provider value={value}>

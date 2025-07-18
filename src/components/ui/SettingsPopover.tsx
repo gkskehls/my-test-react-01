@@ -13,7 +13,7 @@ interface SettingsPopoverProps {
 
 export const SettingsPopover: React.FC<SettingsPopoverProps> = ({ isOpen, onClose, anchorEl }) => {
     const { t, i18n } = useTranslation();
-    const { showNoteNames, toggleNoteNames } = useSettings();
+    const { showNoteNames, toggleNoteNames, guideMode, setGuideMode } = useSettings();
     const { theme, setTheme } = useTheme();
     const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -42,26 +42,25 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({ isOpen, onClos
         return null;
     }
 
-    const rect = anchorEl.getBoundingClientRect();
     const windowWidth = window.innerWidth;
     const isMobile = windowWidth <= 768;
 
     // [수정] 데스크톱과 모바일의 위치 계산 로직을 분리합니다.
-    const popoverStyle: React.CSSProperties = {
-        top: `${rect.bottom + 8}px`,
-    };
+    const popoverStyle: React.CSSProperties = {};
 
-    // 데스크톱일 경우에만 right 속성을 동적으로 계산합니다.
+    // 데스크톱일 경우에만 JS로 위치를 동적으로 계산합니다.
     if (!isMobile) {
-        popoverStyle.right = `${windowWidth - rect.right}px`;
+        const rect = anchorEl.getBoundingClientRect();
+        popoverStyle.top = `${rect.bottom + 8}px`;
+        popoverStyle.right = `${window.innerWidth - rect.right}px`;
     }
+    // 모바일에서는 인라인 스타일로 위치를 지정하지 않고, CSS 클래스에 위임합니다.
 
     const changeLanguage = (lang: 'ko' | 'en') => {
         i18n.changeLanguage(lang);
     };
 
     return (
-        // [수정] 모바일 여부에 따라 클래스를 동적으로 추가합니다.
         <div
             ref={popoverRef}
             className={`settings-popover ${isMobile ? 'is-mobile' : ''}`}
@@ -105,6 +104,25 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({ isOpen, onClos
                         </button>
                         <button onClick={() => changeLanguage('ko')} className={i18n.language === 'ko' ? 'active' : ''}>
                             KO
+                        </button>
+                    </div>
+                </div>
+
+                {/* 4. 가이드 모드 설정 */}
+                <div className="setting-item-column">
+                    <label>{t('settings.guideMode.title')}</label>
+                    <div className="button-group-grid">
+                        <button onClick={() => setGuideMode('full')} className={guideMode === 'full' ? 'active' : ''}>
+                            {t('settings.guideMode.full')}
+                        </button>
+                        <button onClick={() => setGuideMode('sheet-only')} className={guideMode === 'sheet-only' ? 'active' : ''}>
+                            {t('settings.guideMode.sheetOnly')}
+                        </button>
+                        <button onClick={() => setGuideMode('rhythm-only')} className={guideMode === 'rhythm-only' ? 'active' : ''}>
+                            {t('settings.guideMode.rhythmOnly')}
+                        </button>
+                        <button onClick={() => setGuideMode('none')} className={guideMode === 'none' ? 'active' : ''}>
+                            {t('settings.guideMode.none')}
                         </button>
                     </div>
                 </div>

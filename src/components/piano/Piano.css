@@ -93,9 +93,17 @@
 }
 
 .key.guide {
-    /* ✨ 2. 가이드 키의 배경색과 함께, 은은하게 깜빡이는 애니메이션을 적용합니다. */
-    background-color: var(--guide-color-bg);
-    animation: pulse-guide 2s infinite ease-in-out;
+    /* 기존 배경색 변경 대신, 은은하게 빛나는 효과를 줍니다. */
+    box-shadow: 0 0 15px 5px var(--guide-color-glow);
+    border-color: var(--guide-color-bg);
+    transform: scale(1.02);
+    z-index: 3; /* 다른 건반보다 위에 표시되도록 */
+}
+
+/* 가이드 상태일 때의 active 효과도 정의합니다. */
+.key.guide:active,
+.key.guide.active {
+    box-shadow: 0 0 15px 5px var(--guide-color-glow), inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .white-key {

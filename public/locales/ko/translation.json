@@ -24,7 +24,14 @@
     "light": "라이트",
     "dark": "다크",
     "showNoteNames": "계이름 표시",
-    "language": "언어"
+    "language": "언어",
+    "guideMode": {
+      "title": "가이드 모드",
+      "full": "전체",
+      "sheetOnly": "악보만",
+      "rhythmOnly": "리듬만",
+      "none": "끄기"
+    }
   },
   "home": {
     "title": "My Piano 앱",

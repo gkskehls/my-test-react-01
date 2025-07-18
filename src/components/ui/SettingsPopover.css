@@ -8,19 +8,18 @@
     border: 1px solid var(--border-primary);
     padding: 1rem;
     min-width: 240px;
-    /* [수정] 데스크톱용 애니메이션을 기본으로 설정합니다. */
     animation: fadeInDesktop 0.1s ease-out;
 }
 
-/* [추가] 모바일 화면에서 팝오버를 중앙에 위치시키는 스타일 */
+/* 모바일 화면에서 팝오버를 화면 정중앙에 위치시키는 스타일 */
 .settings-popover.is-mobile {
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    /* 모바일용 애니메이션으로 교체합니다. */
+    transform: translate(-50%, -50%);
     animation-name: fadeInMobile;
 }
 
-/* [수정] 기존 fadeIn 키프레임의 이름을 데스크톱용으로 변경합니다. */
+/* 데스크톱용 애니메이션 */
 @keyframes fadeInDesktop {
     from {
         opacity: 0;
@@ -32,15 +31,15 @@
     }
 }
 
-/* [추가] 모바일용 중앙 정렬을 고려한 새로운 키프레임 */
+/* 모바일용 중앙 정렬을 고려한 새로운 애니메이션 */
 @keyframes fadeInMobile {
     from {
         opacity: 0;
-        transform: translateX(-50%) translateY(-10px);
+        transform: translate(-50%, -50%) scale(0.95);
     }
     to {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translate(-50%, -50%) scale(1);
     }
 }
 
@@ -142,4 +141,47 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(20px);
+}
+
+/* 세로로 배치되는 설정 아이템 */
+.setting-item-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.setting-item-column > label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* 2x2 그리드 버튼 그룹 */
+.button-group-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.button-group-grid button {
+    padding: 8px 12px;
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.button-group-grid button:hover {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+}
+
+.button-group-grid button.active {
+    background-color: var(--text-accent);
+    color: var(--background-primary);
+    border-color: var(--text-accent);
 }

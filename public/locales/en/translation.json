@@ -24,7 +24,14 @@
     "light": "Light",
     "dark": "Dark",
     "showNoteNames": "Show Note Names",
-    "language": "Language"
+    "language": "Language",
+    "guideMode": {
+      "title": "Guide Mode",
+      "full": "Full",
+      "sheetOnly": "Sheet Only",
+      "rhythmOnly": "Rhythm Only",
+      "none": "None"
+    }
   },
   "home": {
     "title": "My Piano App",
