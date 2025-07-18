@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './SheetMusic.css';
 import type { NoteDuration } from '../../songs/types';
-import { useSettings } from '../../context/SettingsContext'; // [추가]
+import { useSettings } from '../../context/SettingsContext';
 
 interface NoteProps {
     id: string;
@@ -18,7 +18,7 @@ interface NoteProps {
 
 const Note = React.memo(({ id, noteIndex, stepDifference, isHighlighted, pitch, duration, style }: NoteProps) => {
     const { t } = useTranslation();
-    const { showNoteNames } = useSettings(); // [추가] 설정 값 가져오기
+    const { showNoteNames } = useSettings();
 
     const finalNoteStyle: React.CSSProperties & {
         '--note-index': number;
@@ -40,9 +40,9 @@ const Note = React.memo(({ id, noteIndex, stepDifference, isHighlighted, pitch, 
     const displayName = t(translationKey, noteName);
 
     return (
-        <div id={`note-${id}`} className={noteClasses} style={finalNoteStyle}>
+        // [수정] 불필요한 'note-' 접두사를 제거하고 전달받은 id를 그대로 사용합니다.
+        <div id={id} className={noteClasses} style={finalNoteStyle}>
             <div className="note-head">
-                {/* [수정] showNoteNames가 true일 때만 계이름을 렌더링합니다. */}
                 {showNoteNames && displayName && <span className="note-syllable">{displayName}</span>}
             </div>
             {duration !== 'w' && <div className="stem"></div>}
