@@ -1,6 +1,6 @@
 // src/App.tsx
 import { useState, lazy, Suspense, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Song } from './songs/types';
 import { getSongs } from './firebase/songs';
@@ -10,11 +10,15 @@ import { SettingsProvider } from './context/SettingsContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import Header from './components/ui/Header';
 import { SettingsPopover } from './components/ui/SettingsPopover';
+import ProtectedRoute from './components/auth/ProtectedRoute'; // [추가]
 
+// 페이지 컴포넌트 lazy loading
 const HomePage = lazy(() => import('./pages/HomePage'));
 const PracticePage = lazy(() => import('./pages/PracticePage'));
 const SheetMusicPage = lazy(() => import('./pages/SheetMusicPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage')); // [추가]
+const AdminPage = lazy(() => import('./pages/AdminPage')); // [추가]
 
 import './App.css';
 
@@ -26,7 +30,6 @@ function App() {
     const [hasFetchError, setHasFetchError] = useState(false);
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    // [수정] non-null assertion(!) 대신 null로 초기화하여 타입 안정성을 높입니다.
     const settingsButtonRef = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
@@ -84,6 +87,20 @@ function App() {
                                     <Route path="/practice" element={<PracticePage songs={songs} song={currentSong} onSongChange={handleSongChange} />} />
                                     <Route path="/sheet-music" element={<SheetMusicPage songs={songs} song={currentSong} onSongChange={handleSongChange} />} />
                                     <Route path="/profile" element={<ProfilePage />} />
+
+                                    {/* [추가] 로그인 및 관리자 페이지 라우트 */}
+                                    <Route path="/login" element={<LoginPage />} />
+                                    <Route
+                                        path="/admin"
+                                        element={
+                                            <ProtectedRoute>
+                                                <AdminPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+
+                                    {/* 일치하는 경로가 없을 경우 홈으로 리디렉션 */}
+                                    <Route path="*" element={<Navigate to="/" />} />
                                 </Routes>
                             </Suspense>
                         </main>
