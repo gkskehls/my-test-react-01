@@ -79,22 +79,21 @@
 }
 
 /* --- 건반 상태: 가이드 (Guide) --- */
+/* [핵심 수정] position 속성을 제거하여 검은 건반의 absolute 포지션이 유지되도록 합니다. */
 .key.guide {
-    position: relative;
     overflow: visible;
 }
 
-/* 가이드 효과를 위한 빛나는 오버레이 (가상 요소) */
-.key.guide::before {
+/* [개선] 가이드 효과를 흰 건반과 검은 건반에 대해 명확히 분리하여 정의합니다. */
+
+/* 흰 건반 가이드 효과 */
+.white-key.guide::before {
     content: '';
     position: absolute;
-    /* [수정] 'top' 대신 'bottom'을 사용하여 효과를 건반 아래쪽에 배치합니다. */
     bottom: 35px;
     left: 50%;
-
     width: 90%;
     height: 50px;
-
     background: radial-gradient(
             circle,
             hsla(196, 100%, 70%, 0.7) 0%,
@@ -105,20 +104,25 @@
     animation: breath-guide 2s infinite ease-in-out;
 }
 
-/* 검은 건반의 가이드 효과는 조금 더 작고 어둡게 조정 */
+/* 검은 건반 가이드 효과 */
 .black-key.guide::before {
+    content: '';
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
     width: 100%;
     height: 35px;
-    /* [수정] 검은 건반도 동일하게 'bottom' 기준으로 위치를 조정합니다. */
-    bottom: 30px;
     background: radial-gradient(
             circle,
             hsla(196, 80%, 75%, 0.8) 0%,
             hsla(196, 80%, 75%, 0) 70%
     );
+    border-radius: 50%;
+    pointer-events: none;
+    animation: breath-guide 2s infinite ease-in-out;
 }
 
-/* '숨쉬는' 듯한 애니메이션 키프레임 */
+/* '숨쉬는' 듯한 애니메이션 키프레임 (변경 없음) */
 @keyframes breath-guide {
     0% {
         transform: translateX(-50%) scale(0.95);

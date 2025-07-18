@@ -53,7 +53,21 @@
   },
   "songs": {
     "twinkle-twinkle": "Twinkle, Twinkle, Little Star",
-    "three-blind-mice": "Three Blind Mice"
+    "three-blind-mice": "Three Blind Mice",
+    "blackKeyWalk": {
+      "title": "Black Key Walk",
+      "1": "One",
+      "2": "step",
+      "3": "two",
+      "4": "steps",
+      "5": "high",
+      "6": "up",
+      "7": "com",
+      "8": "ing",
+      "9": "back",
+      "10": "down",
+      "11": "rest"
+    }
   },
   "category": {
     "childrens": "Children's Song",

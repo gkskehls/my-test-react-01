@@ -1,0 +1,26 @@
+{
+  "titleKey": "songs.blackKeyWalk.title",
+  "categoryKey": "category.childrens",
+  "difficultyKey": "difficulty.beginner",
+  "lines": {
+    "0": [
+      { "note": "F#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.1" },
+      { "note": "G#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.2" },
+      { "note": "A#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.3" },
+      { "note": "C#5", "duration": "q", "lyricKey": "songs.blackKeyWalk.4" }
+    ],
+    "1": [
+      { "note": "D#5", "duration": "h", "lyricKey": "songs.blackKeyWalk.5" },
+      { "note": "C#5", "duration": "h", "lyricKey": "songs.blackKeyWalk.6" }
+    ],
+    "2": [
+      { "note": "A#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.7" },
+      { "note": "G#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.8" },
+      { "note": "F#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.9" },
+      { "note": "G#4", "duration": "q", "lyricKey": "songs.blackKeyWalk.10" }
+    ],
+    "3": [
+      { "note": "F#4", "duration": "w", "lyricKey": "songs.blackKeyWalk.11" }
+    ]
+  }
+}
