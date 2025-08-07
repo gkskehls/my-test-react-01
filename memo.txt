@@ -1,0 +1,4 @@
+적어두는곳
+
+git add .
+git push origin main
