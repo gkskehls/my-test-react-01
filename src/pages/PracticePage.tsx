@@ -155,27 +155,56 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
 
     return (
         <div className="practice-container">
+            {/* PracticePage.tsx의 return 문 내부 헤더 및 악보 래퍼 부분 */}
             <div className="practice-header">
-                <button className="song-selector-button" onClick={() => setIsLibraryOpen(true)}>
+                <button
+                    className="song-selector-button"
+                    onClick={() => setIsLibraryOpen(true)}
+                >
                     <span>{t(song.titleKey)}</span>
                     <span className="dropdown-icon">▼</span>
                 </button>
-                {/* 리듬 모드 연주 중일 때 일시정지 버튼 노출 */}
-                {guideMode === 'rhythm-only' && rhythmState === 'playing' && !isSongFinished && (
-                    <button className="rhythm-control-button" onClick={() => setRhythmState('paused')}>
-                        ⏸️ 일시정지
+
+                {/* 리듬 모드 통합 제어 버튼 (아이콘 제거, 텍스트 중심) */}
+                {guideMode === 'rhythm-only' && !isSongFinished && (
+                    <button
+                        className="rhythm-control-button"
+                        onClick={() => {
+                            if (rhythmState === 'playing') {
+                                setRhythmState('paused');
+                            } else if (
+                                rhythmState === 'paused' ||
+                                rhythmState === 'idle'
+                            ) {
+                                rhythmState === 'idle'
+                                    ? setRhythmState('countdown')
+                                    : setRhythmState('playing');
+                            }
+                        }}
+                    >
+                        {rhythmState === 'playing'
+                            ? t('practice.pause')
+                            : rhythmState === 'paused'
+                              ? t('practice.resume')
+                              : t('practice.start')}
                     </button>
                 )}
             </div>
-
-            <div ref={wrapperRef} className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
+            <div
+                ref={wrapperRef}
+                className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}
+            >
                 {showCongrats ? (
                     <div className="congrats-message">
                         <h2>🎉 {t('practice.congratsMessage')} 🎉</h2>
-                        <button onClick={() => {
-                            setCurrentNoteIndex(0);
-                            setRhythmState('idle');
-                        }}>{t('practice.retryButton')}</button>
+                        <button
+                            onClick={() => {
+                                setCurrentNoteIndex(0);
+                                setRhythmState('idle');
+                            }}
+                        >
+                            {t('practice.retryButton')}
+                        </button>
                     </div>
                 ) : (
                     <>
@@ -186,39 +215,12 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                             lyricWidths={lyricWidths}
                             idPrefix="practice-note"
                         />
-                        {/* 리듬 모드 대기/카운트다운/일시정지 오버레이 */}
-                        {guideMode === 'rhythm-only' && rhythmState !== 'playing' && (
+                        {/* 카운트다운 숫자 레이어만 남김 (팝업 삭제) */}
+                        {rhythmState === 'countdown' && (
                             <div className="rhythm-overlay">
-                                {rhythmState === 'idle' && (
-                                    <div className="overlay-content">
-                                        <h3>리듬 연습 모드</h3>
-                                        <p>음표의 박자에 맞춰 자동으로 악보가 진행됩니다.</p>
-                                        <button className="rhythm-start-btn" onClick={() => setRhythmState('countdown')}>
-                                            시작하기
-                                        </button>
-                                    </div>
-                                )}
-                                {rhythmState === 'countdown' && (
-                                    <div className="overlay-content countdown">
-                                        <div className="countdown-number">{countdownValue}</div>
-                                    </div>
-                                )}
-                                {rhythmState === 'paused' && (
-                                    <div className="overlay-content">
-                                        <h3>연습 일시정지됨</h3>
-                                        <div className="button-group">
-                                            <button className="rhythm-start-btn" onClick={() => setRhythmState('playing')}>
-                                                계속하기
-                                            </button>
-                                            <button className="rhythm-reset-btn" onClick={() => {
-                                                setCurrentNoteIndex(0);
-                                                setRhythmState('idle');
-                                            }}>
-                                                처음부터 다시
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
+                                <div className="countdown-number">
+                                    {countdownValue}
+                                </div>
                             </div>
                         )}
                     </>
@@ -231,7 +233,6 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                     guideNote={pianoGuideNote}
                 />
             </div>
-
             <Suspense fallback={null}>
                 {isLibraryOpen && (
                     <SongLibraryModal

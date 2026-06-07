@@ -40,9 +40,12 @@
     "startPractice": "Start Practicing"
   },
   "practice": {
-    "pageTitle": "Practice: {{title}}",
-    "congratsMessage": "Well Done!",
-    "retryButton": "Retry"
+      "pageTitle": "Practice: {{title}}",
+      "congratsMessage": "Well Done!",
+      "retryButton": "Retry",
+      "start": "Start",
+      "pause": "Pause",
+      "resume": "Resume"
   },
   "sheetMusic": {
     "selectSong": "Select a Song"

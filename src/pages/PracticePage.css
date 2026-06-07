@@ -41,10 +41,24 @@
     border-color: #61dafb;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+.dark .song-selector-button:hover {
+    background-color: #373c42; /* 호버 시 약간 더 밝은 어두운 색 */
+    border-color: #61dafb;
+}
+
+.dark .song-selector-button {
+    background-color: #2b3035; /* 버튼 배경을 어두운 색으로 */
+    color: #f8f9fa;            /* 텍스트는 밝은 색으로 */
+    border-color: #495057;     /* 테두리도 어두운 톤으로 */
+}
 
 .dropdown-icon {
     font-size: 0.7em;
     color: #6b7280;
+}
+
+.dark .dropdown-icon {
+    color: #adb5bd !important;
 }
 
 /* [제거] 계이름 표시 토글 스위치 스타일을 모두 제거합니다. */
@@ -331,22 +345,29 @@
     margin-left: 1rem;
 }
 
+.dark .rhythm-control-button {
+    background-color: #2b3035; /* 어두운 배경 */
+    color: #f8f9fa;            /* 밝은 글씨 */
+    border-color: #495057;     /* 어두운 테두리 */
+}
+
 .rhythm-control-button:hover {
     border-color: #61dafb;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     background-color: #ffffff;
 }
 
+.dark .rhythm-control-button:hover {
+    background-color: #373c42; /* 호버 시 색상 */
+    border-color: #61dafb;
+    color: #ffffff;            /* 호버 시 글씨 */
+}
+
 .rhythm-control-button:active {
     transform: scale(0.98);
 }
 
-/* 다크 모드 대응 (필요 시) */
-.dark .rhythm-control-button {
-    background-color: #2b3035;
-    color: #f8f9fa;
-    border-color: #495057;
-}
+
 
 @keyframes fadeIn {
     from { opacity: 0; }
