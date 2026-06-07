@@ -1,0 +1,195 @@
+{
+  "id": "three-blind-mice",
+  "titleKey": "songs.three-blind-mice",
+  "categoryKey": "category.childrens",
+  "difficultyKey": "difficulty.beginner",
+  "lines": [
+    [
+      {
+        "lyricKey": "lyrics.threeBlindMice.0.0",
+        "duration": "q",
+        "note": "E4"
+      },
+      {
+        "note": "D4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.0.1"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.0.2",
+        "duration": "h",
+        "note": "C4"
+      },
+      {
+        "note": "E4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.0.3"
+      },
+      {
+        "duration": "q",
+        "note": "D4",
+        "lyricKey": "lyrics.threeBlindMice.0.4"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.0.5",
+        "duration": "h",
+        "note": "C4"
+      }
+    ],
+    [
+      {
+        "note": "G4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.1.0"
+      },
+      {
+        "note": "F4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.1.1"
+      },
+      {
+        "duration": "h",
+        "note": "E4",
+        "lyricKey": "lyrics.threeBlindMice.1.2"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.1.3",
+        "duration": "q",
+        "note": "G4"
+      },
+      {
+        "duration": "q",
+        "note": "F4",
+        "lyricKey": "lyrics.threeBlindMice.1.4"
+      },
+      {
+        "duration": "h",
+        "note": "E4",
+        "lyricKey": "lyrics.threeBlindMice.1.5"
+      }
+    ],
+    [
+      {
+        "duration": "q",
+        "note": "G4",
+        "lyricKey": "lyrics.threeBlindMice.2.0"
+      },
+      {
+        "duration": "q",
+        "note": "A4",
+        "lyricKey": "lyrics.threeBlindMice.2.1"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.2.2",
+        "duration": "q",
+        "note": "G4"
+      },
+      {
+        "note": "F4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.2.3"
+      },
+      {
+        "duration": "q",
+        "note": "E4",
+        "lyricKey": "lyrics.threeBlindMice.2.4"
+      },
+      {
+        "duration": "q",
+        "note": "D4",
+        "lyricKey": "lyrics.threeBlindMice.2.5"
+      },
+      {
+        "duration": "h",
+        "note": "C4",
+        "lyricKey": "lyrics.threeBlindMice.2.6"
+      }
+    ],
+    [
+      {
+        "note": "G4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.3.0"
+      },
+      {
+        "note": "A4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.3.1"
+      },
+      {
+        "duration": "q",
+        "note": "G4",
+        "lyricKey": "lyrics.threeBlindMice.3.2"
+      },
+      {
+        "duration": "q",
+        "note": "F4",
+        "lyricKey": "lyrics.threeBlindMice.3.3"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.3.4",
+        "duration": "q",
+        "note": "E4"
+      },
+      {
+        "duration": "q",
+        "note": "D4",
+        "lyricKey": "lyrics.threeBlindMice.3.5"
+      },
+      {
+        "duration": "h",
+        "note": "C4",
+        "lyricKey": "lyrics.threeBlindMice.3.6"
+      }
+    ],
+    [
+      {
+        "lyricKey": "lyrics.threeBlindMice.4.0",
+        "duration": "q",
+        "note": "C4"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.4.1",
+        "note": "D4",
+        "duration": "q"
+      },
+      {
+        "duration": "h",
+        "note": "E4",
+        "lyricKey": "lyrics.threeBlindMice.4.2"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.4.3",
+        "note": "C4",
+        "duration": "q"
+      },
+      {
+        "note": "D4",
+        "duration": "q",
+        "lyricKey": "lyrics.threeBlindMice.4.4"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.4.5",
+        "duration": "h",
+        "note": "E4"
+      }
+    ],
+    [
+      {
+        "duration": "q",
+        "note": "D4",
+        "lyricKey": "lyrics.threeBlindMice.5.0"
+      },
+      {
+        "lyricKey": "lyrics.threeBlindMice.5.1",
+        "duration": "q",
+        "note": "D4"
+      },
+      {
+        "duration": "h",
+        "note": "C4",
+        "lyricKey": "lyrics.threeBlindMice.5.2"
+      }
+    ]
+  ]
+}

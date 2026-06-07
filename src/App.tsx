@@ -2,8 +2,7 @@
 import { useState, lazy, Suspense, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Song } from './songs/types';
-import { getSongs } from './firebase/songs';
+import { Song, songs as localSongs } from './songs';
 import { ThemeProvider } from './context/ThemeContext';
 import { SettingsProvider } from './context/SettingsContext';
 
@@ -24,10 +23,8 @@ import './App.css';
 
 function App() {
     const { t, i18n } = useTranslation();
-    const [songs, setSongs] = useState<Song[]>([]);
-    const [currentSong, setCurrentSong] = useState<Song | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [hasFetchError, setHasFetchError] = useState(false);
+    const songs = localSongs;
+    const [currentSong, setCurrentSong] = useState<Song | null>(localSongs.length > 0 ? localSongs[0] : null);
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const settingsButtonRef = useRef<HTMLButtonElement>(null!);
@@ -36,40 +33,15 @@ function App() {
         document.title = t('meta.documentTitle');
     }, [i18n.language, t]);
 
-    useEffect(() => {
-        const fetchSongs = async () => {
-            try {
-                const songList = await getSongs();
-                setSongs(songList);
-                if (songList.length > 0) {
-                    setCurrentSong(songList[0]);
-                }
-            } catch (error) {
-                console.error("Failed to fetch songs:", error);
-                setHasFetchError(true);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchSongs();
-    }, []);
 
     const handleSongChange = (newSong: Song) => {
         setCurrentSong(newSong);
     };
 
-    if (hasFetchError) {
-        return <div className="page-loading">{t('common.fetchError')}</div>;
-    }
-
-    if (isLoading) {
-        return <div className="page-loading">{t('common.loading')}</div>;
-    }
-
     if (!currentSong) {
         return <div className="page-loading">{t('common.noSongsAvailable')}</div>;
     }
+
 
     return (
         <ThemeProvider>
