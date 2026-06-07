@@ -1,5 +1,6 @@
 // src/pages/PracticePage.tsx
 import { useState, useCallback, useEffect, useMemo, lazy, Suspense, useRef } from 'react';
+import * as Tone from 'tone'; // <--- 이 줄을 추가하세요!
 import { useTranslation } from 'react-i18next';
 import Piano from '../components/piano/Piano';
 import SheetMusic from '../components/sheet-music/SheetMusic';
@@ -33,7 +34,6 @@ const getNoteDurationInMs = (duration: NoteDuration): number => {
     }
 };
 
-
 const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }) => {
     const { t } = useTranslation();
     const { guideMode } = useSettings();
@@ -41,6 +41,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
     const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const pianoRef = useRef<any>(null); // 1. ref 생성
 
     // 모든 모드를 포괄하는 상태로 확장
     const [practiceState, setPracticeState] = useState<
@@ -67,21 +68,35 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
 
     // 자동 연주 로직
     useEffect(() => {
-        if (practiceState !== 'auto-play' || isSongFinished) return;
+        if (practiceState !== 'auto-play' || flatNotes.length === 0) {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            return;
+        }
 
-        const currentNote = flatNotes[currentNoteIndex];
-        if (!currentNote) return;
+        Tone.Transport.cancel();
+        Tone.Transport.bpm.value = RHYTHM_MODE_BPM;
 
-        // 시스템이 자동으로 해당 건반 소리를 발생시키는 함수 호출
-        // (Piano 컴포넌트 내부에 triggerNote(note) 같은 메서드가 있다면 여기서 호출)
+        let time = 0;
+        flatNotes.forEach((note, index) => {
+            const durationMs = getNoteDurationInMs(note.duration);
+            const durationSec = durationMs / 1000;
 
-        const durationMs = getNoteDurationInMs(currentNote.duration);
-        const timerId = setTimeout(() => {
-            setCurrentNoteIndex((prev) => prev + 1);
-        }, durationMs);
+            Tone.Transport.schedule((_t) => {
+                pianoRef.current?.triggerNote(note.note, durationMs);
+                setCurrentNoteIndex(index);
+            }, time);
 
-        return () => clearTimeout(timerId);
-    }, [practiceState, currentNoteIndex, isSongFinished, flatNotes]);
+            time += durationSec;
+        });
+
+        Tone.Transport.start();
+
+        return () => {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+        };
+    }, [practiceState, flatNotes]);
 
     useEffect(() => {
         setCurrentNoteIndex(0);
@@ -114,7 +129,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
     }, [currentNoteIndex, flatNotes.length]);
 
     const targetNote = flatNotes[currentNoteIndex];
-//    const isSongFinished = currentNoteIndex >= flatNotes.length;
+    //    const isSongFinished = currentNoteIndex >= flatNotes.length;
 
     // 음표 판정 로직
     const handleNotePlayed = useCallback(
@@ -287,6 +302,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
             </div>
             <div className="piano-wrapper">
                 <Piano
+                    ref={pianoRef} // 3. ref 연결
                     numOctaves={2}
                     onNotePlayed={handleNotePlayed}
                     guideNote={pianoGuideNote}
