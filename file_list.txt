@@ -34,7 +34,7 @@ Root Directory:
 *   pages/
     *   HomePage.css
     *   HomePage.tsx
-    *   AdminPage.tsx
+    *   AdminPage.tsx.bak //삭제됨
     *   LoginPage.tsx
     *   ProfilePage.css
     *   ProfilePage.tsx
@@ -58,7 +58,7 @@ Root Directory:
 *   i18n.js
 *   tmp.txt
 *   firebase/
-    *   songs.ts
+    *   songs.ts.bak //삭제됨
 *   main.tsx
 *   index.css
 *   components/
