@@ -24,7 +24,23 @@ import './App.css';
 function App() {
     const { t, i18n } = useTranslation();
     const songs = localSongs;
-    const [currentSong, setCurrentSong] = useState<Song | null>(localSongs.length > 0 ? localSongs[0] : null);
+    const [currentSong, setCurrentSong] = useState<Song | null>(() => {
+        if (localSongs.length === 0) return null;
+
+        // 1. 기존에 선택한 노래가 있는지 localStorage에서 확인
+        const savedSongId = localStorage.getItem('selectedSongId');
+        if (savedSongId) {
+            const savedSong = localSongs.find(s => s.id === savedSongId);
+            if (savedSong) return savedSong;
+        }
+
+        // 2. 처음 접속했거나 저장된 노래가 없으면 "twinkle-twinkle" 찾기
+        const defaultSong = localSongs.find(s => s.id === 'twinkle-twinkle');
+        if (defaultSong) return defaultSong;
+
+        // 3. 둘 다 없으면 첫 번째 노래 선택
+        return localSongs[0];
+    });
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const settingsButtonRef = useRef<HTMLButtonElement>(null!);
@@ -36,7 +52,9 @@ function App() {
 
     const handleSongChange = (newSong: Song) => {
         setCurrentSong(newSong);
+        localStorage.setItem('selectedSongId', newSong.id);
     };
+
 
     if (!currentSong) {
         return <div className="page-loading">{t('common.noSongsAvailable')}</div>;

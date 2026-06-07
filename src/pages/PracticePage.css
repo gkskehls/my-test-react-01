@@ -165,3 +165,186 @@
     border: 1px solid #495057;  /* 어두운 배경과 카드를 구분하는 옅은 테두리 */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+
+/* --- 리듬 모드 오버레이 스타일 --- */
+.rhythm-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 8px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.dark .rhythm-overlay {
+    background-color: rgba(33, 37, 41, 0.75);
+}
+
+.overlay-content {
+    text-align: center;
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.dark .overlay-content {
+    background: #2b3035;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    color: #f8f9fa;
+}
+
+.overlay-content h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1d20;
+}
+
+.dark .overlay-content h3 {
+    color: #ffffff;
+}
+
+.overlay-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.dark .overlay-content p {
+    color: #adb5bd;
+}
+
+.rhythm-start-btn {
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #4dabf7, #228be6);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34, 139, 230, 0.3);
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+}
+
+.rhythm-start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 139, 230, 0.4);
+    background: linear-gradient(135deg, #339af0, #1c7ed6);
+}
+
+.rhythm-start-btn:active {
+    transform: translateY(0);
+}
+
+.rhythm-reset-btn {
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #495057;
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+}
+
+.dark .rhythm-reset-btn {
+    color: #dee2e6;
+    background-color: #495057;
+}
+
+.rhythm-reset-btn:hover {
+    background-color: #dee2e6;
+    color: #212529;
+}
+
+.dark .rhythm-reset-btn:hover {
+    background-color: #5c636a;
+    color: #ffffff;
+}
+
+.overlay-content .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+/* 카운트다운 스타일 */
+.overlay-content.countdown {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.countdown-number {
+    font-size: 6rem;
+    font-weight: 800;
+    color: #228be6;
+    text-shadow: 0 4px 20px rgba(34, 139, 230, 0.3);
+    animation: pulse 0.5s ease-out infinite;
+}
+
+/* 컨트롤러 헤더 버튼 */
+.rhythm-control-button {
+    margin-left: 1rem;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #fa5252;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(250, 82, 82, 0.2);
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rhythm-control-button:hover {
+    background-color: #e03131;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(250, 82, 82, 0.3);
+}
+
+.rhythm-control-button:active {
+    transform: translateY(0);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.6); opacity: 0; }
+    30% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+}

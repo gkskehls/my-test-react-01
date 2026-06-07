@@ -42,6 +42,10 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
     const [isShaking, setIsShaking] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
+    // [추가] 리듬 모드 상태 및 카운트다운 상태 관리
+    const [rhythmState, setRhythmState] = useState<'idle' | 'countdown' | 'playing' | 'paused'>('idle');
+    const [countdownValue, setCountdownValue] = useState(3);
+
     const layout = useSheetMusicLayout(wrapperRef);
     const lyricWidths = useLyricWidths(song);
 
@@ -54,6 +58,8 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
     useEffect(() => {
         setCurrentNoteIndex(0);
         setIsShaking(false);
+        setRhythmState('idle');
+        setCountdownValue(3);
     }, [song, guideMode]);
 
     // 악보 자동 스크롤 로직
@@ -90,10 +96,32 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
         }
     }, [targetNote, isSongFinished, isShaking, guideMode]);
 
-    // [추가] '리듬만' 모드를 위한 자동 진행 로직
+    // [추가] 리듬 모드 카운트다운 타이머
     useEffect(() => {
-        // '리듬만' 모드가 아니거나 곡이 끝나면 타이머를 실행하지 않습니다.
-        if (guideMode !== 'rhythm-only' || isSongFinished) {
+        if (guideMode !== 'rhythm-only' || rhythmState !== 'countdown') {
+            return;
+        }
+
+        const msPerBeat = 60000 / RHYTHM_MODE_BPM;
+        const intervalId = setInterval(() => {
+            setCountdownValue(prev => {
+                if (prev <= 1) {
+                    clearInterval(intervalId);
+                    setRhythmState('playing');
+                    return 3; // 다음을 위해 초기화
+                }
+                return prev - 1;
+            });
+        }, msPerBeat);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [guideMode, rhythmState]);
+
+    // [추가] '리듬만' 모드를 위한 자동 진행 로직 (playing 상태일 때만)
+    useEffect(() => {
+        if (guideMode !== 'rhythm-only' || rhythmState !== 'playing' || isSongFinished) {
             return;
         }
 
@@ -107,11 +135,11 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
             setCurrentNoteIndex(prev => prev + 1);
         }, durationMs);
 
-        // 컴포넌트가 언마운트되거나, 모드/곡이 바뀌면 타이머를 정리합니다.
+        // 컴포넌트가 언마운트되거나 상태가 바뀌면 타이머를 정리합니다.
         return () => {
             clearTimeout(timerId);
         };
-    }, [guideMode, currentNoteIndex, isSongFinished, flatNotes]);
+    }, [guideMode, rhythmState, currentNoteIndex, isSongFinished, flatNotes]);
 
 
     // [수정] '리듬만' 모드에서도 악보 하이라이트가 동작하도록 추가합니다.
@@ -132,22 +160,68 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                     <span>{t(song.titleKey)}</span>
                     <span className="dropdown-icon">▼</span>
                 </button>
+                {/* 리듬 모드 연주 중일 때 일시정지 버튼 노출 */}
+                {guideMode === 'rhythm-only' && rhythmState === 'playing' && !isSongFinished && (
+                    <button className="rhythm-control-button" onClick={() => setRhythmState('paused')}>
+                        ⏸️ 일시정지
+                    </button>
+                )}
             </div>
 
             <div ref={wrapperRef} className={`practice-sheet-wrapper ${isSongFinished ? 'is-finished' : ''} ${isShaking ? 'shake' : ''}`}>
                 {showCongrats ? (
                     <div className="congrats-message">
                         <h2>🎉 {t('practice.congratsMessage')} 🎉</h2>
-                        <button onClick={() => setCurrentNoteIndex(0)}>{t('practice.retryButton')}</button>
+                        <button onClick={() => {
+                            setCurrentNoteIndex(0);
+                            setRhythmState('idle');
+                        }}>{t('practice.retryButton')}</button>
                     </div>
                 ) : (
-                    <SheetMusic
-                        notes={flatNotes}
-                        currentNoteIndex={sheetMusicHighlightIndex}
-                        layout={layout}
-                        lyricWidths={lyricWidths}
-                        idPrefix="practice-note"
-                    />
+                    <>
+                        <SheetMusic
+                            notes={flatNotes}
+                            currentNoteIndex={sheetMusicHighlightIndex}
+                            layout={layout}
+                            lyricWidths={lyricWidths}
+                            idPrefix="practice-note"
+                        />
+                        {/* 리듬 모드 대기/카운트다운/일시정지 오버레이 */}
+                        {guideMode === 'rhythm-only' && rhythmState !== 'playing' && (
+                            <div className="rhythm-overlay">
+                                {rhythmState === 'idle' && (
+                                    <div className="overlay-content">
+                                        <h3>리듬 연습 모드</h3>
+                                        <p>음표의 박자에 맞춰 자동으로 악보가 진행됩니다.</p>
+                                        <button className="rhythm-start-btn" onClick={() => setRhythmState('countdown')}>
+                                            시작하기
+                                        </button>
+                                    </div>
+                                )}
+                                {rhythmState === 'countdown' && (
+                                    <div className="overlay-content countdown">
+                                        <div className="countdown-number">{countdownValue}</div>
+                                    </div>
+                                )}
+                                {rhythmState === 'paused' && (
+                                    <div className="overlay-content">
+                                        <h3>연습 일시정지됨</h3>
+                                        <div className="button-group">
+                                            <button className="rhythm-start-btn" onClick={() => setRhythmState('playing')}>
+                                                계속하기
+                                            </button>
+                                            <button className="rhythm-reset-btn" onClick={() => {
+                                                setCurrentNoteIndex(0);
+                                                setRhythmState('idle');
+                                            }}>
+                                                처음부터 다시
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
             <div className="piano-wrapper">
