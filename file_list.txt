@@ -1,0 +1,103 @@
+Root Directory:
+*   nvm
+*   src/ (contents listed below)
+*   .git/ (skipped)
+*   dist/ (skipped)
+*   public/ (contents listed below)
+*   scripts/ (contents listed below)
+*   memo.txt
+*   .firebase/ (skipped)
+*   README.md
+*   .gitignore
+*   index.html
+*   .firebaserc
+*   node_modules/ (skipped)
+*   package.json
+*   firebase.json
+*   tsconfig.json
+*   .gitattributes
+*   vite.config.ts
+*   .prettierrc.json
+*   eslint.config.js
+*   package-lock.json
+*   qodana.sarif.json
+*   tsconfig.app.json
+*   tsconfig.node.json
+
+`src/` directory:
+*   lib/
+    *   musicUtils.ts
+*   hooks/
+    *   useAuth.ts
+    *   useLyricWidths.ts
+    *   useSheetMusicLayout.ts
+*   pages/
+    *   HomePage.css
+    *   HomePage.tsx
+    *   AdminPage.tsx
+    *   LoginPage.tsx
+    *   ProfilePage.css
+    *   ProfilePage.tsx
+    *   PracticePage.css
+    *   PracticePage.tsx
+    *   SheetMusicPage.css
+    *   SheetMusicPage.tsx
+*   songs/
+    *   data/
+        *   childrens/
+            *   twinkle-twinkle.json
+            *   three-blind-mice.json
+            *   ZKApdTQhQ51ljINApBHE.json
+    *   index.ts
+    *   types.ts
+*   App.css
+*   App.tsx
+*   context/
+    *   ThemeContext.tsx
+    *   SettingsContext.tsx
+*   i18n.js
+*   tmp.txt
+*   firebase/
+    *   songs.ts
+*   main.tsx
+*   index.css
+*   components/
+    *   ui/
+        *   .DS_Store
+        *   Header.css
+        *   Header.tsx
+        *   SettingsPopover.css
+        *   SettingsPopover.tsx
+    *   auth/
+        *   ProtectedRoute.tsx
+    *   piano/
+        *   Piano.css
+        *   Piano.tsx
+    *   common/
+        *   ErrorBoundary.tsx
+    *   library/
+        *   SongCard.css
+        *   SongCard.tsx
+        *   SongLibraryModal.css
+        *   SongLibraryModal.tsx
+    *   sheet-music/
+        *   Note.tsx
+        *   SheetMusic.css
+        *   SheetMusic.tsx
+        *   MultiLineSheetMusic.css
+        *   MultiLineSheetMusic.tsx
+*   firebase.ts
+*   vite-env.d.ts
+
+`public/` directory:
+*   locales/
+    *   en/
+        *   translation.json
+    *   ko/
+        *   translation.json
+*   vite.svg
+
+`scripts/` directory:
+*   setAdmin.js
+*   new_song.json
+*   uploadSong.js
