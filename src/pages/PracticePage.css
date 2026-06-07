@@ -173,9 +173,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* 블러 효과를 제거하고 배경색 투명도를 조정하여 악보가 비치도록 합니다 */
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: none; /* [수정] blur(8px) 제거 */
+    -webkit-backdrop-filter: none; /* [수정] 제거 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -185,7 +186,7 @@
 }
 
 .dark .rhythm-overlay {
-    background-color: rgba(33, 37, 41, 0.75);
+    background-color: rgba(33, 37, 41, 0.2); /* [수정] 배경 투명도 조정 */
 }
 
 .overlay-content {
@@ -297,11 +298,15 @@
     padding: 0;
 }
 
+/* 카운트다운 숫자 스타일 강조 */
 .countdown-number {
-    font-size: 6rem;
-    font-weight: 800;
+    font-size: 8rem; /* [수정] 숫자를 더 크게 */
+    font-weight: 900;
     color: #228be6;
-    text-shadow: 0 4px 20px rgba(34, 139, 230, 0.3);
+    /* [수정] 악보 위에서도 잘 보이도록 두꺼운 테두리 및 그림자 효과 추가 */
+    text-shadow:
+            0 0 10px rgba(255, 255, 255, 0.9),
+            2px 2px 0px rgba(0, 0, 0, 0.1);
     animation: pulse 0.5s ease-out infinite;
 }
 
