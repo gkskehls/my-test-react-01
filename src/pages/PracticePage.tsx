@@ -42,9 +42,21 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
     const [isShaking, setIsShaking] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // [추가] 리듬 모드 상태 및 카운트다운 상태 관리
-    const [rhythmState, setRhythmState] = useState<'idle' | 'countdown' | 'playing' | 'paused'>('idle');
+    // 모든 모드를 포괄하는 상태로 확장
+    const [practiceState, setPracticeState] = useState<
+        'idle' | 'countdown' | 'playing' | 'paused' | 'auto-play'
+    >('idle');
+
+    // [추가] 리듬 모드용 상태 선언 (오류 해결)
+    const [rhythmState, setRhythmState] = useState<
+        'idle' | 'countdown' | 'playing' | 'paused'
+    >('idle');
+
     const [countdownValue, setCountdownValue] = useState(3);
+
+    // [수정] 변수 선언을 상단으로 이동 (오류 해결)
+    const flatNotes = useMemo(() => song.lines.flat(), [song]);
+    const isSongFinished = currentNoteIndex >= flatNotes.length;
 
     const layout = useSheetMusicLayout(wrapperRef);
     const lyricWidths = useLyricWidths(song);
@@ -53,7 +65,23 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
         onSongChange(newSong);
     };
 
-    const flatNotes = useMemo(() => song.lines.flat(), [song]);
+    // 자동 연주 로직
+    useEffect(() => {
+        if (practiceState !== 'auto-play' || isSongFinished) return;
+
+        const currentNote = flatNotes[currentNoteIndex];
+        if (!currentNote) return;
+
+        // 시스템이 자동으로 해당 건반 소리를 발생시키는 함수 호출
+        // (Piano 컴포넌트 내부에 triggerNote(note) 같은 메서드가 있다면 여기서 호출)
+
+        const durationMs = getNoteDurationInMs(currentNote.duration);
+        const timerId = setTimeout(() => {
+            setCurrentNoteIndex((prev) => prev + 1);
+        }, durationMs);
+
+        return () => clearTimeout(timerId);
+    }, [practiceState, currentNoteIndex, isSongFinished, flatNotes]);
 
     useEffect(() => {
         setCurrentNoteIndex(0);
@@ -65,36 +93,46 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
     // 악보 자동 스크롤 로직
     useEffect(() => {
         const container = wrapperRef.current;
-        if (!container || currentNoteIndex < 0 || currentNoteIndex >= flatNotes.length) return;
+        if (
+            !container ||
+            currentNoteIndex < 0 ||
+            currentNoteIndex >= flatNotes.length
+        )
+            return;
 
-        const currentNoteElement = container.querySelector(`#practice-note-${currentNoteIndex}`);
+        const currentNoteElement = container.querySelector(
+            `#practice-note-${currentNoteIndex}`,
+        );
 
         if (currentNoteElement) {
             currentNoteElement.scrollIntoView({
                 behavior: 'smooth',
                 block: 'nearest',
-                inline: 'center'
+                inline: 'center',
             });
         }
     }, [currentNoteIndex, flatNotes.length]);
 
     const targetNote = flatNotes[currentNoteIndex];
-    const isSongFinished = currentNoteIndex >= flatNotes.length;
+//    const isSongFinished = currentNoteIndex >= flatNotes.length;
 
     // 음표 판정 로직
-    const handleNotePlayed = useCallback((playedNote: string) => {
-        if (guideMode === 'rhythm-only') return; // 리듬 모드에서는 피아노 입력 무시
-        if (isShaking || isSongFinished) return;
+    const handleNotePlayed = useCallback(
+        (playedNote: string) => {
+            if (guideMode === 'rhythm-only') return; // 리듬 모드에서는 피아노 입력 무시
+            if (isShaking || isSongFinished) return;
 
-        if (playedNote === targetNote?.note) {
-            setCurrentNoteIndex(prev => prev + 1);
-        } else {
-            setIsShaking(true);
-            setTimeout(() => {
-                setIsShaking(false);
-            }, 500);
-        }
-    }, [targetNote, isSongFinished, isShaking, guideMode]);
+            if (playedNote === targetNote?.note) {
+                setCurrentNoteIndex((prev) => prev + 1);
+            } else {
+                setIsShaking(true);
+                setTimeout(() => {
+                    setIsShaking(false);
+                }, 500);
+            }
+        },
+        [targetNote, isSongFinished, isShaking, guideMode],
+    );
 
     // [추가] 리듬 모드 카운트다운 타이머
     useEffect(() => {
@@ -104,7 +142,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
 
         const msPerBeat = 60000 / RHYTHM_MODE_BPM;
         const intervalId = setInterval(() => {
-            setCountdownValue(prev => {
+            setCountdownValue((prev) => {
                 if (prev <= 1) {
                     clearInterval(intervalId);
                     setRhythmState('playing');
@@ -121,7 +159,11 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
 
     // [추가] '리듬만' 모드를 위한 자동 진행 로직 (playing 상태일 때만)
     useEffect(() => {
-        if (guideMode !== 'rhythm-only' || rhythmState !== 'playing' || isSongFinished) {
+        if (
+            guideMode !== 'rhythm-only' ||
+            rhythmState !== 'playing' ||
+            isSongFinished
+        ) {
             return;
         }
 
@@ -132,7 +174,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
         const durationMs = getNoteDurationInMs(currentNote.duration);
 
         const timerId = setTimeout(() => {
-            setCurrentNoteIndex(prev => prev + 1);
+            setCurrentNoteIndex((prev) => prev + 1);
         }, durationMs);
 
         // 컴포넌트가 언마운트되거나 상태가 바뀌면 타이머를 정리합니다.
@@ -141,11 +183,13 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
         };
     }, [guideMode, rhythmState, currentNoteIndex, isSongFinished, flatNotes]);
 
-
     // [수정] '리듬만' 모드에서도 악보 하이라이트가 동작하도록 추가합니다.
-    const sheetMusicHighlightIndex = (guideMode === 'full' || guideMode === 'sheet-only' || guideMode === 'rhythm-only')
-        ? currentNoteIndex
-        : -1;
+    const sheetMusicHighlightIndex =
+        guideMode === 'full' ||
+        guideMode === 'sheet-only' ||
+        guideMode === 'rhythm-only'
+            ? currentNoteIndex
+            : -1;
 
     // 피아노 가이드는 '전체' 모드에서만 동작합니다.
     const pianoGuideNote = guideMode === 'full' ? targetNote?.note : undefined;
@@ -163,6 +207,21 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
                 >
                     <span>{t(song.titleKey)}</span>
                     <span className="dropdown-icon">▼</span>
+                </button>
+
+                {/* 자동 연주 버튼 */}
+                <button
+                    className="auto-play-button"
+                    onClick={() => {
+                        setPracticeState((prev) =>
+                            prev === 'auto-play' ? 'idle' : 'auto-play',
+                        );
+                        setRhythmState('idle'); // 다른 모드 종료
+                    }}
+                >
+                    {practiceState === 'auto-play'
+                        ? t('practice.stop')
+                        : t('practice.listen')}
                 </button>
 
                 {/* 리듬 모드 통합 제어 버튼 (아이콘 제거, 텍스트 중심) */}

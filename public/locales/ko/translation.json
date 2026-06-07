@@ -44,6 +44,8 @@
       "congratsMessage": "참 잘했어요!",
       "retryButton": "다시하기",
       "start": "시작하기",
+      "listen": "듣기",
+      "stop": "정지",
       "pause": "일시정지",
       "resume": "계속하기"
   },

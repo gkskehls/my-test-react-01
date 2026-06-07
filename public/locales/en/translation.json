@@ -44,6 +44,8 @@
       "congratsMessage": "Well Done!",
       "retryButton": "Retry",
       "start": "Start",
+      "listen": "listen",
+      "stop": "stop",
       "pause": "Pause",
       "resume": "Resume"
   },
