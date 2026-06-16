@@ -83,7 +83,7 @@ const PracticePage: React.FC<PracticePageProps> = ({ songs, song, onSongChange }
             const durationSec = durationMs / 1000;
 
             Tone.Transport.schedule((_t) => {
-                pianoRef.current?.triggerNote(note.note, durationMs);
+                pianoRef.current?.triggerNote(note.note, durationSec);
                 setCurrentNoteIndex(index);
             }, time);
 

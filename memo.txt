@@ -12,6 +12,18 @@ npm run deploy
 
 npm run dev
 
+# 1. 로컬 작성자 설정
+git config --local user.name "gkskehls"
+git config --local user.email "gkskehls@gmail.com"
+git config --local --list
+
+# 2. 원격 주소 설정 (계정명@ 포함)
+git remote set-url origin https://gkskehls@github.com/gkskehls/my-test-react-01.git
+
+# 3. 확인 후 푸시
+git remote -v
+git push -u origin main
+
 # .env
 
 VITE_API_KEY="AIzaSyAo4mOgKcPHUcRmeq82klsVyy1JpGgtpDI"
